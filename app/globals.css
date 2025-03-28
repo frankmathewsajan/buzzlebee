@@ -101,3 +101,36 @@ html {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.font-marker {
+  font-family: var(--font-marker);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.font-gamja {
+  font-family: var(--font-gamja);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair);
+}
+
+.font-dm {
+  font-family: var(--font-dm);
+}
+
+.font-caveat {
+  font-family: var(--font-caveat);
+}

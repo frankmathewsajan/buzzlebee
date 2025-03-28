@@ -1,14 +1,14 @@
-import { Lora, Playfair_Display } from 'next/font/google';
+import { Caveat, Outfit } from 'next/font/google';
 import './globals.css';
 
-const lora = Lora({
+const caveat = Caveat({ 
   subsets: ['latin'],
-  display: 'swap',
+  variable: '--font-caveat'
 });
 
-const playfair = Playfair_Display({
+const outfit = Outfit({ 
   subsets: ['latin'],
-  display: 'swap',
+  variable: '--font-outfit'
 });
 
 export const metadata = {
@@ -18,7 +18,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${lora.className} ${playfair.className}`}>
+    <html lang="en" className={`${caveat.variable} ${outfit.variable}`}>
       <body>{children}</body>
     </html>
   );
