@@ -683,7 +683,7 @@ export default function Home() {
                             />
                           </div>
                           <div>
-                            <h4 className="text-xl font-medium text-gray-900">IETE Chapter VITAP University</h4>
+                            <h4 className="text-xl font-medium text-gray-900">IETE Chapter</h4>
                             <p className="text-gray-600">Deputy Captain</p>
                           </div>
                         </div>
@@ -694,8 +694,9 @@ export default function Home() {
                         <li>Conducted technical discussions and mentored junior members in successful project execution.</li>
                       </ul>
                       <span className="absolute bottom-4 right-4 px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs">
-                        Non-Professional
+                        Academic - VITAP
                       </span>
+                      
                     </div>
                   </div>
                 </div>
