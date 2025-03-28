@@ -923,7 +923,7 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Beyond Code</h3>
                   <p className="text-gray-700 text-lg leading-relaxed italic mb-6">
-                    When I'm not lost in the abyss of algorithms or academics, I'm either questioning the future of human potential,
+                    When I&apos;m not lost in the abyss of algorithms or academics, I&apos;m either questioning the future of human potential,
                     overanalyzing anime plots, or calculating ten moves ahead in a chess match—only to blunder spectacularly.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
