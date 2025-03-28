@@ -224,7 +224,7 @@ export default function Home() {
     { id: 'projects', ref: sectionRefs.projects, label: 'Built to Last' },
     { id: 'contact', ref: sectionRefs.contact, label: 'Talk to Frank' }
   ];
-  
+
 
   useEffect(() => {
     let observer;
@@ -234,9 +234,9 @@ export default function Home() {
     };
 
     const handleIntersection = (entries) => {
-        entries.forEach((entry) => {
+      entries.forEach((entry) => {
         if (entry.intersectionRatio > 0.2) {
-            setActiveSection(entry.target.id);
+          setActiveSection(entry.target.id);
           requestAnimationFrame(() => {
             entry.target.classList.remove('opacity-0', 'translate-y-10');
             entry.target.classList.add('opacity-100', 'translate-y-0');
@@ -252,11 +252,11 @@ export default function Home() {
 
     try {
       observer = new IntersectionObserver(handleIntersection, observerOptions);
-    sections.forEach(section => {
-      if (section.ref.current) {
-        observer.observe(section.ref.current);
-      }
-    });
+      sections.forEach(section => {
+        if (section.ref.current) {
+          observer.observe(section.ref.current);
+        }
+      });
     } catch (error) {
       console.error('Intersection Observer error:', error);
     }
@@ -298,7 +298,7 @@ export default function Home() {
 
       const subsections = ['about-me', 'journey', 'education', 'experience', 'achievements', 'beyond-code'];
       const subsectionElements = subsections.map(id => document.getElementById(id));
-      
+
       // Calculate total height of all subsections
       const totalHeight = subsectionElements.reduce((sum, element) => {
         return sum + (element ? element.offsetHeight : 0);
@@ -309,10 +309,10 @@ export default function Home() {
       const viewportHeight = window.innerHeight;
       const sectionTop = aboutRect.top;
       const sectionHeight = aboutRect.height;
-      
+
       // Calculate how far we've scrolled through the section
       let scrollProgress = 0;
-      
+
       if (sectionTop < 0) {
         // We've scrolled past the top
         const scrolledAmount = Math.abs(sectionTop);
@@ -326,10 +326,10 @@ export default function Home() {
           const elementRect = element.getBoundingClientRect();
           const elementTop = elementRect.top;
           const elementHeight = elementRect.height;
-          
+
           // If element is in view
           if (elementTop < viewportHeight && elementTop + elementHeight > 0) {
-            const elementProgress = Math.min(100, 
+            const elementProgress = Math.min(100,
               ((viewportHeight - elementTop) / (elementHeight + viewportHeight)) * 100
             );
             // Add a portion of progress for each subsection
@@ -352,11 +352,11 @@ export default function Home() {
     const handleScroll = () => {
       const sections = ['home', 'about', 'projects', 'contact'];
       const sectionElements = sections.map(id => document.getElementById(id));
-      
+
       // Calculate total scrollable height
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
       const currentScroll = window.scrollY;
-      
+
       // Calculate progress based on current scroll position
       const progress = (currentScroll / totalHeight) * 100;
       setScrollProgress(progress);
@@ -403,12 +403,12 @@ export default function Home() {
                   <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
                     <div className="text-3xl font-caveat text-gray-800 mb-1">3+</div>
                     <div className="text-sm font-outfit text-gray-600">Hackathons & Competitions</div>
-              </div>
+                  </div>
                 </div>
 
               </div>
             </div>
-            
+
             {/* Image - slightly smaller */}
             <div className="relative aspect-square w-full max-w-[450px] mx-auto opacity-0 translate-x-4 animate-[fadeIn_1s_ease-out_0.4s_forwards]">
               <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
@@ -449,7 +449,7 @@ export default function Home() {
           className="bg-gray-900/80 backdrop-blur-sm text-white px-5 py-2.5 rounded-full shadow-lg hover:bg-gray-800/90 transition-all duration-300 flex items-center gap-1 w-[240px] pointer-events-auto"
         >
           <div className="flex-shrink-0 -ml-1">
-            <CustomGauge 
+            <CustomGauge
               value={scrollProgress}
               size="small"
               currentSection={sections.findIndex(s => s.id === activeSection) + 1}
@@ -520,21 +520,21 @@ export default function Home() {
                 Who is this guy?
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
               </h2>
-              
+
 
               <div className="space-y-6">
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                Hi, I&apos;m Frank. Figuring out why my solution works before I even understand why it should
-                —I thrive in the space between logic and chaos
+                  Hi, I&apos;m Frank. Figuring out why my solution works before I even understand why it should
+                  —I thrive in the space between logic and chaos
                 </p>
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
                   I believe the best ideas come from experimentation—breaking things on purpose just to see what happens.
                   Playing it safe has never led to anything groundbreaking.
                 </p>
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  When I&apos;m not coding, I&apos;m probably deep-diving into AI research, questioning UX choices in apps, or
-                  rethinking my entire approach to a problem at 2 AM—because inspiration has terrible timing.
+                  When not coding, I&apos;m deep-diving into AI breakthroughs, optimizing robotics algorithms, or exploring the future of gene editing—because innovation never sleeps. If an idea can transcend time, I want to be the one shaping it.
                 </p>
+
               </div>
             </div>
 
@@ -555,7 +555,7 @@ export default function Home() {
                     Started with a simple &quot;Hello, World!&quot; and now crafting AI solutions.
                     The path from basic programming to machine learning has been an adventure of constant learning and growth.
                   </p>
-        </div>
+                </div>
 
                 {/* Education Section */}
                 <div id="education" className="relative pl-8">
@@ -566,49 +566,102 @@ export default function Home() {
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Education</h3>
 
                   {/* Education Card */}
-                  <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-12">
+                  <div className="bg-white/20 backdrop-blur-sm p-8 rounded-xl">
+                    <div className="flex justify-between items-start mb-8">
+                      <div className="flex items-center gap-6">
+                        <div className="relative w-20 h-20">
                           <Image
-                            src="/images/logos/vitap.jpg"
+                            src="/images/logos/vitap.png"
                             alt="VIT-AP Logo"
                             fill
-                            className="object-contain rounded-full"
-                            sizes="48px"
+                            className="object-contain rounded-xl p-1.5"
+                            sizes="64px"
                           />
                         </div>
                         <div>
-                          <h4 className="text-xl font-medium text-gray-900">
+                          <h4 className="text-2xl font-medium text-gray-900 mb-2">
                             B.Tech in Computer Science & Engineering
                           </h4>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 text-lg">
                             Vellore Institute of Technology (VIT-AP), Amaravati
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <span className="text-gray-500 text-sm block">
-                          Expected Graduation: May 2027
-                        </span>
-                        <span className="text-gray-500 text-sm block">
-                          CGPA: 8.95/10.0
-                        </span>
+                      <div className="text-right space-y-2">
+                        <div className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg">
+                          <span className="text-gray-900 text-sm font-medium block">
+                            Expected Graduation: May 2027
+                          </span>
+                        </div>
+                        <div className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg group relative cursor-pointer">
+                          <div className="flex items-center gap-2 transition-all duration-200">
+                            <span className="text-gray-900 text-sm font-medium">CGPA</span>
+                            <span className="text-gray-600 group-hover:hidden">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                            </span>
+                            <span className="text-gray-900 text-sm font-medium hidden group-hover:inline">
+                              8.95 / 10.00
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
                     {/* Details */}
-                    <div className="space-y-2">
-                      <p className="text-gray-600">
-                        <span className="font-medium text-gray-900">Key Courses:</span>
-                      </p>
-                      <ul className="list-disc list-inside pl-4 text-gray-600">
-                        <li>Data Structures</li>
-                        <li>Algorithms</li>
-                        <li>Artificial Intelligence</li>
-                        <li>Machine Learning</li>
-                      </ul>
-                    </div>
+                    <details className="group">
+                      <summary className="flex items-center gap-2 cursor-pointer">
+                        <span className="font-medium text-gray-900 text-lg">Key Courses</span>
+                        <div className="flex-grow h-px bg-gradient-to-r from-gray-300 to-transparent"></div>
+                        <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </summary>
+                      
+                      <div className="mt-4 grid grid-cols-2 gap-x-8 gap-y-2">
+                        <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg">
+                          <h5 className="font-medium text-gray-900 mb-3">Core Computer Science</h5>
+                          <ul className="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Data Structures & Algorithms</li>
+                            <li>Computer Architecture</li>
+                            <li>Operating Systems</li>
+                            <li>Database Management</li>
+                          </ul>
+                        </div>
+
+                        <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg">
+                          <h5 className="font-medium text-gray-900 mb-3">AI & Machine Learning</h5>
+                          <ul className="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Artificial Intelligence</li>
+                            <li>Machine Learning</li>
+                            <li>Deep Learning</li>
+                            <li>Computer Vision</li>
+                          </ul>
+                        </div>
+
+                        <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg">
+                          <h5 className="font-medium text-gray-900 mb-3">Mathematics</h5>
+                          <ul className="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Discrete Mathematics & Logic</li>
+                            <li>Linear Algebra & Matrices</li>
+                            <li>Probability & Statistics</li>
+                            <li>Calculus & Optimization</li>
+                          </ul>
+                        </div>
+
+                        <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg">
+                          <h5 className="font-medium text-gray-900 mb-3">Advanced Topics</h5>
+                          <ul className="list-disc list-inside text-gray-600 space-y-1">
+                            <li>Cloud Computing</li>
+                            <li>Software Engineering</li>
+                            <li>Web Technologies</li>
+                            <li>Control Engineering & IoT</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </details>
                   </div>
                 </div>
 
@@ -618,85 +671,189 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Experience</h3>
                   <div className="grid grid-cols-1 gap-6">
+                    {/* Purple Technologies */}
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="relative w-12 h-12">
+                      <div className="flex justify-between items-start">
+                        {/* Company Logo and Name - Left Side */}
+                        <div className="flex items-start gap-4">
+                          <div className="relative w-20 h-20">
                             <Image
                               src="/images/logos/purple.jpg"
                               alt="Purple Technologies Logo"
                               fill
-                              className="object-contain rounded-full"
-                              sizes="48px"
+                              className="object-contain rounded-full p-1.5"
+                              sizes="64px"
                             />
                           </div>
                           <div>
-                            <h4 className="text-xl font-medium text-gray-900">Purple Technologies</h4>
-                            <p className="text-gray-600">Full Stack Dev Intern</p>
+                            <Link 
+                              href="https://purpletechno.com" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="group"
+                            >
+                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                                Purple Techno Solutions
+                                <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </h4>
+                            </Link>
+                            <p className="text-gray-600 text-lg">Full Stack & ML Intern</p>
                           </div>
                         </div>
-                        <span className="text-gray-500 text-sm">Aug 2023 – Present</span>
+
+                        {/* Date - Right Side */}
+                        <div className="-mr-2">
+                          <span className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg text-gray-900 text-sm font-medium">
+                            Aug 2023 – Present
+                          </span>
+                        </div>
                       </div>
-                      <ul className="list-disc list-inside text-gray-600 space-y-2">
-                        <li>Developed and maintained responsive web applications using Next.js and TailwindCSS.</li>
-                        <li>Implemented secure authentication systems and integrated third-party APIs.</li>
-                        <li>Collaborated with the design team to create intuitive user interfaces and improve UX.</li>
-                      </ul>
+
+                      {/* Details Section */}
+                      <div className="mt-4">
+                        <details className="group marker:content-['']">
+                          <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
+                            <span className="group-open:hidden">Show more</span>
+                            <span className="hidden group-open:inline">Show less</span>
+                            <svg className="w-4 h-4 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="mt-4 pl-4 border-l-2 border-gray-200">
+                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                              <li>Developed and maintained responsive web applications using Next.js and TailwindCSS.</li>
+                              <li>Implemented secure authentication systems and integrated third-party APIs.</li>
+                              <li>Collaborated with the design team to create intuitive user interfaces and improve UX.</li>
+                            </ul>
+                          </div>
+                        </details>
+                      </div>
                     </div>
 
+                    {/* TechToGreen */}
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="relative w-12 h-12">
+                      <div className="flex justify-between items-start">
+                        {/* Company Logo and Name - Left Side */}
+                        <div className="flex items-start gap-4">
+                          <div className="relative w-20 h-20">
                             <Image
-                              src="/images/logos/ttg.jpg"
+                              src="/images/logos/t2g.png"
                               alt="TechToGreen Logo"
                               fill
-                              className="object-contain rounded-full"
-                              sizes="48px"
+                              className="object-contain rounded-xl p-1.5"
+                              sizes="64px"
                             />
                           </div>
                           <div>
-                            <h4 className="text-xl font-medium text-gray-900">TechToGreen Drone & Robotics Pvt. Ltd.</h4>
-                            <p className="text-gray-600">Research and Development Intern</p>
+                            <Link 
+                              href="https://t2gdrone.com" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="group"
+                            >
+                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                                TechToGreen Drone & Robotics Pvt. Ltd.
+                                <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </h4>
+                            </Link>
+                            <p className="text-gray-600 text-lg">Research and Development Intern</p>
                           </div>
                         </div>
-                        <span className="text-gray-500 text-sm">Aug 2023 – Present</span>
+
+                        {/* Date - Right Side */}
+                        <div className="-mr-2">
+                          <span className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg text-gray-900 text-sm font-medium">
+                            Aug 2023 – Present
+                          </span>
+                        </div>
                       </div>
-                      <ul className="list-disc list-inside text-gray-600 space-y-2">
-                        <li>Developed intelligent safety and agricultural systems, including a hazard detection helmet and autonomous drones.</li>
-                        <li>Optimized Django REST APIs, reducing response time by 20% and enhancing mobile interfaces using React Native.</li>
-                        <li>Implemented computer vision algorithms for plant anomaly detection and established automated testing protocols.</li>
-                      </ul>
+
+                      {/* Details Section */}
+                      <div className="mt-4">
+                        <details className="group marker:content-['']">
+                          <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
+                            <span className="group-open:hidden">Show more</span>
+                            <span className="hidden group-open:inline">Show less</span>
+                            <svg className="w-4 h-4 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="mt-4 pl-4 border-l-2 border-gray-200">
+                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                              <li>Developed intelligent safety and agricultural systems, including a hazard detection helmet and autonomous drones.</li>
+                              <li>Optimized Django REST APIs, reducing response time by 20% and enhancing mobile interfaces using React Native.</li>
+                              <li>Implemented computer vision algorithms for plant anomaly detection and established automated testing protocols.</li>
+                            </ul>
+                          </div>
+                        </details>
+                      </div>
                     </div>
 
-                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl relative">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex items-center gap-4">
-                          <div className="relative w-12 h-12">
+                    {/* IETE Chapter */}
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
+                      <div className="flex justify-between items-start">
+                        {/* Company Logo and Name - Left Side */}
+                        <div className="flex items-start gap-4">
+                          <div className="relative w-19 h-19">
                             <Image
                               src="/images/logos/iete.jpg"
                               alt="IETE Logo"
                               fill
-                              className="object-contain rounded-full"
-                              sizes="48px"
+                              className="object-contain rounded-full p-1.5"
+                              sizes="64px"
                             />
                           </div>
                           <div>
-                            <h4 className="text-xl font-medium text-gray-900">IETE Chapter</h4>
-                            <p className="text-gray-600">Deputy Captain</p>
+                            <Link 
+                              href="https://iete.org" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="group"
+                            >
+                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                              Institute of Electronics & Telecom Engineers
+                                <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </h4>
+                            </Link>
+                            <p className="text-gray-600 text-lg">Deputy Captain</p>
                           </div>
                         </div>
-                        <span className="text-gray-500 text-sm">Nov 2023 – Jan 2025</span>
+
+                        {/* Date and Badge - Right Side */}
+                        <div className="-mr-2 flex items-center gap-3">
+                          <span className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg text-gray-900 text-sm font-medium">
+                            Nov 2023 – Jan 2025
+                          </span>
+                          <span className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg text-gray-900 text-sm font-medium">
+                            Academic
+                          </span>
+                        </div>
                       </div>
-                      <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
-                        <li>Led AI, IoT, and web development workshops, increasing engagement and technical expertise.</li>
-                        <li>Conducted technical discussions and mentored junior members in successful project execution.</li>
-                      </ul>
-                      <span className="absolute bottom-4 right-4 px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs">
-                        Academic - VITAP
-                      </span>
-                      
+
+                      {/* Details Section */}
+                      <div className="mt-4">
+                        <details className="group marker:content-['']">
+                          <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
+                            <span className="group-open:hidden">Show more</span>
+                            <span className="hidden group-open:inline">Show less</span>
+                            <svg className="w-4 h-4 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="mt-4 pl-4 border-l-2 border-gray-200">
+                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                              <li>Led AI, IoT, and web development workshops, increasing engagement and technical expertise.</li>
+                              <li>Conducted technical discussions and mentored junior members in successful project execution.</li>
+                            </ul>
+                          </div>
+                        </details>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -709,13 +866,13 @@ export default function Home() {
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
                       <div className="flex items-center justify-between mb-4">
                         <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">01</div>
-                        <div className="relative w-12 h-12">
+                        <div className="relative w-16 h-16">
                           <Image
                             src="/images/logos/SA.png"
                             alt="NASA Space Apps Logo"
                             fill
-                            className="object-contain rounded-full"
-                            sizes="48px"
+                            className="object-contain rounded-full p-1.5"
+                            sizes="64px"
                           />
                         </div>
                       </div>
@@ -726,13 +883,13 @@ export default function Home() {
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
                       <div className="flex items-center justify-between mb-4">
                         <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">02</div>
-                        <div className="relative w-12 h-12">
+                        <div className="relative w-16 h-16">
                           <Image
                             src="/images/logos/alcove.png"
                             alt="HackAP Logo"
                             fill
-                            className="object-contain rounded-full"
-                            sizes="48px"
+                            className="object-contain rounded-full p-1.5"
+                            sizes="64px"
                           />
                         </div>
                       </div>
@@ -743,13 +900,13 @@ export default function Home() {
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
                       <div className="flex items-center justify-between mb-4">
                         <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">03</div>
-                        <div className="relative w-12 h-12">
+                        <div className="relative w-16 h-16">
                           <Image
                             src="/images/logos/BSG.svg"
                             alt="Bharat Scouts & Guides Logo"
                             fill
-                            className="object-contain rounded-full"
-                            sizes="48px"
+                            className="object-contain rounded-full p-1.5"
+                            sizes="64px"
                           />
                         </div>
                       </div>
@@ -766,30 +923,22 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Beyond Code</h3>
                   <p className="text-gray-700 text-lg leading-relaxed italic mb-6">
-                    &ldquo;When I&apos;m not coding, I&apos;m probably dissecting AI papers, binging internet memes,
-                    or arguing whether dark mode is superior (it is).&rdquo;
+                    When I'm not lost in the abyss of algorithms or academics, I'm either questioning the future of human potential,
+                    overanalyzing anime plots, or calculating ten moves ahead in a chess match—only to blunder spectacularly.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-3">Current Focus</h4>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-3">Current Obsessions</h4>
                       <ul className="list-disc list-inside text-gray-600 space-y-2">
-                        <li>Deep Learning Research</li>
-                        <li>Full-stack Development</li>
-                        <li>Open Source Contributions</li>
-                        <li>Hackathon Projects</li>
+                        <li>Artificial Intelligence in Biotechnology</li>
+                        <li>Chess, Strategy & Mental Warfare</li>
+                        <li>Anime, Storytelling & Philosophy</li>
+                        <li>Breaking Systems & Redefining Norms</li>
                       </ul>
                     </div>
-                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-3">Interests</h4>
-                      <ul className="list-disc list-inside text-gray-600 space-y-2">
-                        <li>AI Ethics & Future Tech</li>
-                        <li>UI/UX Design</li>
-                        <li>Tech Community Building</li>
-                        <li>Continuous Learning</li>
-                      </ul>
-                  </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -809,7 +958,7 @@ export default function Home() {
               <h2 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
                 Guess What I Use?
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
-          </h2>
+              </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
@@ -905,7 +1054,7 @@ export default function Home() {
               Feel free to contact me. I am always open to discussing new projects, creative ideas, or opportunities to contribute to your visions.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Get in Touch</h3>
@@ -937,30 +1086,30 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span className="text-gray-400">Not there yet. 🥢 </span>
-              </div>
+                </div>
               </div>
             </div>
-            
+
             <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Connect with Me</h3>
               <div className="grid grid-cols-2 gap-4">
-                <a href="https://github.com/frankmathewsajan" target="_blank" rel="noopener noreferrer" 
-                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                <a href="https://github.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                   <FaGithub className="w-5 h-5" />
                   GitHub
                 </a>
                 <a href="https://linkedin.com/in/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
                   <FaLinkedin className="w-5 h-5" />
                   LinkedIn
                 </a>
                 <a href="https://discord.com/users/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                   className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
+                  className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
                   <FaDiscord className="w-5 h-5" />
                   Discord
                 </a>
                 <a href="https://instagram.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                   className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
+                  className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
                   <FaInstagram className="w-5 h-5" />
                   Instagram
                 </a>
