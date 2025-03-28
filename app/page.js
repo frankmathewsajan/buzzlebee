@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, memo } from "react";
 import { ArrowUpCircle, ArrowDownCircle, CheckCircle } from '@geist-ui/icons';
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
 
-const CustomGauge = memo(({ value, size = "small", currentSection }) => {
+const CustomGauge = memo(({ value, size = "small", currentSection, subsectionProgress = 0 }) => {
   const sizeClasses = {
     small: "w-8 h-8",
     medium: "w-10 h-10",
@@ -37,6 +37,9 @@ const CustomGauge = memo(({ value, size = "small", currentSection }) => {
     return colors['0'];
   };
 
+  // Calculate the total progress including subsection progress
+  const totalProgress = value + (subsectionProgress / 100);
+
   return (
     <div className={`relative ${sizeClasses[size]}`}>
       <svg className="w-full h-full" viewBox="0 0 24 24">
@@ -56,11 +59,11 @@ const CustomGauge = memo(({ value, size = "small", currentSection }) => {
           cy="12"
           r="10"
           fill="none"
-          stroke={getColor(value)}
+          stroke={getColor(totalProgress)}
           strokeWidth="1"
-          strokeDasharray={`${(value / 100) * 62.83} 62.83`}
+          strokeDasharray={`${(totalProgress / 100) * 62.83} 62.83`}
           transform="rotate(-90 12 12)"
-          className="transition-all duration-500 ease-in-out"
+          className="transition-all duration-300 ease-out"
         />
       </svg>
       <span className="absolute inset-0 flex items-center justify-center text-base font-medium text-white">
@@ -80,7 +83,7 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
 
       const subsections = ['about-me', 'journey', 'education', 'experience', 'beyond-code'];
       const subsectionElements = subsections.map(id => document.getElementById(id));
-      
+
       const visibleSubsection = subsectionElements.find(element => {
         if (!element) return false;
         const rect = element.getBoundingClientRect();
@@ -125,13 +128,11 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
                     section.ref.current?.scrollIntoView({ behavior: 'smooth' });
                   }, 300);
                 }}
-                className={`w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group ${
-                  activeSection === section.id ? 'bg-gray-50/80 font-medium' : ''
-                }`}
+                className={`w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group ${activeSection === section.id ? 'bg-gray-50/80 font-medium' : ''
+                  }`}
               >
-                <span className={`text-sm transition-colors duration-300 ${
-                  activeSection === section.id ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
-                }`}>
+                <span className={`text-sm transition-colors duration-300 ${activeSection === section.id ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
+                  }`}>
                   {index + 1}. {section.label}
                 </span>
                 {activeSection === section.id && (
@@ -152,11 +153,10 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
                           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                       }}
-                      className={`w-full px-6 py-2 text-left text-sm transition-all duration-300 ${
-                        activeSubsection === subsection.id
-                          ? 'text-gray-900 font-medium bg-gray-100/50'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
-                      }`}
+                      className={`w-full px-6 py-2 text-left text-sm transition-all duration-300 ${activeSubsection === subsection.id
+                        ? 'text-gray-900 font-medium bg-gray-100/50'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50/80'
+                        }`}
                     >
                       {subsection.label}
                     </button>
@@ -195,6 +195,8 @@ ProjectCard.displayName = 'ProjectCard';
 export default function Home() {
   const [activeSection, setActiveSection] = useState('home');
   const [showNavMenu, setShowNavMenu] = useState(false);
+  const [subsectionProgress, setSubsectionProgress] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -206,34 +208,35 @@ export default function Home() {
 
   const sections = [
     { id: 'home', ref: sectionRefs.home, label: 'Being Frank' },
-    { 
-      id: 'about', 
-      ref: sectionRefs.about, 
+    {
+      id: 'about',
+      ref: sectionRefs.about,
       label: 'The Story',
       subsections: [
-        { id: 'about-me', label: 'About Me' },
-        { id: 'journey', label: 'The Journey' },
-        { id: 'education', label: 'Education' },
-        { id: 'experience', label: 'Experience' },
-        { id: 'achievements', label: 'Notable Achievements' },
-        { id: 'beyond-code', label: 'Beyond Code' }
+        { id: 'about-me', label: 'Who&apos;s This Guy?' },
+        { id: 'journey', label: 'The Chaos' },
+        { id: 'education', label: 'Street Cred' },
+        { id: 'experience', label: 'Battle Scars' },
+        { id: 'achievements', label: 'Flex Wall' },
+        { id: 'beyond-code', label: 'When I Touch Grass' }
       ]
     },
-    { id: 'projects', ref: sectionRefs.projects, label: 'The Work' },
+    { id: 'projects', ref: sectionRefs.projects, label: 'Built to Last' },
     { id: 'contact', ref: sectionRefs.contact, label: 'Talk to Frank' }
   ];
+  
 
   useEffect(() => {
     let observer;
-    const observerOptions = { 
+    const observerOptions = {
       threshold: [0.2, 0.5, 0.8],
       rootMargin: '-10% 0px'
     };
 
     const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
+        entries.forEach((entry) => {
         if (entry.intersectionRatio > 0.2) {
-          setActiveSection(entry.target.id);
+            setActiveSection(entry.target.id);
           requestAnimationFrame(() => {
             entry.target.classList.remove('opacity-0', 'translate-y-10');
             entry.target.classList.add('opacity-100', 'translate-y-0');
@@ -249,11 +252,11 @@ export default function Home() {
 
     try {
       observer = new IntersectionObserver(handleIntersection, observerOptions);
-      sections.forEach(section => {
-        if (section.ref.current) {
-          observer.observe(section.ref.current);
-        }
-      });
+    sections.forEach(section => {
+      if (section.ref.current) {
+        observer.observe(section.ref.current);
+      }
+    });
     } catch (error) {
       console.error('Intersection Observer error:', error);
     }
@@ -282,12 +285,93 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Add new effect for tracking subsection progress
+  useEffect(() => {
+    const handleScroll = () => {
+      if (activeSection !== 'about') {
+        setSubsectionProgress(0);
+        return;
+      }
+
+      const aboutSection = document.getElementById('about');
+      if (!aboutSection) return;
+
+      const subsections = ['about-me', 'journey', 'education', 'experience', 'achievements', 'beyond-code'];
+      const subsectionElements = subsections.map(id => document.getElementById(id));
+      
+      // Calculate total height of all subsections
+      const totalHeight = subsectionElements.reduce((sum, element) => {
+        return sum + (element ? element.offsetHeight : 0);
+      }, 0);
+
+      // Calculate current scroll position within about section
+      const aboutRect = aboutSection.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const sectionTop = aboutRect.top;
+      const sectionHeight = aboutRect.height;
+      
+      // Calculate how far we've scrolled through the section
+      let scrollProgress = 0;
+      
+      if (sectionTop < 0) {
+        // We've scrolled past the top
+        const scrolledAmount = Math.abs(sectionTop);
+        const totalScrollable = sectionHeight + viewportHeight;
+        scrollProgress = Math.min(100, (scrolledAmount / totalScrollable) * 100);
+      }
+
+      // Add small increments for each subsection
+      subsectionElements.forEach((element, index) => {
+        if (element) {
+          const elementRect = element.getBoundingClientRect();
+          const elementTop = elementRect.top;
+          const elementHeight = elementRect.height;
+          
+          // If element is in view
+          if (elementTop < viewportHeight && elementTop + elementHeight > 0) {
+            const elementProgress = Math.min(100, 
+              ((viewportHeight - elementTop) / (elementHeight + viewportHeight)) * 100
+            );
+            // Add a portion of progress for each subsection
+            scrollProgress += (elementProgress / subsections.length);
+          }
+        }
+      });
+
+      // Ensure progress stays within bounds
+      scrollProgress = Math.max(0, Math.min(100, scrollProgress));
+      setSubsectionProgress(scrollProgress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeSection]);
+
+  // Add new effect for tracking overall scroll progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'projects', 'contact'];
+      const sectionElements = sections.map(id => document.getElementById(id));
+      
+      // Calculate total scrollable height
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+      
+      // Calculate progress based on current scroll position
+      const progress = (currentScroll / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#e7dfd8]">
       {/* Hero Section */}
-      <section 
-        id="home" 
-        ref={sectionRefs.home} 
+      <section
+        id="home"
+        ref={sectionRefs.home}
         className="min-h-screen flex items-center justify-center relative overflow-hidden opacity-0 translate-y-10 transition-all duration-1000 ease-in-out"
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative w-full">
@@ -302,7 +386,7 @@ export default function Home() {
                   Frank
                 </div>
                 <p className="text-lg md:text-xl text-gray-600 mt-12 font-serif italic max-w-xl opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.4s_forwards] leading-relaxed tracking-wide">
-                  Shaping ideas that transcend time<br/>
+                  Shaping ideas that transcend time<br />
                   <span className="ml-4 inline-block">—one bug at a time.</span>
                 </p>
 
@@ -319,12 +403,12 @@ export default function Home() {
                   <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl">
                     <div className="text-3xl font-caveat text-gray-800 mb-1">3+</div>
                     <div className="text-sm font-outfit text-gray-600">Hackathons & Competitions</div>
-                  </div>
+              </div>
                 </div>
 
               </div>
             </div>
-
+            
             {/* Image - slightly smaller */}
             <div className="relative aspect-square w-full max-w-[450px] mx-auto opacity-0 translate-x-4 animate-[fadeIn_1s_ease-out_0.4s_forwards]">
               <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
@@ -366,9 +450,10 @@ export default function Home() {
         >
           <div className="flex-shrink-0 -ml-1">
             <CustomGauge 
-              value={((sections.findIndex(s => s.id === activeSection) + 1) / sections.length) * 100}
+              value={scrollProgress}
               size="small"
               currentSection={sections.findIndex(s => s.id === activeSection) + 1}
+              subsectionProgress={subsectionProgress}
             />
           </div>
           <span className="text-base w-[140px] text-center transition-all duration-500 ease-in-out truncate">
@@ -383,7 +468,7 @@ export default function Home() {
       </div>
 
       {/* Navigation Menu */}
-      <NavigationMenu 
+      <NavigationMenu
         showNavMenu={showNavMenu}
         setShowNavMenu={setShowNavMenu}
         sections={sections}
@@ -391,9 +476,9 @@ export default function Home() {
       />
 
       {/* About Section */}
-      <section 
-        id="about" 
-        ref={sectionRefs.about} 
+      <section
+        id="about"
+        ref={sectionRefs.about}
         className="min-h-screen flex items-center justify-center bg-[#e7dfd8] opacity-0 translate-y-10 transition-all duration-1000 ease-in-out"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -431,17 +516,30 @@ export default function Home() {
 
             {/* Middle Column - About Me */}
             <div className="lg:col-span-2">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">About Me</h2>
-              <p className="text-xl font-medium text-gray-800 mb-8 italic">
-                &ldquo;I break things, fix them, and sometimes make them better.&rdquo;
-              </p>
+              <h2 className="text-5xl font-bold text-gray-900 mb-8 font-caveat relative inline-block">
+                Who is this guy?
+                <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
+              </h2>
+              
+
               <div className="space-y-6">
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  I&apos;m Frank, a Computer Science student obsessed with AI, ML, and building things that actually matter. 
-                  From crafting intelligent systems to making sleek interfaces, I thrive at the intersection of logic and creativity.
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                Hi, I&apos;m Frank. Figuring out why my solution works before I even understand why it should
+                —I thrive in the space between logic and chaos
+                </p>
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  I believe the best ideas come from experimentation—breaking things on purpose just to see what happens.
+                  Playing it safe has never led to anything groundbreaking.
+                </p>
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  When I&apos;m not coding, I&apos;m probably deep-diving into AI research, questioning UX choices in apps, or
+                  rethinking my entire approach to a problem at 2 AM—because inspiration has terrible timing.
                 </p>
               </div>
             </div>
+
+
+
           </div>
 
           {/* Journey Timeline */}
@@ -454,34 +552,150 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">The Journey</h3>
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Started with a simple &quot;Hello, World!&quot; and now crafting AI solutions. 
+                    Started with a simple &quot;Hello, World!&quot; and now crafting AI solutions.
                     The path from basic programming to machine learning has been an adventure of constant learning and growth.
                   </p>
-                </div>
+        </div>
 
-                {/* Education */}
+                {/* Education Section */}
                 <div id="education" className="relative pl-8">
+                  {/* Timeline Dot */}
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
+
+                  {/* Section Title */}
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Education</h3>
+
+                  {/* Education Card */}
                   <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                    <h4 className="text-xl font-medium text-gray-900">BTech in Computer Science</h4>
-                    <p className="text-gray-600">AI/ML Specialization</p>
-                    <p className="text-gray-500 text-sm mt-2">2020 - Present</p>
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src="/images/logos/vitap.jpg"
+                            alt="VIT-AP Logo"
+                            fill
+                            className="object-contain rounded-full"
+                            sizes="48px"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="text-xl font-medium text-gray-900">
+                            B.Tech in Computer Science & Engineering
+                          </h4>
+                          <p className="text-gray-600">
+                            Vellore Institute of Technology (VIT-AP), Amaravati
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-gray-500 text-sm block">
+                          Expected Graduation: May 2027
+                        </span>
+                        <span className="text-gray-500 text-sm block">
+                          CGPA: 8.95/10.0
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Details */}
+                    <div className="space-y-2">
+                      <p className="text-gray-600">
+                        <span className="font-medium text-gray-900">Key Courses:</span>
+                      </p>
+                      <ul className="list-disc list-inside pl-4 text-gray-600">
+                        <li>Data Structures</li>
+                        <li>Algorithms</li>
+                        <li>Artificial Intelligence</li>
+                        <li>Machine Learning</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
+
 
                 {/* Experience */}
                 <div id="experience" className="relative pl-8">
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Experience</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-6">
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <h4 className="text-xl font-medium text-gray-900">5+ Years of Coding</h4>
-                      <p className="text-gray-600">Full-stack Development & AI/ML</p>
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-12 h-12">
+                            <Image
+                              src="/images/logos/purple.jpg"
+                              alt="Purple Technologies Logo"
+                              fill
+                              className="object-contain rounded-full"
+                              sizes="48px"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="text-xl font-medium text-gray-900">Purple Technologies</h4>
+                            <p className="text-gray-600">Full Stack Dev Intern</p>
+                          </div>
+                        </div>
+                        <span className="text-gray-500 text-sm">Aug 2023 – Present</span>
+                      </div>
+                      <ul className="list-disc list-inside text-gray-600 space-y-2">
+                        <li>Developed and maintained responsive web applications using Next.js and TailwindCSS.</li>
+                        <li>Implemented secure authentication systems and integrated third-party APIs.</li>
+                        <li>Collaborated with the design team to create intuitive user interfaces and improve UX.</li>
+                      </ul>
                     </div>
+
                     <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl">
-                      <h4 className="text-xl font-medium text-gray-900">3+ Years AI/ML</h4>
-                      <p className="text-gray-600">Deep Learning & Computer Vision</p>
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-12 h-12">
+                            <Image
+                              src="/images/logos/ttg.jpg"
+                              alt="TechToGreen Logo"
+                              fill
+                              className="object-contain rounded-full"
+                              sizes="48px"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="text-xl font-medium text-gray-900">TechToGreen Drone & Robotics Pvt. Ltd.</h4>
+                            <p className="text-gray-600">Research and Development Intern</p>
+                          </div>
+                        </div>
+                        <span className="text-gray-500 text-sm">Aug 2023 – Present</span>
+                      </div>
+                      <ul className="list-disc list-inside text-gray-600 space-y-2">
+                        <li>Developed intelligent safety and agricultural systems, including a hazard detection helmet and autonomous drones.</li>
+                        <li>Optimized Django REST APIs, reducing response time by 20% and enhancing mobile interfaces using React Native.</li>
+                        <li>Implemented computer vision algorithms for plant anomaly detection and established automated testing protocols.</li>
+                      </ul>
+                    </div>
+
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl relative">
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-4">
+                          <div className="relative w-12 h-12">
+                            <Image
+                              src="/images/logos/iete.jpg"
+                              alt="IETE Logo"
+                              fill
+                              className="object-contain rounded-full"
+                              sizes="48px"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="text-xl font-medium text-gray-900">IETE Chapter VITAP University</h4>
+                            <p className="text-gray-600">Deputy Captain</p>
+                          </div>
+                        </div>
+                        <span className="text-gray-500 text-sm">Nov 2023 – Jan 2025</span>
+                      </div>
+                      <ul className="list-disc list-inside text-gray-600 space-y-2 mb-6">
+                        <li>Led AI, IoT, and web development workshops, increasing engagement and technical expertise.</li>
+                        <li>Conducted technical discussions and mentored junior members in successful project execution.</li>
+                      </ul>
+                      <span className="absolute bottom-4 right-4 px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full text-xs">
+                        Non-Professional
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -491,25 +705,67 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Notable Achievements</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3].map((achievement, index) => (
-                      <div
-                        key={achievement}
-                        className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300"
-                      >
-                        <div className="text-4xl font-caveat text-gray-800 mb-4">0{achievement}</div>
-                        <h4 className="text-xl font-semibold text-gray-900 mb-3">Achievement Title</h4>
-                        <p className="text-gray-600">Description of the achievement and its significance.</p>
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">01</div>
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src="/images/logos/SA.png"
+                            alt="NASA Space Apps Logo"
+                            fill
+                            className="object-contain rounded-full"
+                            sizes="48px"
+                          />
+                        </div>
                       </div>
-                    ))}
+                      <h4 className="text-xl font-semibold text-gray-900 mb-3 font-outfit">NASA Space Apps 2024</h4>
+                      <p className="text-gray-600 font-serif">Global Nominee</p>
+                    </div>
+
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">02</div>
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src="/images/logos/alcove.png"
+                            alt="HackAP Logo"
+                            fill
+                            className="object-contain rounded-full"
+                            sizes="48px"
+                          />
+                        </div>
+                      </div>
+                      <h4 className="text-xl font-semibold text-gray-900 mb-3 font-outfit">HackAP - Transport & Logistics</h4>
+                      <p className="text-gray-600 font-serif">Hackathon First Place</p>
+                    </div>
+
+                    <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300 group">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="text-5xl font-caveat text-gray-800 group-hover:scale-110 transition-transform duration-300">03</div>
+                        <div className="relative w-12 h-12">
+                          <Image
+                            src="/images/logos/BSG.svg"
+                            alt="Bharat Scouts & Guides Logo"
+                            fill
+                            className="object-contain rounded-full"
+                            sizes="48px"
+                          />
+                        </div>
+                      </div>
+                      <h4 className="text-xl font-semibold text-gray-900 mb-3 font-outfit">Rajya Puraskar Award</h4>
+                      <p className="text-gray-600 font-serif">Bharat Scouts & Guides Honor</p>
+                    </div>
                   </div>
                 </div>
+
+
 
                 {/* Beyond Code */}
                 <div id="beyond-code" className="relative pl-8">
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">Beyond Code</h3>
                   <p className="text-gray-700 text-lg leading-relaxed italic mb-6">
-                    &ldquo;When I&apos;m not coding, I&apos;m probably dissecting AI papers, binging internet memes, 
+                    &ldquo;When I&apos;m not coding, I&apos;m probably dissecting AI papers, binging internet memes,
                     or arguing whether dark mode is superior (it is).&rdquo;
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -530,7 +786,7 @@ export default function Home() {
                         <li>Tech Community Building</li>
                         <li>Continuous Learning</li>
                       </ul>
-                    </div>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -540,25 +796,19 @@ export default function Home() {
       </section>
 
       {/* Projects Section - Focus on Tech Stack and Projects */}
-      <section 
-        id="projects" 
-        ref={sectionRefs.projects} 
+      <section
+        id="projects"
+        ref={sectionRefs.projects}
         className="min-h-screen flex items-center justify-center bg-[#e7dfd8] opacity-0 translate-y-10 transition-all duration-1000 ease-in-out"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-16">
             {/* Tech Arsenal */}
             <div className="space-y-12">
-              <div className="flex items-center justify-between">
-                <h2 className="text-4xl font-bold text-gray-900">Tech Arsenal</h2>
-                <button 
-                  onClick={() => window.open('/projects', '_blank')}
-                  className="group relative px-6 py-3 text-lg font-medium text-white bg-gray-900/90 rounded-xl hover:bg-gray-800 transition-all duration-300 hover:shadow-lg"
-                >
-                  <span className="relative z-10">See My Projects</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </button>
-              </div>
+              <h2 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
+                Guess What I Use?
+                <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
+          </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
@@ -605,15 +855,32 @@ export default function Home() {
 
             {/* Featured Projects */}
             <div className="space-y-8">
-              <h3 className="text-3xl font-semibold text-gray-900">Featured Projects</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
+                  Featured Projects
+                  <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
+                </h3>
+                <button
+                  onClick={() => window.open('/projects', '_blank')}
+                  className="group relative px-8 py-3 text-lg font-medium text-gray-900 bg-white/50 backdrop-blur-sm rounded-xl hover:bg-white/80 transition-all duration-300 hover:shadow-lg border border-gray-200/20"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    All Projects
+                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-900/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <ProjectCard 
+                <ProjectCard
                   title="AI Healthcare Solution"
                   description="Developed an AI-powered diagnostic tool for early disease detection using computer vision."
                   tags={["Python", "TensorFlow", "OpenCV"]}
                 />
 
-                <ProjectCard 
+                <ProjectCard
                   title="Smart Portfolio"
                   description="A modern, responsive portfolio website built with Next.js and TailwindCSS."
                   tags={["Next.js", "TailwindCSS", "React"]}
@@ -625,9 +892,9 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section 
-        id="contact" 
-        ref={sectionRefs.contact} 
+      <section
+        id="contact"
+        ref={sectionRefs.contact}
         className="min-h-screen flex items-center justify-center bg-[#e7dfd8] opacity-0 translate-y-10 transition-all duration-700 ease-out"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -644,6 +911,12 @@ export default function Home() {
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span className="text-gray-600">Frank Mathew Sajan</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <a href="mailto:frankmathewsajan@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
@@ -651,11 +924,19 @@ export default function Home() {
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <a href="mailto:la.buzzlebee@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
+                    la.buzzlebee@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span className="text-gray-400">Not there yet. 🥢 </span>
-                </div>
+              </div>
               </div>
             </div>
             
