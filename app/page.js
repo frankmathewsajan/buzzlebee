@@ -222,7 +222,7 @@ export default function Home() {
       ]
     },
     { id: 'projects', ref: sectionRefs.projects, label: 'Built to Last' },
-    { id: 'contact', ref: sectionRefs.contact, label: 'Talk to Frank' }
+    { id: 'contact', ref: sectionRefs.contact, label: 'Get in Touch' }
   ];
 
 
@@ -611,15 +611,14 @@ export default function Home() {
                     </div>
 
                     {/* Details */}
-                    <details className="group">
-                      <summary className="flex items-center gap-2 cursor-pointer">
-                        <span className="font-medium text-gray-900 text-lg">Key Courses</span>
-                        <div className="flex-grow h-px bg-gradient-to-r from-gray-300 to-transparent"></div>
-                        <svg className="w-5 h-5 text-gray-500 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <details className="group marker:content-['']">
+                      <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
+                        <span className="group-open:hidden">Key Courses</span>
+                        <span className="hidden group-open:inline">Show less</span>
+                        <svg className="w-4 h-4 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </summary>
-                      
                       <div className="mt-4 grid grid-cols-2 gap-x-8 gap-y-2">
                         <div className="bg-white/30 backdrop-blur-sm p-4 rounded-lg">
                           <h5 className="font-medium text-gray-900 mb-3">Core Computer Science</h5>
@@ -712,7 +711,7 @@ export default function Home() {
                       </div>
 
                       {/* Details Section */}
-                      <div className="mt-4">
+                      <div className="">
                         <details className="group marker:content-['']">
                           <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
                             <span className="group-open:hidden">Show more</span>
@@ -773,7 +772,7 @@ export default function Home() {
                       </div>
 
                       {/* Details Section */}
-                      <div className="mt-4">
+                      <div className="">
                         <details className="group marker:content-['']">
                           <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
                             <span className="group-open:hidden">Show more</span>
@@ -837,7 +836,7 @@ export default function Home() {
                       </div>
 
                       {/* Details Section */}
-                      <div className="mt-4">
+                      <div className="">
                         <details className="group marker:content-['']">
                           <summary className="flex items-center gap-2 cursor-pointer justify-end text-sm text-gray-500 hover:text-gray-900 transition-colors duration-200">
                             <span className="group-open:hidden">Show more</span>
