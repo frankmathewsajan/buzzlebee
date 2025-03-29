@@ -5,6 +5,7 @@ import { ArrowUpCircle, ArrowDownCircle } from '@geist-ui/icons';
 import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -99,10 +100,15 @@ export default function Projects() {
         caseStudy: "/case-studies/lms"
       },
       relatedMiniProjects: [
-        { name: "Problem Set 0: Indoor Voice", tech: "Python" },
-        { name: "Problem Set 1: Deep Thought", tech: "Python" },
-        { name: "Problem Set 2: Camel Case", tech: "Python" },
-        // ... add more mini projects
+        { name: "Indoor Voice", tech: "Python" },
+        { name: "Deep Thought", tech: "Python" },
+        { name: "Camel Case", tech: "Python" },
+        { name: "Outdated", tech: "Python" },
+        { name: "Adieu, Adieu", tech: "Python" },
+        { name: "Back to the Bank", tech: "Python" },
+        { name: "Lines of Code", tech: "Python" },
+        { name: "Regular, um, Expressions", tech: "Python" },
+        { name: "Cookie Jar", tech: "Python" }
       ]
     },
     {
@@ -125,10 +131,11 @@ export default function Projects() {
         caseStudy: "/case-studies/hss-manager"
       },
       relatedMiniProjects: [
-        { name: "Project 0: Search", tech: "HTML, CSS" },
-        { name: "Project 1: Wiki", tech: "Django" },
-        { name: "Project 2: Commerce", tech: "Django" },
-        // ... add more mini projects
+        { name: "Search", tech: "HTML, CSS" },
+        { name: "Wiki", tech: "Django" },
+        { name: "Commerce", tech: "Django" },
+        { name: "Mail", tech: "Django, JavaScript" },
+        { name: "Network", tech: "Django, JavaScript" }
       ]
     }
   ];
@@ -346,6 +353,26 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen">
+      {/* Navigation Links */}
+      <div className="fixed top-8 right-8 z-50 flex gap-4">
+        {activeProject !== 'overview' && (
+          <button
+            onClick={() => projectRefs.overview.current?.scrollIntoView({ behavior: 'smooth' })}
+            className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200`}
+          >
+            Back to Top
+          </button>
+        )}
+        {activeProject === 'overview' && (
+          <Link 
+            href="/"
+            className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200`}
+          >
+            Return Home
+          </Link>
+        )}
+      </div>
+
       {/* Overview Section - Keep original cream/brown theme */}
       <section 
         id="overview"
@@ -510,13 +537,13 @@ export default function Projects() {
           onClick={() => setShowMiniProjectsModal(false)}
         >
           <motion.div 
-            className="bg-[#FAF5EE] rounded-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            className="bg-[#FAF5EE] rounded-2xl p-8 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-center mb-8 pb-4 border-b border-[#5D503A]/10 bg-[#FAF5EE]">
               <h3 className={`${spaceGrotesk.className} text-2xl text-[#5D503A]`}>
                 Course Mini Projects
               </h3>
@@ -709,40 +736,42 @@ export default function Projects() {
       })}
 
       {/* Update the navigation dots to match current section color */}
-      <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
-        <div className={`flex flex-col items-end ${activeProject === 'overview' ? 'gap-6' : 'gap-3'}`}>
-          {['overview', ...projects.map(p => p.id)].map((id, index) => {
-            const project = projects.find(p => p.id === id);
-            const colors = id === 'overview' 
-              ? { text: '#5D503A' } 
-              : domainColors[project?.category];
-            
-            return (
-              <button
-                key={id}
-                onClick={() => {
-                  projectRefs[id].current?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className={`group flex items-center gap-3 ${activeProject === 'overview' ? 'cursor-default' : ''}`}
-              >
-                <span className={`${inter.className} text-sm transition-all duration-300 ${activeProject === 'overview' ? 'hidden' : 'opacity-0 group-hover:opacity-100'}`}
-                  style={{ 
-                    color: colors.text
-                  }}>
-                  {id === 'overview' ? 'Overview' : project?.title}
-                </span>
-                <div className={`w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-150`}
-                  style={{ 
-                    backgroundColor: activeProject === id 
-                      ? colors.text 
-                      : `${colors.text}4D`,
-                    transform: activeProject === id ? 'scale(1.5)' : 'scale(1)'
-                  }} />
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+      {!showMiniProjectsModal && (
+        <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
+          <div className={`flex flex-col items-end ${activeProject === 'overview' ? 'gap-6' : 'gap-3'}`}>
+            {['overview', ...projects.map(p => p.id)].map((id, index) => {
+              const project = projects.find(p => p.id === id);
+              const colors = id === 'overview' 
+                ? { text: '#5D503A' } 
+                : domainColors[project?.category];
+              
+              return (
+                <button
+                  key={id}
+                  onClick={() => {
+                    projectRefs[id].current?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className={`group flex items-center gap-3 ${activeProject === 'overview' ? 'cursor-default' : ''}`}
+                >
+                  <span className={`${inter.className} text-sm transition-all duration-300 ${activeProject === 'overview' ? 'hidden' : 'opacity-0 group-hover:opacity-100'}`}
+                    style={{ 
+                      color: colors.text
+                    }}>
+                    {id === 'overview' ? 'Overview' : project?.title}
+                  </span>
+                  <div className={`w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-150`}
+                    style={{ 
+                      backgroundColor: activeProject === id 
+                        ? colors.text 
+                        : `${colors.text}4D`,
+                      transform: activeProject === id ? 'scale(1.5)' : 'scale(1)'
+                    }} />
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+      )}
 
       {/* Update scroll progress bar colors based on current section */}
       <div className="fixed left-0 top-0 h-1 w-full z-50"
