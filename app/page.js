@@ -75,6 +75,23 @@ const CustomGauge = memo(({ value, size = "small", currentSection, subsectionPro
 
 const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSection }) => {
   const [activeSubsection, setActiveSubsection] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowNavMenu(false);
+      }
+    };
+
+    if (showNavMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNavMenu, setShowNavMenu]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -101,7 +118,7 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
 
   return (
     showNavMenu && (
-      <div className="fixed bottom-24 right-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden w-64 z-50 border border-gray-100">
+      <div ref={menuRef} className="fixed bottom-24 right-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden w-64 z-50 border border-gray-100">
         <div className="py-2">
           {/* Back to Top Button */}
           <button
@@ -165,6 +182,34 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
               )}
             </div>
           ))}
+
+          {/* Additional Links */}
+          <div className="border-t border-gray-100">
+            <Link
+              href="/projects"
+              onClick={() => setShowNavMenu(false)}
+              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
+            >
+              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                Projects
+              </span>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
+            <Link
+              href="/case-studies"
+              onClick={() => setShowNavMenu(false)}
+              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
+            >
+              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                Case Studies
+              </span>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </div>
     )
