@@ -266,7 +266,7 @@ export default function Home() {
       ref: sectionRefs.about,
       label: 'The Story',
       subsections: [
-        { id: 'about-me', label: 'Who&apos;s This Guy?' },
+        { id: 'about-me', label: 'Who\'s This Guy?' },
         { id: 'journey', label: 'The Chaos' },
         { id: 'education', label: 'Street Cred' },
         { id: 'experience', label: 'Battle Scars' },
