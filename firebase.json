@@ -1,13 +1,28 @@
 {
-  "hosting": [
-    {
-      "target": "buzzlebee",
-      "public": "out",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    }
-  ]
+  "hosting": {
+    "public": "out",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/projects",
+        "destination": "/projects.html"
+      },
+      {
+        "source": "/case-studies",
+        "destination": "/case-studies.html"
+      },
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/404.html"
+      }
+    ]
+  }
 }
