@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { ArrowUpCircle, ArrowDownCircle } from '@geist-ui/icons';
 import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
@@ -148,14 +148,21 @@ export default function Projects() {
     "Course Projects": ["library-management", "hss-manager"]
   };
 
-  const projectRefs = {
-    overview: useRef(null),
-    'helmet-system': useRef(null),
-    'ai-ignite': useRef(null),
-    'banking-sim': useRef(null),
-    'library-management': useRef(null),
-    'hss-manager': useRef(null)
-  };
+  const overviewRef = useRef(null);
+  const helmetSystemRef = useRef(null);
+  const aiIgniteRef = useRef(null);
+  const bankingSimRef = useRef(null);
+  const libraryManagementRef = useRef(null);
+  const hssManagerRef = useRef(null);
+
+  const projectRefs = useMemo(() => ({
+    overview: overviewRef,
+    'helmet-system': helmetSystemRef,
+    'ai-ignite': aiIgniteRef,
+    'banking-sim': bankingSimRef,
+    'library-management': libraryManagementRef,
+    'hss-manager': hssManagerRef
+  }), []);
 
   const themes = {
     dark: {
@@ -307,7 +314,7 @@ export default function Projects() {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [activeProject, isScrolling]);
+  }, [activeProject, isScrolling, projectRefs]);
 
   // Add CSS for smooth scrolling
   useEffect(() => {

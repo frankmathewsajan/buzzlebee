@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, memo } from "react";
+import { useEffect, useRef, useState, memo, useMemo } from "react";
 import { ArrowUpCircle, ArrowDownCircle, CheckCircle } from '@geist-ui/icons';
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
 
@@ -197,16 +197,24 @@ export default function Home() {
   const [showNavMenu, setShowNavMenu] = useState(false);
   const [subsectionProgress, setSubsectionProgress] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const sectionRefs = {
-    home: useRef(null),
-    about: useRef(null),
-    journey: useRef(null),
-    projects: useRef(null),
-    achievements: useRef(null),
-    contact: useRef(null)
-  };
+  
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const journeyRef = useRef(null);
+  const projectsRef = useRef(null);
+  const achievementsRef = useRef(null);
+  const contactRef = useRef(null);
 
-  const sections = [
+  const sectionRefs = useMemo(() => ({
+    home: homeRef,
+    about: aboutRef,
+    journey: journeyRef,
+    projects: projectsRef,
+    achievements: achievementsRef,
+    contact: contactRef
+  }), []);
+
+  const sections = useMemo(() => [
     { id: 'home', ref: sectionRefs.home, label: 'Being Frank' },
     {
       id: 'about',
@@ -223,8 +231,7 @@ export default function Home() {
     },
     { id: 'projects', ref: sectionRefs.projects, label: 'Built to Last' },
     { id: 'contact', ref: sectionRefs.contact, label: 'Get in Touch' }
-  ];
-
+  ], [sectionRefs]);
 
   useEffect(() => {
     let observer;
@@ -262,14 +269,14 @@ export default function Home() {
     }
 
     return () => observer?.disconnect();
-  }, []);
+  }, [sections]);
 
   useEffect(() => {
     if (sectionRefs.home.current) {
       sectionRefs.home.current.classList.remove('opacity-0', 'translate-y-10');
       sectionRefs.home.current.classList.add('opacity-100', 'translate-y-0');
     }
-  }, []);
+  }, [sectionRefs.home]);
 
   useEffect(() => {
     let scrollTimeout;
@@ -552,7 +559,7 @@ export default function Home() {
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">The Journey</h3>
                   <p className="text-gray-700 text-lg leading-relaxed">
                     Started with a simple &quot;Hello, World!&quot;—now building AI that speaks for itself. <br/>
-                    From debugging first loops to solving real-world problems, it’s been a journey of curiosity, chaos, and constant growth.
+                    From debugging first loops to solving real-world problems, it&apos;s been a journey of curiosity, chaos, and constant growth.
                   </p>
 
                 </div>
