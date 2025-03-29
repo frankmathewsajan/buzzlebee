@@ -431,10 +431,10 @@ export default function Home() {
             {/* Text Content */}
             <div className="text-left space-y-12 ml-8">
               <div className="relative">
-                <h1 className="text-[5rem] md:text-[8rem] text-gray-800 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_forwards] font-caveat leading-[1.1] hover:scale-105 transition-transform cursor-default">
+                <h1 className="text-[4rem] md:text-[6rem] text-gray-800 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_forwards] font-caveat leading-[1.1] hover:scale-105 transition-transform cursor-default">
                   Just
                 </h1>
-                <div className="text-[6rem] md:text-[9rem] font-caveat text-gray-800 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.2s_forwards] hover:scale-105 transition-transform cursor-default leading-[1.1]">
+                <div className="text-[5rem] md:text-[7rem] font-caveat text-gray-800 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.2s_forwards] hover:scale-105 transition-transform cursor-default leading-[1.1]">
                   Frank
                 </div>
                 <p className="text-lg md:text-xl text-gray-600 mt-12 font-serif italic max-w-xl opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.4s_forwards] leading-relaxed tracking-wide">
@@ -568,7 +568,7 @@ export default function Home() {
 
             {/* Middle Column - About Me */}
             <div className="lg:col-span-2">
-              <h2 className="text-5xl font-bold text-gray-900 mb-8 font-caveat relative inline-block">
+              <h2 className="text-4xl font-bold text-gray-900 mb-8 font-caveat relative inline-block">
                 Who is this guy?
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
               </h2>
@@ -631,10 +631,10 @@ export default function Home() {
                           />
                         </div>
                         <div>
-                          <h4 className="text-2xl font-medium text-gray-900 mb-2">
+                          <h4 className="text-xl font-medium text-gray-900 mb-2">
                             B.Tech in Computer Science & Engineering
                           </h4>
-                          <p className="text-gray-600 text-lg">
+                          <p className="text-gray-600 text-base">
                             Vellore Institute of Technology (VIT-AP), Amaravati
                           </p>
                         </div>
@@ -743,14 +743,14 @@ export default function Home() {
                               rel="noopener noreferrer"
                               className="group"
                             >
-                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                              <h4 className="text-xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
                                 Purple Techno Solutions
                                 <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
                               </h4>
                             </Link>
-                            <p className="text-gray-600 text-lg">Full Stack & ML Intern</p>
+                            <p className="text-gray-600 text-base">Full Stack & ML Intern</p>
                           </div>
                         </div>
 
@@ -773,7 +773,7 @@ export default function Home() {
                             </svg>
                           </summary>
                           <div className="mt-4 pl-4 border-l-2 border-gray-200">
-                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                            <ul className="list-disc list-inside text-gray-600 space-y-1.5 marker:text-gray-400">
                               <li>Developed and maintained responsive web applications using Next.js and TailwindCSS.</li>
                               <li>Implemented secure authentication systems and integrated third-party APIs.</li>
                               <li>Collaborated with the design team to create intuitive user interfaces and improve UX.</li>
@@ -804,14 +804,14 @@ export default function Home() {
                               rel="noopener noreferrer"
                               className="group"
                             >
-                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                              <h4 className="text-xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
                                 TechToGreen Drone & Robotics Pvt. Ltd.
                                 <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
                               </h4>
                             </Link>
-                            <p className="text-gray-600 text-lg">Research and Development Intern</p>
+                            <p className="text-gray-600 text-base">Research and Development Intern</p>
                           </div>
                         </div>
 
@@ -834,7 +834,7 @@ export default function Home() {
                             </svg>
                           </summary>
                           <div className="mt-4 pl-4 border-l-2 border-gray-200">
-                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                            <ul className="list-disc list-inside text-gray-600 space-y-1.5 marker:text-gray-400">
                               <li>Developed intelligent safety and agricultural systems, including a hazard detection helmet and autonomous drones.</li>
                               <li>Optimized Django REST APIs, reducing response time by 20% and enhancing mobile interfaces using React Native.</li>
                               <li>Implemented computer vision algorithms for plant anomaly detection and established automated testing protocols.</li>
@@ -865,14 +865,14 @@ export default function Home() {
                               rel="noopener noreferrer"
                               className="group"
                             >
-                              <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
+                              <h4 className="text-xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
                                 Institute of Electronics & Telecom Engineers
                                 <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>
                               </h4>
                             </Link>
-                            <p className="text-gray-600 text-lg">Deputy Captain</p>
+                            <p className="text-gray-600 text-base">Deputy Captain</p>
                           </div>
                         </div>
 
@@ -898,7 +898,7 @@ export default function Home() {
                             </svg>
                           </summary>
                           <div className="mt-4 pl-4 border-l-2 border-gray-200">
-                            <ul className="list-disc list-inside text-gray-600 space-y-2 marker:text-gray-400">
+                            <ul className="list-disc list-inside text-gray-600 space-y-1.5 marker:text-gray-400">
                               <li>Led AI, IoT, and web development workshops, increasing engagement and technical expertise.</li>
                               <li>Conducted technical discussions and mentored junior members in successful project execution.</li>
                             </ul>
@@ -1002,90 +1002,139 @@ export default function Home() {
         ref={sectionRefs.projects}
         className="min-h-screen flex items-center justify-center bg-[#e7dfd8] opacity-0 translate-y-10 transition-all duration-1000 ease-in-out"
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-16">
-            {/* Tech Arsenal */}
-            <div className="space-y-12">
-              <h2 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
-                Guess What I Use?
-                <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
-              </h2>
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
+            <div className="relative max-w-6xl mx-auto">
+              {/* Vertical Separator */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-gray-400 to-transparent"></div>
+              
+              {/* Horizontal Separator */}
+              <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gray-400 to-transparent"></div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
-                  <h4 className="text-xl font-medium text-gray-900 mb-4">AI/ML</h4>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>Neural Networks</li>
-                    <li>Computer Vision</li>
-                    <li>Natural Language Processing</li>
-                    <li>Machine Learning Models</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
-                  <h4 className="text-xl font-medium text-gray-900 mb-4">Web Dev</h4>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>React & Next.js</li>
-                    <li>TailwindCSS</li>
-                    <li>Node.js & Express</li>
-                    <li>REST APIs & GraphQL</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
-                  <h4 className="text-xl font-medium text-gray-900 mb-4">Tools</h4>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>Git & GitHub</li>
-                    <li>Docker & Kubernetes</li>
-                    <li>AWS Cloud Services</li>
-                    <li>Linux (Kali on WSL)</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-xl hover:bg-white/30 transition-all duration-300">
-                  <h4 className="text-xl font-medium text-gray-900 mb-4">Core</h4>
-                  <ul className="space-y-2 text-gray-600">
-                    <li>Python & JavaScript</li>
-                    <li>C++ & Java</li>
-                    <li>System Design</li>
-                    <li>Problem Solving</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Projects */}
-            <div className="space-y-8">
-              <div className="flex items-center justify-between">
-                <h3 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
-                  Featured Projects
+              {/* Title */}
+              <div className="absolute left-0 top-0 -translate-y-12 flex flex-col">
+                <h2 className="text-4xl font-bold text-gray-900 font-caveat relative inline-block opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.2s_forwards]">
+                  Guess What I Use?
                   <div className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gray-900 to-transparent"></div>
-                </h3>
-                <button
-                  onClick={() => window.open('/projects', '_blank')}
-                  className="group relative px-8 py-3 text-lg font-medium text-gray-900 bg-white/50 backdrop-blur-sm rounded-xl hover:bg-white/80 transition-all duration-300 hover:shadow-lg border border-gray-200/20"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    All Projects
-                    <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-900/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </button>
+                </h2>
+                <p className="text-sm text-gray-600 mt-4 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.4s_forwards]">Because sometimes, the right tools make all the difference</p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <ProjectCard
-                  title="AI Healthcare Solution"
-                  description="Developed an AI-powered diagnostic tool for early disease detection using computer vision."
-                  tags={["Python", "TensorFlow", "OpenCV"]}
-                />
 
-                <ProjectCard
-                  title="Smart Portfolio"
-                  description="A modern, responsive portfolio website built with Next.js and TailwindCSS."
-                  tags={["Next.js", "TailwindCSS", "React"]}
-                />
+              {/* Navigation Buttons - Top Right */}
+              <div className="absolute right-0 top-0 -translate-y-12 flex gap-4">
+                <Link
+                  href="/projects"
+                  className="px-6 py-2.5 bg-gray-900/90 backdrop-blur-sm rounded-lg text-white hover:bg-gray-800 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl group opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_1.2s_forwards]"
+                >
+                  <span className="flex flex-col items-start">
+                    <span className="flex items-center gap-2">
+                      <span>What&apos;s the Fuss?</span>
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                    <span className="text-xs text-gray-300 mt-0.5">View My Projects</span>
+                  </span>
+                </Link>
+                <Link
+                  href="/case-studies"
+                  className="px-6 py-2.5 bg-gray-100/80 backdrop-blur-sm rounded-lg text-gray-900 hover:bg-gray-200/80 transition-all duration-300 text-sm font-medium border border-gray-300/50 hover:border-gray-400/50 group opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_1.2s_forwards]"
+                >
+                  <span className="flex flex-col items-start">
+                    <span className="flex items-center gap-2">
+                      <span>Built This. But Why?</span>
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                    <span className="text-xs text-gray-600 mt-0.5">Read Case Studies</span>
+                  </span>
+                </Link>
+              </div>
+
+              {/* Grid Layout */}
+              <div className="grid grid-cols-2 grid-rows-2 gap-12 py-16">
+                {/* Top Left - Backend & AI */}
+                <div className="relative px-12 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.6s_forwards]">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Backend & AI</h3>
+                  <div className="space-y-3">
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Django</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">My go-to for AI-driven applications, handling inference, classification, and API management</p>
+                    </div>
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Flask</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">When I need a lightning-fast prototype or a quick local server, Flask is the move</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Right - Databases & Storage */}
+                <div className="relative px-12 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_0.8s_forwards]">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Databases & Storage</h3>
+                  <div className="space-y-3">
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Supabase / SQLite</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">Supabase for SQL-backed projects, but if things are lightweight, I keep it simple with SQLite</p>
+                    </div>
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Firebase / MongoDB</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">I&apos;ve worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Left - Frontend & Mobile */}
+                <div className="relative px-12 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_1.0s_forwards]">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Frontend & Mobile</h3>
+                  <div className="space-y-3">
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">React / Vue / Next.js</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">If performance and UI/UX matter, I bring these into play</p>
+                    </div>
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">React Native + Expo</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">For mobile apps, I keep it smooth with React Native and Expo</p>
+                    </div>
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Django + React</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">When AI meets a slick frontend, Django runs the API while React handles the user experience</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Right - Deployment & Hosting */}
+                <div className="relative px-12 opacity-0 translate-y-4 animate-[fadeIn_0.8s_ease-out_1.2s_forwards]">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">Deployment & Hosting</h3>
+                  <div className="space-y-3">
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">Firebase / GitHub Pages</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">Static hosting made easy. Firebase for seamless deployment with SSL and custom domains; GitHub Pages for quick, free hosting</p>
+                    </div>
+                    <div className="group relative">
+                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                        <span className="text-base">AWS EC2</span>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600 pl-4">For dynamic websites that need serious backend muscle</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1126,14 +1175,6 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-3">
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                  <a href="mailto:la.buzzlebee@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    la.buzzlebee@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span className="text-gray-400">Not there yet. 🥢 </span>

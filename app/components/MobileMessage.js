@@ -59,7 +59,7 @@ export default function MobileMessage() {
                 You&apos;re ahead of the curve! 🚀
               </p>
               <p className="font-inter text-base text-gray-600 leading-relaxed">
-                While we craft the perfect mobile experience, try our desktop version for the full showcase.
+                While I craft the perfect mobile experience, try the desktop version for the full showcase.
               </p>
             </div>
           </div>
