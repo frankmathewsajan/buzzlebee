@@ -207,14 +207,14 @@ export default function Projects() {
   // Color schemes for different domains
   const domainColors = {
     'IoT/Embedded Systems': {
-      bg: '#DFE8E6',
-      text: '#607ebc',
-      accent: '#278782'
+      bg: '#FFF9E6',
+      text: '#321b15',
+      accent: '#8B4513'
     },
     'AI/ML': {
-      bg: '#FEF1E1',
-      text: '#FC350B',
-      accent: '#A0430A'
+      bg: '#F5F5F5',
+      text: '#2C3E50',
+      accent: '#34495E'
     },
     'Full-stack Development': {
       bg: '#ece5d8',
@@ -727,6 +727,16 @@ export default function Projects() {
                     >
                       GitHub
                     </a>
+                    <Link
+                      href={project.links.caseStudy}
+                      className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                      style={{ 
+                        border: `1px solid ${colors.text}`,
+                        color: colors.text
+                      }}
+                    >
+                      View Case Study
+                    </Link>
                   </div>
                 </motion.div>
 
