@@ -1,5 +1,19 @@
 {
   "projects": {
-    "default": "buzzlebee"
-  }
+    "default": "buzzlebee",
+    "buzzlebee": "buzzlebee"
+  },
+  "targets": {
+    "buzzlebee": {
+      "hosting": {
+        "frankmathewsajan": [
+          "frankmathewsajan"
+        ],
+        "buzzlebee": [
+          "buzzlebee"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

@@ -18,6 +18,7 @@ export default function Projects() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [visibleSection, setVisibleSection] = useState('overview');
   const [showMiniProjectsModal, setShowMiniProjectsModal] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const projects = [
     {
@@ -233,28 +234,95 @@ export default function Projects() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['overview', ...projects.map(p => p.id)];
-      const sectionElements = sections.map(id => document.getElementById(id));
-      
-      const currentSection = sectionElements.find(element => {
-        if (!element) return false;
-        const rect = element.getBoundingClientRect();
-        return rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
-      });
+    let scrollTimeout;
 
-      if (currentSection) {
-        setActiveProject(currentSection.id);
+    const handleScroll = () => {
+      setIsScrolling(true);
+      
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
       }
 
-      // Calculate scroll progress
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
+      scrollTimeout = setTimeout(() => {
+        setIsScrolling(false);
+        
+        const sections = Object.keys(projectRefs);
+        const sectionElements = sections.map(id => document.getElementById(id));
+        
+        // Find the current section based on viewport visibility
+        const currentSection = sectionElements.find(element => {
+          if (!element) return false;
+          const rect = element.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          
+          // Calculate how much of the section is visible
+          const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
+          const sectionHeight = Math.max(1, rect.height); // Prevent division by zero
+          const visibilityPercentage = (visibleHeight / sectionHeight) * 100;
+          
+          // If more than 75% of the section is visible, consider it the current section
+          return visibilityPercentage > 75;
+        });
+
+        if (currentSection) {
+          setActiveProject(currentSection.id);
+        }
+
+        // Calculate scroll progress with bounds checking
+        const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const currentScroll = Math.max(0, Math.min(window.scrollY, totalHeight));
+        const progress = (currentScroll / totalHeight) * 100;
+        setScrollProgress(progress);
+      }, 150);
+    };
+
+    const handleWheel = (e) => {
+      if (isScrolling) return;
+      
+      e.preventDefault();
+      
+      const sections = Object.keys(projectRefs);
+      const currentIndex = sections.indexOf(activeProject);
+      
+      if (e.deltaY > 0 && currentIndex < sections.length - 1) {
+        const nextSection = projectRefs[sections[currentIndex + 1]].current;
+        if (nextSection) {
+          nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (e.deltaY < 0 && currentIndex > 0) {
+        const prevSection = projectRefs[sections[currentIndex - 1]].current;
+        if (prevSection) {
+          prevSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleWheel);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+    };
+  }, [activeProject, isScrolling]);
+
+  // Add CSS for smooth scrolling
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      html {
+        scroll-behavior: smooth;
+      }
+      section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
   }, []);
 
   useEffect(() => {
@@ -373,20 +441,20 @@ export default function Projects() {
         )}
       </div>
 
-      {/* Overview Section - Keep original cream/brown theme */}
-      <section 
+      {/* Overview Section */}
+      <section
         id="overview"
         ref={projectRefs.overview}
-        className="min-h-screen flex items-center relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE]"
+        className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-16"
       >
         <motion.div 
-          className="max-w-[90vw] mx-auto w-full py-8"
+          className="max-w-[90vw] mx-auto w-full"
           initial="hidden"
           animate={visibleSection === 'overview' ? 'visible' : 'exit'}
           variants={fadeInUp}
         >
           <motion.h1 
-            className={`${spaceGrotesk.className} text-5xl md:text-7xl leading-none text-[#5D503A] mb-8`}
+            className={`${spaceGrotesk.className} text-5xl md:text-7xl leading-none text-[#5D503A] mb-12`}
             variants={{
               hidden: { opacity: 0, x: -20 },
               visible: { 
@@ -400,60 +468,19 @@ export default function Projects() {
           </motion.h1>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
             variants={sectionVariants}
             initial="hidden"
             animate={visibleSection === 'overview' ? 'visible' : 'exit'}
           >
-            {/* Left Column - Main Projects */}
+            {/* Left Column - Featured Projects */}
             <motion.div className="space-y-8" variants={sectionVariants}>
-              {/* Featured Projects Section */}
               <motion.div className="space-y-4" variants={sectionVariants}>
                 <motion.h3 variants={itemVariants} className={`${spaceGrotesk.className} text-base md:text-lg text-[#5D503A] uppercase tracking-wider`}>
                   Featured Projects
                 </motion.h3>
                 <motion.div className="space-y-4" variants={staggerContainer}>
-                  {projects.filter(p => !p.category.includes('CS50')).map((project, index) => (
-                    <motion.button
-                      key={project.id}
-                      variants={itemVariants}
-                      onClick={() => projectRefs[project.id].current?.scrollIntoView({ behavior: 'smooth' })}
-                      className="group block text-left w-full"
-                    >
-                      <div className="flex items-baseline justify-between border-b border-[#5D503A]/20 pb-2 group-hover:border-[#5D503A] transition-all duration-200"
-                        style={{
-                          boxShadow: `0 2px 4px -2px ${domainColors[project.category]?.text}10`,
-                        }}
-                      >
-                        <div className="space-y-0.5">
-                          <span className={`${inter.className} text-base text-[#5D503A] block`}>{project.title}</span>
-                          <span className={`${inter.className} text-xs text-[#5D503A]/60`}>{project.category}</span>
-                        </div>
-                        <span className={`${inter.className} text-xs text-[#5D503A]/60`}>{project.timeline}</span>
-                      </div>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              </motion.div>
-
-              {/* Course Projects Section */}
-              <motion.div className="space-y-4" variants={sectionVariants}>
-                <motion.div variants={itemVariants} className="flex items-center justify-between">
-                  <h3 className={`${spaceGrotesk.className} text-base md:text-lg text-[#5D503A] uppercase tracking-wider`}>
-                    Course Projects
-                  </h3>
-                  <button
-                    onClick={() => setShowMiniProjectsModal(true)}
-                    className={`${inter.className} text-xs text-[#5D503A] hover:text-[#5D503A]/60 transition-colors duration-200 flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A]/40`}
-                  >
-                    View Mini Projects
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </motion.div>
-                <motion.div className="space-y-4" variants={staggerContainer}>
-                  {projects.filter(p => p.category.includes('CS50')).map((project, index) => (
+                  {projects.filter(p => !p.category.includes('CS50')).map((project) => (
                     <motion.button
                       key={project.id}
                       variants={itemVariants}
@@ -477,53 +504,89 @@ export default function Projects() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column - Timeline */}
-            <motion.div className="space-y-8" variants={sectionVariants}>
+            {/* Right Column - Course Projects and Scroll Indicator */}
+            <motion.div className="flex flex-col justify-between" variants={sectionVariants}>
+              {/* Course Projects Section */}
               <motion.div className="space-y-4" variants={sectionVariants}>
-                <motion.h3 variants={itemVariants} className={`${spaceGrotesk.className} text-base md:text-lg text-[#5D503A] uppercase tracking-wider`}>
-                  Project Timeline
-                </motion.h3>
-                <motion.div className="space-y-4 relative" variants={staggerContainer}>
-                  {/* Timeline line */}
-                  <div className="absolute left-0 top-0 bottom-0 w-px bg-[#5D503A]/10"></div>
-                  
-                  {[...projects].sort((a, b) => new Date(b.timeline) - new Date(a.timeline)).map((project, index) => (
-                    <motion.div 
-                      key={project.id} 
-                      className="group relative pl-4"
-                      variants={timelineItemVariants}
+                <motion.div variants={itemVariants} className="flex items-center justify-between">
+                  <h3 className={`${spaceGrotesk.className} text-base md:text-lg text-[#5D503A] uppercase tracking-wider`}>
+                    Course Projects
+                  </h3>
+                  <button
+                    onClick={() => setShowMiniProjectsModal(true)}
+                    className={`${inter.className} text-xs text-[#5D503A] hover:text-[#5D503A]/60 transition-colors duration-200 flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A]/40`}
+                  >
+                    View Mini Projects
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </motion.div>
+                <motion.div className="space-y-4" variants={staggerContainer}>
+                  {projects.filter(p => p.category.includes('CS50')).map((project) => (
+                    <motion.button
+                      key={project.id}
+                      variants={itemVariants}
+                      onClick={() => projectRefs[project.id].current?.scrollIntoView({ behavior: 'smooth' })}
+                      className="group block text-left w-full"
                     >
-                      {/* Timeline dot with background to prevent line showing through */}
-                      <div className="absolute left-[-4px] top-1/2 w-2 h-2 rounded-full flex items-center justify-center"
-                        style={{ 
-                          backgroundColor: '#FAF5EE',
-                          boxShadow: `0 0 0 2px ${domainColors[project.category]?.text}40`
-                        }}
-                      >
-                        <div className="w-1 h-1 rounded-full"
-                          style={{ 
-                            backgroundColor: domainColors[project.category]?.text
-                          }}
-                        ></div>
-                      </div>
-                      
                       <div className="flex items-baseline justify-between border-b border-[#5D503A]/20 pb-2 group-hover:border-[#5D503A] transition-all duration-200"
                         style={{
                           boxShadow: `0 2px 4px -2px ${domainColors[project.category]?.text}10`,
                         }}
                       >
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-1.5">
-                            <span className={`${inter.className} text-sm text-[#5D503A]`}>{project.timeline}</span>
-                            <span className="w-1 h-1 rounded-full bg-[#5D503A]/40"></span>
-                            <span className={`${inter.className} text-xs text-[#5D503A]/60`}>{project.category}</span>
-                          </div>
-                          <span className={`${inter.className} text-sm text-[#5D503A] block`}>{project.title}</span>
+                        <div className="space-y-0.5">
+                          <span className={`${inter.className} text-base text-[#5D503A] block`}>{project.title}</span>
+                          <span className={`${inter.className} text-xs text-[#5D503A]/60`}>{project.category}</span>
                         </div>
+                        <span className={`${inter.className} text-xs text-[#5D503A]/60`}>{project.timeline}</span>
                       </div>
-                    </motion.div>
+                    </motion.button>
                   ))}
                 </motion.div>
+              </motion.div>
+
+              {/* Scroll Indicator */}
+              <motion.div 
+                className="flex items-center justify-center mt-24"
+                variants={sectionVariants}
+              >
+                <motion.button 
+                  className="relative w-24 h-24 flex items-center justify-center cursor-pointer"
+                  onClick={() => {
+                    const sections = ['overview', ...projects.map(p => p.id)];
+                    const currentIndex = sections.indexOf(visibleSection);
+                    if (currentIndex < sections.length - 1) {
+                      projectRefs[sections[currentIndex + 1]].current?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  animate={{
+                    y: [0, 8, 0],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <div className="absolute inset-0 border-2 border-[#5D503A]/40 rounded-full"></div>
+                  <div className="flex flex-col items-center">
+                    <span className={`${inter.className} text-sm text-[#5D503A] mb-1`}>scroll</span>
+                    <svg 
+                      className="w-4 h-4 text-[#5D503A]" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={1.5} 
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      />
+                    </svg>
+                  </div>
+                </motion.button>
               </motion.div>
             </motion.div>
           </motion.div>

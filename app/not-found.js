@@ -12,6 +12,7 @@ export default function NotFound() {
   const availablePages = [
     { name: 'Home', href: '/' },
     { name: 'Projects', href: '/projects' },
+    { name: 'Case Studies', href: '/case-studies' },
   ];
 
   return (

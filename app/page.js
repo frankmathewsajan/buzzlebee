@@ -524,15 +524,14 @@ export default function Home() {
 
               <div className="space-y-6">
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  Hi, I&apos;m Frank. Figuring out why my solution works before I even understand why it should
-                  —I thrive in the space between logic and chaos
+                  Hi, I&apos;m Frank. Navigating the unknown before I even grasp the map—I thrive in the space between logic and chaos.
                 </p>
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
                   I believe the best ideas come from experimentation—breaking things on purpose just to see what happens.
                   Playing it safe has never led to anything groundbreaking.
                 </p>
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  When not coding, I&apos;m deep-diving into AI breakthroughs, optimizing robotics algorithms, or exploring the future of gene editing—because innovation never sleeps. If an idea can transcend time, I want to be the one shaping it.
+                  When not coding, I&apos;m deep-diving into chess, maybe some anime, or the future of gene editing—because innovation never sleeps. If an idea can transcend time, I want to be the one shaping it.
                 </p>
 
               </div>
@@ -552,9 +551,10 @@ export default function Home() {
                   <div className="absolute left-[-5px] top-0 w-3 h-3 bg-gray-900 rounded-full"></div>
                   <h3 className="text-2xl font-semibold text-gray-900 mb-4">The Journey</h3>
                   <p className="text-gray-700 text-lg leading-relaxed">
-                    Started with a simple &quot;Hello, World!&quot; and now crafting AI solutions.
-                    The path from basic programming to machine learning has been an adventure of constant learning and growth.
+                    Started with a simple &quot;Hello, World!&quot;—now building AI that speaks for itself. <br/>
+                    From debugging first loops to solving real-world problems, it’s been a journey of curiosity, chaos, and constant growth.
                   </p>
+
                 </div>
 
                 {/* Education Section */}
@@ -685,9 +685,9 @@ export default function Home() {
                             />
                           </div>
                           <div>
-                            <Link 
-                              href="https://purpletechno.com" 
-                              target="_blank" 
+                            <Link
+                              href="https://purpletechno.com"
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="group"
                             >
@@ -746,9 +746,9 @@ export default function Home() {
                             />
                           </div>
                           <div>
-                            <Link 
-                              href="https://t2gdrone.com" 
-                              target="_blank" 
+                            <Link
+                              href="https://t2gdrone.com"
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="group"
                             >
@@ -807,14 +807,14 @@ export default function Home() {
                             />
                           </div>
                           <div>
-                            <Link 
-                              href="https://iete.org" 
-                              target="_blank" 
+                            <Link
+                              href="https://iete.org"
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="group"
                             >
                               <h4 className="text-2xl font-medium text-gray-900 mb-1 hover:text-gray-600 transition-colors duration-200 flex items-center gap-1">
-                              Institute of Electronics & Telecom Engineers
+                                Institute of Electronics & Telecom Engineers
                                 <svg className="w-4 h-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                                 </svg>

@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "yarn build && firebase deploy",
+    "firebase": "cp -r out/* ../frankmathewsajan/public && cd ../frankmathewsajan && firebase deploy",
+    "fb": "yarn deploy && yarn firebase"
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",
