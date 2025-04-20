@@ -5,6 +5,19 @@ import Link from "next/link";
 import { useEffect, useRef, useState, memo, useMemo } from "react";
 import { ArrowUpCircle, ArrowDownCircle, CheckCircle } from '@geist-ui/icons';
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
+import { Space_Grotesk, Inter } from 'next/font/google';
+
+// Font setup
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 const CustomGauge = memo(({ value, size = "small", currentSection }) => {
   const sizeClasses = {
@@ -157,7 +170,43 @@ const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSect
                 Case Studies
               </span>
               <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => setShowNavMenu(false)}
+              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
+            >
+              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                Education & Experience
+              </span>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </Link>
+            <Link
+              href="/certifications"
+              onClick={() => setShowNavMenu(false)}
+              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
+            >
+              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                Certifications
+              </span>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </Link>
+            <Link
+              href="/blogs"
+              onClick={() => setShowNavMenu(false)}
+              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
+            >
+              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
+                Blog
+              </span>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </Link>
           </div>
@@ -395,6 +444,28 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
+  // Save scroll position when leaving the page
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem('indexScrollPosition', window.scrollY.toString());
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  // Restore scroll position when returning to the page
+  useEffect(() => {
+    const savedScrollPosition = localStorage.getItem('indexScrollPosition');
+    if (savedScrollPosition) {
+      // Use setTimeout to ensure the page has rendered
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScrollPosition));
+        localStorage.removeItem('indexScrollPosition'); // Clear the saved position
+      }, 100);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#e7dfd8]">
       {/* Hero Section */}
@@ -513,64 +584,73 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
           {/* About Me + Journey + Beyond Code */}
           <div id="about-me" className="space-y-20 mb-24" ref={aboutSectionRef}>
-            {/* Title Row */}
-            <h2 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block text-left w-full">
-              Let me introduce myself...
-            </h2>
+            {/* First Row - Title, Introduction and Image */}
+            <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-16">
+              <div className="space-y-6">
+                <h2 className="text-5xl font-bold text-gray-900 font-caveat">
+                  Let me introduce myself...
+                </h2>
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hi</b>, &nbsp;I'm Frank. I write poetic reflections, so let me introduce myself in a way that feels more like art than a résumé.
+                </p>
+                <div className="w-12 h-1 bg-gray-900/20 rounded-full"></div>
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                    When I'm not coding, I play chess, watch anime, or sleep—because innovation never sleeps, but I do.
+                  </p>
+              </div>
+              <div className="relative aspect-square w-full max-w-[300px] mx-auto">
+                <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
+                <Image
+                  src="/images/frank.jpg"
+                  alt="Frank Mathew Sajan"
+                  fill
+                  className="object-cover rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-2 bg-white/10 backdrop-blur-sm"
+                  priority
+                  sizes="(max-width: 768px) 300px, 300px"
+                  style={{
+                    transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+                    transition: 'transform 0.3s ease-out'
+                  }}
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                  }}
+                />
+              </div>
+            </div>
 
-            {/* Content Row - Image and Write-up */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {/* Image Column */}
-              <div className="lg:col-span-1">
-                <div className="relative aspect-square w-full max-w-[600px] mx-auto lg:mx-0">
-                  <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
-                  <Image
-                    src="/images/frank.jpg"
-                    alt="Frank Mathew Sajan"
-                    fill
-                    className="object-cover rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-2 bg-white/10 backdrop-blur-sm"
-                    priority
-                    sizes="(max-width: 768px) 400px, 600px"
-                    style={{
-                      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-                      transition: 'transform 0.3s ease-out'
-                    }}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const x = e.clientX - rect.left;
-                      const y = e.clientY - rect.top;
-                      const centerX = rect.width / 2;
-                      const centerY = rect.height / 2;
-                      const rotateX = (y - centerY) / 20;
-                      const rotateY = (centerX - x) / 20;
-                      e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                    }}
-                  />
+            {/* Second Row - Poem and Main Text */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+              {/* Left Column - Poem */}
+              <div className="bg-white/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100/20">
+                <div className="space-y-4">
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-center italic whitespace-nowrap">
+                    In creation's throes, I find my grace,<br />
+                    A rhythm born from chance's face;<br />
+                    Where logic fades, and wildness sings,<br />
+                    There, in the dance, my spirit springs.
+                  </p>
                 </div>
               </div>
 
-              {/* Write-up Column */}
-              <div className="lg:col-span-2 ">
-                <div className="space-y-6">
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    <b className="text-2xl  font-bold" style={{ fontFamily: 'Times New Roman' }}>Hi</b>, &nbsp;I'm Frank. I love to write poetic reflections, so let me describe myself in a way that sounds aesthetic and fun.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    <i>I thrive in the space between logic and chaos, navigating the unknown even before I grasp the map. In the dance of creation, I find my rhythm in the unexpected.</i>
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    I believe the best ideas emerge from experimentation—breaking things on purpose just to see what happens. Playing it safe has never led to anything groundbreaking.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    When I'm not coding, I'm deep-diving into chess, exploring anime, or contemplating the future of gene editing—because innovation never sleeps.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    <i>Then again, if an idea can transcend time, I want to be the one shaping it.</i>
-                  </p>
-                </div>
+              {/* Right Column - Main Text */}
+              <div className="space-y-6">
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  I believe the best ideas emerge from experimentation—breaking things on purpose just to see what happens. Playing it safe has never led to anything groundbreaking.
+                </p>
+
+                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify italic text-center">
+                  Then again, if an idea can transcend time, I want to be the one shaping it.
+                </p>
               </div>
             </div>
           </div>
@@ -657,18 +737,28 @@ export default function Home() {
               {activeTechStack === 'backend' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">Backend</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Django</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-lg font-medium text-gray-900">Django</h4>
+                          <Link href="/certifications#django" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </Link>
+                        </div>
+                        <p className="text-base text-gray-600">My go-to for robust web applications, handling complex business logic and API management</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">My go-to for robust web applications, handling complex business logic and API management</p>
+                      <Image src="/images/logos/techstack/django.jpg" alt="Django" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Flask</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Flask</h4>
+                        <p className="text-base text-gray-600">When I need a lightning-fast prototype or a quick local server, Flask is the move</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">When I need a lightning-fast prototype or a quick local server, Flask is the move</p>
+                      <Image src="/images/logos/techstack/flask.png" alt="Flask" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -677,18 +767,20 @@ export default function Home() {
               {activeTechStack === 'databases' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">Databases & Storage</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Supabase / SQLite</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Supabase / SQLite</h4>
+                        <p className="text-base text-gray-600">Supabase for SQL-backed projects, but if things are lightweight, I keep it simple with SQLite</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">Supabase for SQL-backed projects, but if things are lightweight, I keep it simple with SQLite</p>
+                      <Image src="/images/logos/techstack/supabase.png" alt="Supabase" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Firebase / MongoDB</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Firebase / MongoDB</h4>
+                        <p className="text-base text-gray-600">I've worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">I've worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
+                      <Image src="/images/logos/techstack/firebase.svg" alt="Firebase" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -697,24 +789,35 @@ export default function Home() {
               {activeTechStack === 'frontend' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">Frontend</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">React / Vue</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-lg font-medium text-gray-900">Next.js</h4>
+                          <Link href="/certifications#nextjs" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </Link>
+                        </div>
+                        <p className="text-base text-gray-600">My preferred framework for server-rendered React applications</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For building interactive and responsive user interfaces</p>
+                      <Image src="/images/logos/techstack/next.webp" alt="Next.js" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Next.js</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Vite</h4>
+                        <p className="text-base text-gray-600">For building fast and modern web applications</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">My preferred framework for server-rendered React applications</p>
+                      <Image src="/images/logos/techstack/vite.jpg" alt="Vite" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Electron</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Electron</h4>
+                        <p className="text-base text-gray-600">For building cross-platform desktop applications</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For building cross-platform desktop applications</p>
+                      <Image src="/images/logos/techstack/electron.svg" alt="Electron" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -723,18 +826,28 @@ export default function Home() {
               {activeTechStack === 'mobile' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">Mobile Development</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">React Native + Expo</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-lg font-medium text-gray-900">React Native + Expo</h4>
+                          <Link href="/certifications#react-native" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </Link>
+                        </div>
+                        <p className="text-base text-gray-600">For mobile apps, I keep it smooth with React Native and Expo</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For mobile apps, I keep it smooth with React Native and Expo</p>
+                      <Image src="/images/logos/techstack/exporn.webp" alt="Expo" width={120} height={120} className="rounded-md hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Cordova</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Cordova</h4>
+                        <p className="text-base text-gray-600">For hybrid mobile applications when web technologies are preferred</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For hybrid mobile applications when web technologies are preferred</p>
+                      <Image src="/images/logos/techstack/cordova.png" alt="Cordova" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -743,24 +856,35 @@ export default function Home() {
               {activeTechStack === 'devops' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">DevOps & Deployment</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">Docker</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-lg font-medium text-gray-900">Docker</h4>
+                          <Link href="/certifications#docker" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </Link>
+                        </div>
+                        <p className="text-base text-gray-600">For containerization and consistent development environments</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For containerization and consistent development environments</p>
+                      <Image src="/images/logos/techstack/docker.png" alt="Docker" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">GitHub Actions</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">GitHub Actions</h4>
+                        <p className="text-base text-gray-600">For CI/CD pipelines and automated workflows</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For CI/CD pipelines and automated workflows</p>
+                      <Image src="/images/logos/techstack/gitbub-actions.avif" alt="GitHub Actions" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">AWS / Firebase</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">AWS / Firebase</h4>
+                        <p className="text-base text-gray-600">For cloud deployment and hosting solutions</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For cloud deployment and hosting solutions</p>
+                      <Image src="/images/logos/techstack/aws.png" alt="AWS" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -769,24 +893,35 @@ export default function Home() {
               {activeTechStack === 'ai' && (
                 <div className="space-y-6">
                   <h3 className="text-2xl font-semibold text-gray-900">AI & Machine Learning</h3>
-                  <div className="space-y-4">
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">TensorFlow / PyTorch</span>
+                  <div className="grid grid-cols-1 gap-12">
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-lg font-medium text-gray-900">TensorFlow / PyTorch</h4>
+                          <Link href="/certifications#tensorflow" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </Link>
+                        </div>
+                        <p className="text-base text-gray-600">For deep learning and neural network implementations</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For deep learning and neural network implementations</p>
+                      <Image src="/images/logos/techstack/tf.webp" alt="TensorFlow" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">scikit-learn</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">scikit-learn</h4>
+                        <p className="text-base text-gray-600">For traditional machine learning algorithms and data analysis</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For traditional machine learning algorithms and data analysis</p>
+                      <Image src="/images/logos/techstack/scikit-learn.png" alt="scikit-learn" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="group relative">
-                      <div className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                        <span className="text-lg font-medium">OpenAI API</span>
+                    <div className="flex justify-between items-center">
+                      <div className="space-y-2">
+                        <h4 className="text-lg font-medium text-gray-900">Hugging Face</h4>
+                        <p className="text-base text-gray-600">For integrating advanced language models into applications</p>
                       </div>
-                      <p className="mt-2 text-base text-gray-600 pl-4">For integrating advanced language models into applications</p>
+                      <Image src="/images/logos/techstack/huggin face.png" alt="Hugging Face" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -812,28 +947,42 @@ export default function Home() {
                 <p className="text-lg md:text-xl text-gray-700 font-serif text-justify mb-8" style={{ fontFamily: 'Times New Roman' }}>
                   If you're here to understand what I have built, what I value, or what I can contribute - this is a good place to start. Currently focused on integrating real world systems with intelligent automation - across domains like IoT, environmental tech, and health and safety.
                 </p>
-                <div className="flex flex-row gap-3 mb-8">
-                  <Link
-                    href="/projects"
-                    className="w-fit px-6 py-2 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center gap-3 group border border-red-800 rounded-lg"
+                <div className="grid grid-cols-2 gap-4 mb-12">
+                  <Link 
+                    href="/projects" 
+                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
                   >
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
-                      View Projects
-                    </span>
-                    <svg className="w-4 h-4 text-gray-700 group-hover:text-gray-900 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
+                    Projects
                   </Link>
-                  <Link
-                    href="/case-studies"
-                    className="w-fit px-6 py-2 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center gap-3 group border border-red-800 rounded-lg"
+                  <Link 
+                    href="/certifications" 
+                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
                   >
-                    <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
-                      Case Studies
-                    </span>
-                    <svg className="w-4 h-4 text-gray-700 group-hover:text-gray-900 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
+                    Certifications
+                  </Link>
+                  <Link 
+                    href="/blogs" 
+                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
+                  >
+                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                    Blog
+                  </Link>
+                  <Link 
+                    href="/about" 
+                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
+                  >
+                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Education & Experience
                   </Link>
                 </div>
                 <p className="text-lg text-gray-600 font-serif text-justify" style={{ fontFamily: 'Times New Roman' }}>
