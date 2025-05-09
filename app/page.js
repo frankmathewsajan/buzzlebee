@@ -591,11 +591,11 @@ export default function Home() {
                   Let me introduce myself...
                 </h2>
                 <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hi</b>, &nbsp;I'm Frank. I write poetic reflections, so let me introduce myself in a way that feels more like art than a résumé.
+                  <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hi</b>, &nbsp;I&apos;m Frank. I write poetic reflections, so let me introduce myself in a way that feels more like art than a résumé.
                 </p>
                 <div className="w-12 h-1 bg-gray-900/20 rounded-full"></div>
                   <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    When I'm not coding, I play chess, watch anime, or sleep—because innovation never sleeps, but I do.
+                    When I&apos;m not coding, I play chess, watch anime, or sleep—because innovation never sleeps, but I do.
                   </p>
               </div>
               <div className="relative aspect-square w-full max-w-[300px] mx-auto">
@@ -634,8 +634,8 @@ export default function Home() {
               <div className="bg-white/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100/20">
                 <div className="space-y-4">
                   <p className="text-gray-700 leading-relaxed text-lg font-serif text-center italic whitespace-nowrap">
-                    In creation's throes, I find my grace,<br />
-                    A rhythm born from chance's face;<br />
+                    In creation&apos;s throes, I find my grace,<br />
+                    A rhythm born from chance&apos;s face;<br />
                     Where logic fades, and wildness sings,<br />
                     There, in the dance, my spirit springs.
                   </p>
@@ -778,7 +778,7 @@ export default function Home() {
                     <div className="flex justify-between items-center">
                       <div className="space-y-2">
                         <h4 className="text-lg font-medium text-gray-900">Firebase / MongoDB</h4>
-                        <p className="text-base text-gray-600">I've worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
+                        <p className="text-base text-gray-600">I&apos;ve worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
                       </div>
                       <Image src="/images/logos/techstack/firebase.svg" alt="Firebase" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
@@ -945,7 +945,7 @@ export default function Home() {
               <div>
                 <h2 className="text-5xl font-bold text-gray-900 mb-8 font-caveat">Don&apos;t be shy!</h2>
                 <p className="text-lg md:text-xl text-gray-700 font-serif text-justify mb-8" style={{ fontFamily: 'Times New Roman' }}>
-                  If you're here to understand what I have built, what I value, or what I can contribute - this is a good place to start. Currently focused on integrating real world systems with intelligent automation - across domains like IoT, environmental tech, and health and safety.
+                  If you&apos;re here to understand what I have built, what I value, or what I can contribute - this is a good place to start. Currently focused on integrating real world systems with intelligent automation - across domains like IoT, environmental tech, and health and safety.
                 </p>
                 <div className="grid grid-cols-2 gap-4 mb-12">
                   <Link 
