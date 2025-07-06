@@ -582,75 +582,66 @@ export default function Home() {
           }`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-          {/* About Me + Journey + Beyond Code */}
-          <div id="about-me" className="space-y-20 mb-24" ref={aboutSectionRef}>
-            {/* First Row - Title, Introduction and Image */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-16">
-              <div className="space-y-6">
-                <h2 className="text-5xl font-bold text-gray-900 font-caveat">
-                  Let me introduce myself...
-                </h2>
-                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hi</b>, &nbsp;I&apos;m Frank. I write poetic reflections, so let me introduce myself in a way that feels more like art than a résumé.
-                </p>
-                <div className="w-12 h-1 bg-gray-900/20 rounded-full"></div>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    When I&apos;m not coding, I play chess, watch anime, or sleep—because innovation never sleeps, but I do.
-                  </p>
-              </div>
-              <div className="relative aspect-square w-full max-w-[300px] mx-auto">
-                <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
-                <Image
-                  src="/images/frank.jpg"
-                  alt="Frank Mathew Sajan"
-                  fill
-                  className="object-cover rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-2 bg-white/10 backdrop-blur-sm"
-                  priority
-                  sizes="(max-width: 768px) 300px, 300px"
-                  style={{
-                    transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-                    transition: 'transform 0.3s ease-out'
-                  }}
-                  onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 20;
-                    const rotateY = (centerX - x) / 20;
-                    e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                  }}
-                />
-              </div>
+          {/* About Me Section */}
+          <div id="about-me" className="space-y-16 mb-24" ref={aboutSectionRef}>
+            {/* Header */}
+            <div className="text-left">
+              <h2 className="text-5xl font-bold text-gray-900 font-caveat mb-4">
+                Let me introduce myself...
+              </h2>
+              <div className="w-16 h-1 bg-gray-900/20 rounded-full"></div>
             </div>
 
-            {/* Second Row - Poem and Main Text */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-              {/* Left Column - Poem */}
-              <div className="bg-white/20 backdrop-blur-sm p-8 rounded-2xl shadow-lg border border-gray-100/20">
-                <div className="space-y-4">
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-center italic whitespace-nowrap">
-                    In creation&apos;s throes, I find my grace,<br />
-                    A rhythm born from chance&apos;s face;<br />
-                    Where logic fades, and wildness sings,<br />
-                    There, in the dance, my spirit springs.
-                  </p>
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+              {/* Left Column - Personal Image */}
+              <div className="lg:col-span-1 flex justify-center lg:justify-start">
+                <div className="relative aspect-square w-full max-w-[280px]">
+                  <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
+                  <Image
+                    src="/images/frank.jpg"
+                    alt="Frank Mathew Sajan"
+                    fill
+                    className="object-cover rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-2 bg-white/10 backdrop-blur-sm"
+                    priority
+                    sizes="(max-width: 768px) 280px, 280px"
+                    style={{
+                      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
+                      transition: 'transform 0.3s ease-out'
+                    }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const y = e.clientY - rect.top;
+                      const centerX = rect.width / 2;
+                      const centerY = rect.height / 2;
+                      const rotateX = (y - centerY) / 20;
+                      const rotateY = (centerX - x) / 20;
+                      e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                    }}
+                  />
                 </div>
               </div>
 
-              {/* Right Column - Main Text */}
-              <div className="space-y-6">
-                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  I believe the best ideas emerge from experimentation—breaking things on purpose just to see what happens. Playing it safe has never led to anything groundbreaking.
-                </p>
-
-                <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify italic text-center">
-                  Then again, if an idea can transcend time, I want to be the one shaping it.
-                </p>
+              {/* Right Column - Text Content */}
+              <div className="lg:col-span-2 space-y-8">
+                <div className="space-y-6">
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                    <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hey there!</b> &nbsp;Frank here. I could throw around buzzwords and tell you I'm "passionate about innovative solutions," but honestly? I just like building stuff that works.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                    When I'm not coding, I'm probably playing chess (badly), watching anime (obsessively), or sleeping (not enough). It's a simple life, but it keeps me sane.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                    Look, instead of me rambling about what I can do, just poke around. Check out the projects, see what I've built. If something catches your eye, great. If not, no worries—at least you got to see some decent web design.
+                  </p>
+                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                    The tech stack section shows what I actually use (not what I think sounds impressive), and the projects are real things I've built for real problems. Some worked out better than others, but that's how it goes.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -664,264 +655,224 @@ export default function Home() {
         className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.projects ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 pt-24 pb-8">
-          <div className="max-w-6xl mx-auto">
+        <div className="w-full px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+          <div className="max-w-7xl mx-auto">
             {/* Title */}
             <div className="mb-8">
-              <h2 className="text-5xl font-bold text-gray-900 font-caveat relative inline-block">
-                My Building Blocks...
+              <h2 className="text-5xl font-bold text-gray-900 font-caveat mb-4">
+                What I Work With
               </h2>
-              <p className="text-sm text-gray-600 mt-3">Because sometimes, the right tools make all the difference</p>
+              <p className="text-lg text-gray-600 font-serif">The tools that help me turn ideas into reality</p>
             </div>
 
-            {/* Tech Stack Buttons */}
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mb-6">
-              <button
-                onClick={() => setActiveTechStack('frontend')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'frontend'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
+            {/* Tech Categories */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {[
+                { key: 'frontend', label: 'Frontend' },
+                { key: 'backend', label: 'Backend' },
+                { key: 'mobile', label: 'Mobile' },
+                { key: 'databases', label: 'Database' },
+                { key: 'devops', label: 'DevOps' },
+                { key: 'ai', label: 'AI/ML' }
+              ].map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveTechStack(key)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    activeTechStack === key
+                      ? 'bg-gray-900 text-white shadow-lg'
+                      : 'bg-white/70 text-gray-700 hover:bg-white/90 hover:shadow-md'
                   }`}
-              >
-                <h3 className="text-sm font-medium">Frontend</h3>
-              </button>
-              <button
-                onClick={() => setActiveTechStack('mobile')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'mobile'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
-                  }`}
-              >
-                <h3 className="text-sm font-medium">Mobile</h3>
-              </button>
-              <button
-                onClick={() => setActiveTechStack('databases')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'databases'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
-                  }`}
-              >
-                <h3 className="text-sm font-medium">Databases</h3>
-              </button>
-              <button
-                onClick={() => setActiveTechStack('backend')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'backend'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
-                  }`}
-              >
-                <h3 className="text-sm font-medium">Backend</h3>
-              </button>
-              <button
-                onClick={() => setActiveTechStack('devops')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'devops'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
-                  }`}
-              >
-                <h3 className="text-sm font-medium">DevOps</h3>
-              </button>
-              <button
-                onClick={() => setActiveTechStack('ai')}
-                className={`p-2 rounded-md transition-all duration-300 ${activeTechStack === 'ai'
-                    ? 'bg-white/80 text-gray-900 shadow-md border border-red-800'
-                    : 'bg-white/50 hover:bg-white/80 text-gray-900'
-                  }`}
-              >
-                <h3 className="text-sm font-medium">AI/ML</h3>
-              </button>
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
-            {/* Detailed View */}
-            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-8 shadow-lg min-h-[300px]">
+            {/* Content Display */}
+            <div className="space-y-6">
               {activeTechStack === 'backend' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">Backend</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-lg font-medium text-gray-900">Django</h4>
-                          <Link href="/certifications#django" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Certified
-                          </Link>
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <h4 className="text-xl font-bold text-gray-900">Django</h4>
+                            <Link href="/certifications#django" className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full hover:bg-green-200 transition-colors">
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              Certified
+                            </Link>
+                          </div>
+                          <p className="text-gray-600 leading-relaxed">Robust web applications with complex business logic and seamless API management</p>
                         </div>
-                        <p className="text-base text-gray-600">My go-to for robust web applications, handling complex business logic and API management</p>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/django.jpg" alt="Django" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
                       </div>
-                      <Image src="/images/logos/techstack/django.jpg" alt="Django" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Flask</h4>
-                        <p className="text-base text-gray-600">When I need a lightning-fast prototype or a quick local server, Flask is the move</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">Flask</h4>
+                          <p className="text-gray-600 leading-relaxed">Lightning-fast prototyping and elegant microservices architecture</p>
+                        </div>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/flask.png" alt="Flask" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
                       </div>
-                      <Image src="/images/logos/techstack/flask.png" alt="Flask" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'databases' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">Databases & Storage</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Supabase / SQLite</h4>
-                        <p className="text-base text-gray-600">Supabase for SQL-backed projects, but if things are lightweight, I keep it simple with SQLite</p>
-                      </div>
-                      <Image src="/images/logos/techstack/supabase.png" alt="Supabase" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Firebase / MongoDB</h4>
-                        <p className="text-base text-gray-600">I&apos;ve worked with NoSQL solutions like Firebase and MongoDB, but I rarely need them</p>
-                      </div>
-                      <Image src="/images/logos/techstack/firebase.svg" alt="Firebase" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
               )}
 
               {activeTechStack === 'frontend' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">Frontend</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-lg font-medium text-gray-900">Next.js</h4>
-                          <Link href="/certifications#nextjs" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/next.webp" alt="Next.js" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Next.js</h4>
+                        <p className="text-gray-600 text-sm">Server-rendered React perfection</p>
+                      </div>
+                    </div>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/vite.jpg" alt="Vite" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <h4 className="text-lg font-bold text-gray-900">Vite</h4>
+                          <Link href="/certifications#vite" className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full hover:bg-green-200 transition-colors">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
                             Certified
                           </Link>
                         </div>
-                        <p className="text-base text-gray-600">My preferred framework for server-rendered React applications</p>
+                        <p className="text-gray-600 text-sm">Blazing fast modern development</p>
                       </div>
-                      <Image src="/images/logos/techstack/next.webp" alt="Next.js" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Vite</h4>
-                        <p className="text-base text-gray-600">For building fast and modern web applications</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/electron.svg" alt="Electron" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Electron</h4>
+                        <p className="text-gray-600 text-sm">Cross-platform desktop excellence</p>
                       </div>
-                      <Image src="/images/logos/techstack/vite.jpg" alt="Vite" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Electron</h4>
-                        <p className="text-base text-gray-600">For building cross-platform desktop applications</p>
-                      </div>
-                      <Image src="/images/logos/techstack/electron.svg" alt="Electron" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
               )}
 
               {activeTechStack === 'mobile' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">Mobile Development</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-lg font-medium text-gray-900">React Native + Expo</h4>
-                          <Link href="/certifications#react-native" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Certified
-                          </Link>
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">React Native + Expo</h4>
+                          <p className="text-gray-600 leading-relaxed">Seamless cross-platform mobile experiences with native performance</p>
                         </div>
-                        <p className="text-base text-gray-600">For mobile apps, I keep it smooth with React Native and Expo</p>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/exporn.webp" alt="Expo" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
                       </div>
-                      <Image src="/images/logos/techstack/exporn.webp" alt="Expo" width={120} height={120} className="rounded-md hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Cordova</h4>
-                        <p className="text-base text-gray-600">For hybrid mobile applications when web technologies are preferred</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">Cordova</h4>
+                          <p className="text-gray-600 leading-relaxed">Hybrid applications leveraging web technologies for mobile platforms</p>
+                        </div>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/cordova.png" alt="Cordova" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
                       </div>
-                      <Image src="/images/logos/techstack/cordova.png" alt="Cordova" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTechStack === 'databases' && (
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">Supabase / SQLite</h4>
+                          <p className="text-gray-600 leading-relaxed">PostgreSQL power with Supabase, SQLite simplicity for lightweight solutions</p>
+                        </div>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/supabase.png" alt="Supabase" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">Firebase / MongoDB</h4>
+                          <p className="text-gray-600 leading-relaxed">NoSQL flexibility when document-based architecture serves the vision</p>
+                        </div>
+                        <div className="ml-6">
+                          <Image src="/images/logos/techstack/firebase.svg" alt="Firebase" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
 
               {activeTechStack === 'devops' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">DevOps & Deployment</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-lg font-medium text-gray-900">Docker</h4>
-                          <Link href="/certifications#docker" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Certified
-                          </Link>
-                        </div>
-                        <p className="text-base text-gray-600">For containerization and consistent development environments</p>
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/docker.png" alt="Docker" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Docker</h4>
+                        <p className="text-gray-600 text-sm">Containerized consistency</p>
                       </div>
-                      <Image src="/images/logos/techstack/docker.png" alt="Docker" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">GitHub Actions</h4>
-                        <p className="text-base text-gray-600">For CI/CD pipelines and automated workflows</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/gitbub-actions.avif" alt="GitHub Actions" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">GitHub Actions</h4>
+                        <p className="text-gray-600 text-sm">Automated CI/CD workflows</p>
                       </div>
-                      <Image src="/images/logos/techstack/gitbub-actions.avif" alt="GitHub Actions" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">AWS / Firebase</h4>
-                        <p className="text-base text-gray-600">For cloud deployment and hosting solutions</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/aws.png" alt="AWS" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">AWS / Firebase</h4>
+                        <p className="text-gray-600 text-sm">Cloud infrastructure mastery</p>
                       </div>
-                      <Image src="/images/logos/techstack/aws.png" alt="AWS" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
               )}
 
               {activeTechStack === 'ai' && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-semibold text-gray-900">AI & Machine Learning</h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-lg font-medium text-gray-900">TensorFlow / PyTorch</h4>
-                          <Link href="/certifications#tensorflow" className="flex items-center gap-1 text-sm text-green-600 hover:text-green-700 transition-colors">
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Certified
-                          </Link>
-                        </div>
-                        <p className="text-base text-gray-600">For deep learning and neural network implementations</p>
+                <div className="space-y-8 animate-fadeIn">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/tf.webp" alt="TensorFlow" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">TensorFlow / PyTorch</h4>
+                        <p className="text-gray-600 text-sm">Deep learning architectures</p>
                       </div>
-                      <Image src="/images/logos/techstack/tf.webp" alt="TensorFlow" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">scikit-learn</h4>
-                        <p className="text-base text-gray-600">For traditional machine learning algorithms and data analysis</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/scikit-learn.png" alt="scikit-learn" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">scikit-learn</h4>
+                        <p className="text-gray-600 text-sm">Classical ML algorithms</p>
                       </div>
-                      <Image src="/images/logos/techstack/scikit-learn.png" alt="scikit-learn" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="space-y-2">
-                        <h4 className="text-lg font-medium text-gray-900">Hugging Face</h4>
-                        <p className="text-base text-gray-600">For integrating advanced language models into applications</p>
+                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
+                      <div className="text-center">
+                        <Image src="/images/logos/techstack/huggin face.png" alt="Hugging Face" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Hugging Face</h4>
+                        <p className="text-gray-600 text-sm">Advanced language models</p>
                       </div>
-                      <Image src="/images/logos/techstack/huggin face.png" alt="Hugging Face" width={120} height={120} className="rounded-full hover:scale-110 transition-all duration-300 hover:shadow-lg" />
                     </div>
                   </div>
                 </div>
