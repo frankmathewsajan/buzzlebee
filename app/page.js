@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, memo, useMemo } from "react";
-import { ArrowUpCircle, ArrowDownCircle, CheckCircle } from '@geist-ui/icons';
+import { useEffect, useRef, useState, memo, useMemo, useCallback } from "react";
+
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
 import { Space_Grotesk, Inter } from 'next/font/google';
+import PortfolioMap from './components/PortfolioMap';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ 
@@ -19,205 +20,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const CustomGauge = memo(({ value, size = "small", currentSection }) => {
-  const sizeClasses = {
-    small: "w-8 h-8",
-    medium: "w-10 h-10",
-    large: "w-12 h-12"
-  };
 
-  const colors = {
-    '0': '#ffffff',    // white
-    '10': '#e0f2fe',   // sky-100
-    '20': '#bae6fd',   // sky-200
-    '30': '#7dd3fc',   // sky-300
-    '40': '#38bdf8',   // sky-400
-    '50': '#f0fdf4',   // green-50
-    '60': '#dcfce7',   // green-100
-    '70': '#bbf7d0',   // green-200
-    '80': '#86efac',   // green-300
-    '90': '#4ade80',   // green-400
-    '100': '#fecaca'   // red-200
-  };
-
-  const getColor = (value) => {
-    const thresholds = Object.keys(colors).map(Number).sort((a, b) => a - b);
-    for (let i = thresholds.length - 1; i >= 0; i--) {
-      if (value >= thresholds[i]) {
-        return colors[thresholds[i]];
-      }
-    }
-    return colors['0'];
-  };
-
-  // Calculate the total progress including subsection progress
-  const totalProgress = value;
-
-  return (
-    <div className={`relative ${sizeClasses[size]}`}>
-      <svg className="w-full h-full" viewBox="0 0 24 24">
-        {/* Background circle */}
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          fill="none"
-          stroke={getColor(0)}
-          strokeWidth="1.5"
-          className="opacity-20"
-        />
-        {/* Progress circle */}
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          fill="none"
-          stroke={getColor(totalProgress)}
-          strokeWidth="1"
-          strokeDasharray={`${(totalProgress / 100) * 62.83} 62.83`}
-          transform="rotate(-90 12 12)"
-          className="transition-all duration-300 ease-out"
-        />
-      </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-base font-medium text-white">
-        {currentSection}
-      </span>
-    </div>
-  );
-});
-
-const NavigationMenu = memo(({ showNavMenu, setShowNavMenu, sections, activeSection }) => {
-  const menuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowNavMenu(false);
-      }
-    };
-
-    if (showNavMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showNavMenu, setShowNavMenu]);
-
-  return (
-    showNavMenu && (
-      <div ref={menuRef} className="fixed bottom-24 right-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden w-64 z-50 border border-gray-100">
-        <div className="py-2">
-          {/* Back to Top Button */}
-          <button
-            onClick={() => {
-              setShowNavMenu(false);
-              setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }, 300);
-            }}
-            className="w-full px-6 py-2 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center gap-3 group border-b border-gray-100"
-          >
-            <span className="text-xs text-gray-500 group-hover:text-gray-900 transition-colors duration-300">
-              Back to Top
-            </span>
-          </button>
-
-          {/* Section List */}
-          {sections.map((section, index) => (
-            <button
-              key={section.id}
-              onClick={() => {
-                setShowNavMenu(false);
-                setTimeout(() => {
-                  section.ref.current?.scrollIntoView({ behavior: 'smooth' });
-                }, 300);
-              }}
-              className={`w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group ${activeSection === section.id ? 'bg-gray-50/80 font-medium' : ''
-                }`}
-            >
-              <span className={`text-sm transition-colors duration-300 ${activeSection === section.id ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-900'
-                }`}>
-                {index + 1}. {section.label}
-              </span>
-              {activeSection === section.id && (
-                <CheckCircle className="w-4 h-4 text-gray-900" />
-              )}
-            </button>
-          ))}
-
-          {/* Additional Links */}
-          <div className="border-t border-gray-100">
-            <Link
-              href="/projects"
-              onClick={() => setShowNavMenu(false)}
-              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
-                Projects
-              </span>
-              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Link>
-            <Link
-              href="/case-studies"
-              onClick={() => setShowNavMenu(false)}
-              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
-                Case Studies
-              </span>
-              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </Link>
-            <Link
-              href="/about"
-              onClick={() => setShowNavMenu(false)}
-              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
-                Education & Experience
-              </span>
-              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </Link>
-            <Link
-              href="/certifications"
-              onClick={() => setShowNavMenu(false)}
-              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
-                Certifications
-              </span>
-              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-              </svg>
-            </Link>
-            <Link
-              href="/blogs"
-              onClick={() => setShowNavMenu(false)}
-              className="w-full px-6 py-3 text-left hover:bg-gray-50/80 transition-all duration-300 flex items-center justify-between group"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors duration-300">
-                Blog
-              </span>
-              <svg className="w-4 h-4 text-gray-400 group-hover:text-gray-900 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  );
-});
-
-NavigationMenu.displayName = 'NavigationMenu';
-CustomGauge.displayName = 'CustomGauge';
 
 const ProjectCard = memo(({ title, description, tags }) => {
   return (
@@ -238,180 +41,115 @@ const ProjectCard = memo(({ title, description, tags }) => {
 ProjectCard.displayName = 'ProjectCard';
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [showNavMenu, setShowNavMenu] = useState(false);
-  const [subsectionProgress, setSubsectionProgress] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [sectionVisibility, setSectionVisibility] = useState({
     home: true,
     about: false,
     projects: false,
     contact: false
   });
-  const [activeTechStack, setActiveTechStack] = useState('backend');
+
+  const [projectsBlur, setProjectsBlur] = useState(true);
+  const [projectsOpacity, setProjectsOpacity] = useState(0);
+  const [contactOpacity, setContactOpacity] = useState(0);
+
+  // Add missing CSS keyframes
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .tooltip-hover .tooltip-content {
+        filter: none !important;
+        z-index: 9999;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+      
+      .tooltip-hover .tooltip-text {
+        filter: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
 
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
-  const journeyRef = useRef(null);
   const projectsRef = useRef(null);
-  const achievementsRef = useRef(null);
   const contactRef = useRef(null);
   const homeSectionRef = useRef(null);
   const aboutSectionRef = useRef(null);
 
-  const sectionRefs = useMemo(() => ({
-    home: homeRef,
-    about: aboutRef,
-    journey: journeyRef,
-    projects: projectsRef,
-    achievements: achievementsRef,
-    contact: contactRef
-  }), []);
-
-  const sections = useMemo(() => [
-    { id: 'home', ref: sectionRefs.home, label: 'Being Frank' },
-    { id: 'about', ref: sectionRefs.about, label: 'The Story' },
-    { id: 'projects', ref: sectionRefs.projects, label: 'Built to Last' },
-    { id: 'contact', ref: sectionRefs.contact, label: 'Get in Touch' }
-  ], [sectionRefs]);
-
-  useEffect(() => {
-    let observer;
-    const observerOptions = {
-      threshold: [0.2, 0.5, 0.8],
-      rootMargin: '-10% 0px'
-    };
-
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.intersectionRatio > 0.2) {
-          setActiveSection(entry.target.id);
-          requestAnimationFrame(() => {
-            entry.target.classList.remove('opacity-0', 'translate-y-10');
-            entry.target.classList.add('opacity-100', 'translate-y-0');
-          });
-        } else {
-          requestAnimationFrame(() => {
-            entry.target.classList.add('opacity-0', 'translate-y-10');
-            entry.target.classList.remove('opacity-100', 'translate-y-0');
-          });
-        }
-      });
-    };
-
-    try {
-      observer = new IntersectionObserver(handleIntersection, observerOptions);
-      sections.forEach(section => {
-        if (section.ref.current) {
-          observer.observe(section.ref.current);
-        }
-      });
-    } catch (error) {
-      console.error('Intersection Observer error:', error);
-    }
-
-    return () => observer?.disconnect();
-  }, [sections]);
-
-  useEffect(() => {
-    if (sectionRefs.home.current) {
-      sectionRefs.home.current.classList.remove('opacity-0', 'translate-y-10');
-      sectionRefs.home.current.classList.add('opacity-100', 'translate-y-0');
-    }
-  }, [sectionRefs.home]);
-
-  useEffect(() => {
-    let scrollTimeout;
-    const handleScroll = () => {
-      if (!scrollTimeout) {
-        scrollTimeout = setTimeout(() => {
-          scrollTimeout = null;
-        }, 66);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Add new effect for tracking subsection progress
+  // Track section visibility with intersection observer
   useEffect(() => {
     const handleScroll = () => {
-      if (activeSection !== 'about') {
-        setSubsectionProgress(0);
-        return;
-      }
-
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      
+      // Get the about section (Let me introduce myself)
       const aboutSection = document.getElementById('about');
-      if (!aboutSection) return;
-
-      const subsections = ['about-me', 'journey', 'education', 'experience', 'achievements', 'beyond-code'];
-      const subsectionElements = subsections.map(id => document.getElementById(id));
-
-      // Calculate total height of all subsections
-      const totalHeight = subsectionElements.reduce((sum, element) => {
-        return sum + (element ? element.offsetHeight : 0);
-      }, 0);
-
-      // Calculate current scroll position within about section
-      const aboutRect = aboutSection.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const sectionTop = aboutRect.top;
-      const sectionHeight = aboutRect.height;
-
-      // Calculate how far we've scrolled through the section
-      let scrollProgress = 0;
-
-      if (sectionTop < 0) {
-        // We've scrolled past the top
-        const scrolledAmount = Math.abs(sectionTop);
-        const totalScrollable = sectionHeight + viewportHeight;
-        scrollProgress = Math.min(100, (scrolledAmount / totalScrollable) * 100);
+      const contactSection = document.getElementById('contact');
+      
+      if (aboutSection && contactSection) {
+        // Get the offset positions from the top of the document
+        const aboutOffsetTop = aboutSection.offsetTop;
+        const aboutHeight = aboutSection.offsetHeight;
+        const aboutMiddle = aboutOffsetTop + (aboutHeight / 2);
+        
+        // Get projects and contact section positions
+        const projectsSection = document.getElementById('projects');
+        const contactOffsetTop = contactSection.offsetTop;
+        const projectsOffsetTop = projectsSection ? projectsSection.offsetTop : 0;
+        
+        // Calculate midpoints for consistent transitions (like other sections)
+        const projectsHeight = projectsSection ? projectsSection.offsetHeight : 0;
+        const contactHeight = contactSection.offsetHeight;
+        const projectsMiddle = projectsOffsetTop + (projectsHeight / 2);
+        const contactMiddle = contactOffsetTop + (contactHeight / 2);
+        
+        // Debug logging
+        console.log({
+          scrollY,
+          aboutMiddle,
+          projectsMiddle,
+          contactMiddle,
+          projectsVisible: scrollY >= aboutMiddle && scrollY < projectsMiddle,
+          contactVisible: scrollY >= projectsMiddle
+        });
+        
+        // Simple consistent logic: 
+        // Projects visible from about middle to projects middle
+        // Contact visible from projects middle onwards
+        if (scrollY >= aboutMiddle && scrollY < projectsMiddle) {
+          setProjectsOpacity(1);
+          setContactOpacity(0);
+        } else if (scrollY >= projectsMiddle) {
+          setProjectsOpacity(0);
+          setContactOpacity(1);
+        } else {
+          setProjectsOpacity(0);
+          setContactOpacity(0);
+        }
       }
 
-      // Add small increments for each subsection
-      subsectionElements.forEach((element, index) => {
-        if (element) {
-          const elementRect = element.getBoundingClientRect();
-          const elementTop = elementRect.top;
-          const elementHeight = elementRect.height;
-
-          // If element is in view
-          if (elementTop < viewportHeight && elementTop + elementHeight > 0) {
-            const elementProgress = Math.min(100,
-              ((viewportHeight - elementTop) / (elementHeight + viewportHeight)) * 100
-            );
-            // Add a portion of progress for each subsection
-            scrollProgress += (elementProgress / subsections.length);
-          }
-        }
-      });
-
-      // Ensure progress stays within bounds
-      scrollProgress = Math.max(0, Math.min(100, scrollProgress));
-      setSubsectionProgress(scrollProgress);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeSection]);
-
-  // Add new effect for tracking overall scroll progress
-  useEffect(() => {
-    const handleScroll = () => {
+      // Update current section based on scroll position
       const sections = ['home', 'about', 'projects', 'contact'];
       const sectionElements = sections.map(id => document.getElementById(id));
-
-      // Calculate total scrollable height
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = window.scrollY;
-
-      // Calculate progress based on current scroll position
-      const progress = (currentScroll / totalHeight) * 100;
-      setScrollProgress(progress);
+      
+      for (let i = sectionElements.length - 1; i >= 0; i--) {
+        if (sectionElements[i]) {
+          const rect = sectionElements[i].getBoundingClientRect();
+          if (rect.top <= window.innerHeight / 2) {
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -468,6 +206,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#e7dfd8]">
+      {/* Portfolio Explorer Map - Self-contained component */}
+      <PortfolioMap />
+
       {/* Hero Section */}
       <section
         id="home"
@@ -542,105 +283,124 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Fixed Navigation */}
-      <div className="fixed z-50 bottom-8 right-8">
-        <button
-          onClick={() => setShowNavMenu(prev => !prev)}
-          className="bg-gray-900/80 backdrop-blur-sm text-white px-5 py-2.5 rounded-full shadow-lg hover:bg-gray-800/90 transition-all duration-300 flex items-center gap-1 w-[240px] pointer-events-auto"
-        >
-          <div className="flex-shrink-0 -ml-1">
-            <CustomGauge
-              value={scrollProgress}
-              size="small"
-              currentSection={sections.findIndex(s => s.id === activeSection) + 1}
-            />
-          </div>
-          <span className="text-base w-[140px] text-center transition-all duration-500 ease-in-out truncate">
-            {sections.find(s => s.id === activeSection)?.label}
-          </span>
-          {showNavMenu ? (
-            <ArrowDownCircle className="w-5 h-5 flex-shrink-0 transition-transform duration-500 ease-in-out" />
-          ) : (
-            <ArrowUpCircle className="w-5 h-5 flex-shrink-0 transition-transform duration-500 ease-in-out" />
-          )}
-        </button>
-      </div>
-
-      {/* Navigation Menu */}
-      <NavigationMenu
-        showNavMenu={showNavMenu}
-        setShowNavMenu={setShowNavMenu}
-        sections={sections}
-        activeSection={activeSection}
-      />
-
-      {/* About Section */}
+      {/* Introduction Article Section - Full Viewport */}
       <section
         id="about"
         ref={aboutRef}
         className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-          {/* About Me Section */}
-          <div id="about-me" className="space-y-16 mb-24" ref={aboutSectionRef}>
-            {/* Header */}
-            <div className="text-left">
-              <h2 className="text-5xl font-bold text-gray-900 font-caveat mb-4">
-                Let me introduce myself...
-              </h2>
-              <div className="w-16 h-1 bg-gray-900/20 rounded-full"></div>
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-screen flex items-center">
+          <div className="w-full" ref={aboutSectionRef}>
+            {/* Editorial Header - Playful Typography Mix */}
+            <div className="mb-16">
+              <div className="relative">
+                {/* Main Typography Composition - Strategic Red Accents */}
+                <div className="flex flex-wrap items-baseline gap-3 mb-6">
+                  <span className="text-5xl font-black text-gray-900 font-sans uppercase tracking-tight">LET</span>
+                  <span className="text-2xl font-light text-gray-700 font-serif lowercase italic">me</span>
+                  <span className="text-4xl font-black text-red-600 font-sans uppercase tracking-wide">INTRODUCE</span>
+                </div>
+                <div className="flex flex-wrap items-baseline gap-3">
+                  <span className="text-2xl font-medium text-gray-700 font-serif lowercase italic">my</span>
+                  <span className="text-6xl font-black text-gray-900 font-sans uppercase tracking-tight">SELF</span>
+                  <span className="text-2xl text-red-500 font-serif">...</span>
+                </div>
+                
+                {/* Minimal Decorative Elements */}
+                <div className="absolute -top-2 -left-1 w-2 h-2 bg-red-600 rounded-full opacity-60"></div>
+                <div className="absolute top-1/4 -right-3 w-1.5 h-1.5 bg-red-400 rounded-full opacity-40"></div>
+                <div className="mt-8 w-20 h-px bg-gradient-to-r from-red-600 via-gray-800 to-transparent opacity-70"></div>
+              </div>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-              {/* Left Column - Personal Image */}
-              <div className="lg:col-span-1 flex justify-center lg:justify-start">
-                <div className="relative aspect-square w-full max-w-[280px]">
-                  <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
-                  <Image
-                    src="/images/frank.jpg"
-                    alt="Frank Mathew Sajan"
-                    fill
-                    className="object-cover rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-2 bg-white/10 backdrop-blur-sm"
-                    priority
-                    sizes="(max-width: 768px) 280px, 280px"
-                    style={{
-                      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-                      transition: 'transform 0.3s ease-out'
-                    }}
-                    onMouseMove={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const x = e.clientX - rect.left;
-                      const y = e.clientY - rect.top;
-                      const centerX = rect.width / 2;
-                      const centerY = rect.height / 2;
-                      const rotateX = (y - centerY) / 20;
-                      const rotateY = (centerX - x) / 20;
-                      e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-                    }}
-                  />
+            {/* Main Article Content - Vogue Editorial Style */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+              {/* Left Column - Chess Illustration */}
+              <div className="lg:col-span-2 flex justify-center lg:justify-start">
+                <div className="relative w-full max-w-[380px]">
+                  <div className="relative aspect-square">
+                    <Image
+                      src="/images/chess.png"
+                      alt="Chess pieces illustration"
+                      fill
+                      className="object-contain"
+                      priority
+                      sizes="(max-width: 768px) 380px, 380px"
+                    />
+                  </div>
+                  {/* Editorial Caption - Magazine Style */}
+                  <div className="mt-6 text-center space-y-2">
+                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500 font-sans font-medium">
+                      Strategic Thinking
+                    </p>
+                    <div className="w-16 h-px bg-red-500 mx-auto opacity-60"></div>
+                    <p className="text-sm text-gray-600 font-serif italic leading-relaxed max-w-xs mx-auto">
+                      Every move counts, both on the board and in code
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Right Column - Text Content */}
-              <div className="lg:col-span-2 space-y-8">
-                <div className="space-y-6">
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    <b className="text-2xl font-bold" style={{ fontFamily: 'Times New Roman' }}>Hey there!</b> &nbsp;Frank here. I could throw around buzzwords and tell you I'm "passionate about innovative solutions," but honestly? I just like building stuff that works.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    When I'm not coding, I'm probably playing chess (badly), watching anime (obsessively), or sleeping (not enough). It's a simple life, but it keeps me sane.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    Look, instead of me rambling about what I can do, just poke around. Check out the projects, see what I've built. If something catches your eye, great. If not, no worries—at least you got to see some decent web design.
-                  </p>
-                  <p className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                    The tech stack section shows what I actually use (not what I think sounds impressive), and the projects are real things I've built for real problems. Some worked out better than others, but that's how it goes.
-                  </p>
+              {/* Right Column - Article Text */}
+              <div className="lg:col-span-3 space-y-8 lg:-mt-20">
+                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  <span className="text-3xl font-black font-sans text-gray-900">HEY</span> 
+                  <span className="text-xl font-light font-serif italic text-gray-800 ml-2">there!</span> 
+                  <span className="text-lg font-medium text-red-600 ml-2">Frank</span> here. I could throw around buzzwords and tell you I'm 
+                  <span className="text-red-500 font-serif italic">"passionate about innovative solutions,"</span> but honestly? I just like building 
+                  <span className="font-sans font-medium text-gray-900 uppercase text-base tracking-wide"> STUFF</span> that works.
+                </div>
+                
+                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  When I'm not <span className="font-sans text-gray-900 uppercase text-base tracking-wide">CODING</span>, I'm probably playing 
+                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> CHESS</span>&nbsp;
+                  <span className="text-red-500 font-serif italic text-base">(badly)</span>, watching 
+                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> ANIME</span>&nbsp;
+                  <span className="text-red-600 font-serif italic text-base">(obsessively)</span>, or 
+                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> SLEEPING</span>&nbsp;
+                  <span className="text-red-500 font-serif italic text-base">(not enough)</span>. It's a simple life, but it keeps me 
+                  <span className="text-red-600"> content</span>.
+                </div>
+                
+                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  <span className="text-2xl font-black font-sans text-gray-900 uppercase tracking-tight">LOOK</span>, instead of me rambling about what I can do, just&nbsp;
+                  <span className="relative group tooltip-hover">
+                    <Link href="/projects" className="text-red-600 font-bold underline decoration-red-300 text-lg hover:bg-red-50 px-1 rounded transition-colors cursor-pointer tooltip-text">
+                      poke around
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      Check out my projects →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span>. Check out the projects, see what I've built. If something catches your eye, 
+                  <span className="font-sans font-semibold text-gray-900 uppercase text-sm tracking-wide"> GREAT</span>. If not, no worries—at least you got to see some 
+                  <span className="text-red-500 font-serif italic"> decent</span> web design.
+                </div>
+                
+                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  The <span className="relative group tooltip-hover">
+                    <Link href="/case-studies" className="tooltip-text font-sans text-gray-900 uppercase text-base tracking-wider hover:text-red-600 transition-colors cursor-pointer border-b border-gray-400 hover:border-red-400">
+                      CASE STUDIES
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      See my thinking process →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span> section shows my&nbsp; 
+                  <span className="text-red-600 font-serif italic text-lg">thinking process</span> and how I approach problems (the messy, iterative reality of development), and the projects are&nbsp; 
+                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> things I've built for&nbsp; 
+                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> problems. Some worked out better than others, but that's 
+                  <span className="text-red-500 font-serif italic"> how it goes</span>.
+                </div>
+
+                {/* Editorial Signature */}
+                <div className="mt-12 pt-8 border-t border-gray-300">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-px bg-red-500"></div>
+                    <span className="text-xs uppercase tracking-[0.2em] text-gray-500 font-sans">Frank Mathew Sajan</span>
+                    <div className="w-12 h-px bg-red-500"></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -648,235 +408,221 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects Section */}
+      {/* Projects Preview Section */}
       <section
         id="projects"
         ref={projectsRef}
-        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.projects ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.projects ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
           }`}
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        <div 
+          className="w-full px-4 sm:px-6 lg:px-8 py-16 transition-opacity duration-700 ease-in-out"
+          style={{ opacity: projectsOpacity }}
+        >
           <div className="max-w-7xl mx-auto">
-            {/* Title */}
-            <div className="mb-8">
-              <h2 className="text-5xl font-bold text-gray-900 font-caveat mb-4">
-                What I Work With
-              </h2>
-              <p className="text-lg text-gray-600 font-serif">The tools that help me turn ideas into reality</p>
+            {/* Title Section */}
+            <div className="mb-12 text-center">
+              <p className="text-base text-gray-600 font-light max-w-xl mx-auto">
+                Top 4 projects solving real problems with clean, functional design
+              </p>
             </div>
 
-            {/* Tech Categories */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              {[
-                { key: 'frontend', label: 'Frontend' },
-                { key: 'backend', label: 'Backend' },
-                { key: 'mobile', label: 'Mobile' },
-                { key: 'databases', label: 'Database' },
-                { key: 'devops', label: 'DevOps' },
-                { key: 'ai', label: 'AI/ML' }
-              ].map(({ key, label }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTechStack(key)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                    activeTechStack === key
-                      ? 'bg-gray-900 text-white shadow-lg'
-                      : 'bg-white/70 text-gray-700 hover:bg-white/90 hover:shadow-md'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+            {/* Projects List */}
+            <div className="space-y-16 mb-8">
+              
+              {/* Row 1: Intelligent Safety Helmet System & AI-Ignite Educational Platform */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                {/* Intelligent Safety Helmet System */}
+                <div className="group cursor-pointer">
+                  {/* Divider Line */}
+                  <div className="w-full h-px bg-gray-300 mb-6"></div>
+                  
+                  {/* Project Info */}
+                  <div className="space-y-5 mb-8">
+                    {/* Project Name & Tech Stack */}
+                    <div>
+                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                        INTELLIGENT SAFETY HELMET SYSTEM
+                      </h3>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Arduino</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">C++</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">IoT</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">GPS</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div>
+                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
+                        Award-winning IoT solution providing real-time hazard detection with GPS tracking 
+                        and emergency communication for industrial safety applications.
+                      </p>
+                      <span className="text-xs text-gray-400 font-mono mt-2 block">2024</span>
+                    </div>
+                  </div>
+                  
+                  {/* Project Mockup/Image */}
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
+                    <div className="text-center p-8">
+                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
+                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">SAFETY TECHNOLOGY</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI-Ignite Educational Platform */}
+                <div className="group cursor-pointer">
+                  {/* Divider Line */}
+                  <div className="w-full h-px bg-gray-300 mb-6"></div>
+                  
+                  {/* Project Info */}
+                  <div className="space-y-5 mb-8">
+                    {/* Project Name & Tech Stack */}
+                    <div>
+                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                        AI-IGNITE EDUCATIONAL PLATFORM
+                      </h3>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">TensorFlow</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Python</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">AWS</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Machine Learning</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div>
+                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
+                        AI-powered learning platform with adaptive testing that personalizes education 
+                        based on individual learning patterns and progress analytics.
+                      </p>
+                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
+                    </div>
+                  </div>
+                  
+                  {/* Project Mockup/Image */}
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
+                    <div className="text-center p-8">
+                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                      </div>
+                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">AI EDUCATION</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 2: Banking Simulation System & Library Management System */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                {/* Banking Simulation System */}
+                <div className="group cursor-pointer">
+                  {/* Divider Line */}
+                  <div className="w-full h-px bg-gray-300 mb-6"></div>
+                  
+                  {/* Project Info */}
+                  <div className="space-y-5 mb-8">
+                    {/* Project Name & Tech Stack */}
+                    <div>
+                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                        DIGITAL BANKING SIMULATION
+                      </h3>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Node.js</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">MongoDB</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Express</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Real-time</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div>
+                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
+                        Gamified banking system inspired by Monopoly's Ultimate Banking, featuring 
+                        real-time balance updates and comprehensive transaction management.
+                      </p>
+                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
+                    </div>
+                  </div>
+                  
+                  {/* Project Mockup/Image */}
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
+                    <div className="text-center p-8">
+                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                      </div>
+                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">FINTECH SIMULATION</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Library Management System */}
+                <div className="group cursor-pointer">
+                  {/* Divider Line */}
+                  <div className="w-full h-px bg-gray-300 mb-6"></div>
+                  
+                  {/* Project Info */}
+                  <div className="space-y-5 mb-8">
+                    {/* Project Name & Tech Stack */}
+                    <div>
+                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                        LIBRARY MANAGEMENT SYSTEM
+                      </h3>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Python</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Tkinter</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">SQLite</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">GUI</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <div>
+                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
+                        Comprehensive GUI-based system handling library operations with inventory 
+                        management, member tracking, and automated fine calculations.
+                      </p>
+                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
+                    </div>
+                  </div>
+                  
+                  {/* Project Mockup/Image */}
+                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
+                    <div className="text-center p-8">
+                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                      </div>
+                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">LIBRARY SYSTEM</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            {/* Content Display */}
-            <div className="space-y-6">
-              {activeTechStack === 'backend' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-3">
-                            <h4 className="text-xl font-bold text-gray-900">Django</h4>
-                            <Link href="/certifications#django" className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full hover:bg-green-200 transition-colors">
-                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              Certified
-                            </Link>
-                          </div>
-                          <p className="text-gray-600 leading-relaxed">Robust web applications with complex business logic and seamless API management</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/django.jpg" alt="Django" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">Flask</h4>
-                          <p className="text-gray-600 leading-relaxed">Lightning-fast prototyping and elegant microservices architecture</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/flask.png" alt="Flask" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'frontend' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/next.webp" alt="Next.js" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Next.js</h4>
-                        <p className="text-gray-600 text-sm">Server-rendered React perfection</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/vite.jpg" alt="Vite" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          <h4 className="text-lg font-bold text-gray-900">Vite</h4>
-                          <Link href="/certifications#vite" className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full hover:bg-green-200 transition-colors">
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            Certified
-                          </Link>
-                        </div>
-                        <p className="text-gray-600 text-sm">Blazing fast modern development</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/electron.svg" alt="Electron" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Electron</h4>
-                        <p className="text-gray-600 text-sm">Cross-platform desktop excellence</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'mobile' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">React Native + Expo</h4>
-                          <p className="text-gray-600 leading-relaxed">Seamless cross-platform mobile experiences with native performance</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/exporn.webp" alt="Expo" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">Cordova</h4>
-                          <p className="text-gray-600 leading-relaxed">Hybrid applications leveraging web technologies for mobile platforms</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/cordova.png" alt="Cordova" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'databases' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">Supabase / SQLite</h4>
-                          <p className="text-gray-600 leading-relaxed">PostgreSQL power with Supabase, SQLite simplicity for lightweight solutions</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/supabase.png" alt="Supabase" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">Firebase / MongoDB</h4>
-                          <p className="text-gray-600 leading-relaxed">NoSQL flexibility when document-based architecture serves the vision</p>
-                        </div>
-                        <div className="ml-6">
-                          <Image src="/images/logos/techstack/firebase.svg" alt="Firebase" width={80} height={80} className="rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'devops' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/docker.png" alt="Docker" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Docker</h4>
-                        <p className="text-gray-600 text-sm">Containerized consistency</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/gitbub-actions.avif" alt="GitHub Actions" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">GitHub Actions</h4>
-                        <p className="text-gray-600 text-sm">Automated CI/CD workflows</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/aws.png" alt="AWS" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">AWS / Firebase</h4>
-                        <p className="text-gray-600 text-sm">Cloud infrastructure mastery</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTechStack === 'ai' && (
-                <div className="space-y-8 animate-fadeIn">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/tf.webp" alt="TensorFlow" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">TensorFlow / PyTorch</h4>
-                        <p className="text-gray-600 text-sm">Deep learning architectures</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/scikit-learn.png" alt="scikit-learn" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">scikit-learn</h4>
-                        <p className="text-gray-600 text-sm">Classical ML algorithms</p>
-                      </div>
-                    </div>
-                    <div className="group bg-white/50 rounded-2xl p-6 hover:bg-white/70 transition-all duration-300 hover:shadow-lg">
-                      <div className="text-center">
-                        <Image src="/images/logos/techstack/huggin face.png" alt="Hugging Face" width={80} height={80} className="rounded-xl mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Hugging Face</h4>
-                        <p className="text-gray-600 text-sm">Advanced language models</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+            {/* Call to Action */}
+            <div className="text-center">
+              <Link 
+                href="/projects" 
+                className="inline-flex items-center gap-3 bg-gray-900 text-white px-8 py-4 rounded-lg hover:bg-gray-800 transition-all duration-300 hover:shadow-lg font-medium tracking-wide uppercase text-sm"
+              >
+                View All Projects
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
@@ -886,107 +632,177 @@ export default function Home() {
       <section
         id="contact"
         ref={contactRef}
-        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.contact ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.contact ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
           }`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Left Column - CTA Content */}
+        <div 
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 transition-opacity duration-700 ease-in-out"
+          style={{ opacity: contactOpacity }}
+        >
+          {/* Main Contact Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+            {/* Left Column - GET IN TOUCH */}
+            <div className="flex items-center justify-center lg:justify-start">
+              <h2 className="font-thin uppercase tracking-tight text-gray-700" style={
+                { fontSize: '8vw', 
+                fontFamily: 'RecifeDisplay, serif', 
+                lineHeight: '0.9' }
+                }>GET IN TOUCH</h2>
+            </div>
+
+            {/* Right Column - Paragraphs */}
             <div className="">
-              <div>
-                <h2 className="text-5xl font-bold text-gray-900 mb-8 font-caveat">Don&apos;t be shy!</h2>
-                <p className="text-lg md:text-xl text-gray-700 font-serif text-justify mb-8" style={{ fontFamily: 'Times New Roman' }}>
-                  If you&apos;re here to understand what I have built, what I value, or what I can contribute - this is a good place to start. Currently focused on integrating real world systems with intelligent automation - across domains like IoT, environmental tech, and health and safety.
+              <div className="space-y-6">
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  If you're here to understand what I have{' '}
+                  <span className="relative group tooltip-hover">
+                    <Link href="/projects" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
+                      built
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      Check out my projects →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span>, what I{' '}
+                  <span className="relative group tooltip-hover">
+                    <Link href="/blogs" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
+                      value
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      Read my thoughts →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span>, or what I can{' '}
+                  <span className="relative group tooltip-hover">
+                    <Link href="/case-studies" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
+                      contribute
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      See case studies →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span>{' '}
+                  — this is a good place to start.
                 </p>
-                <div className="grid grid-cols-2 gap-4 mb-12">
-                  <Link 
-                    href="/projects" 
-                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
-                  >
-                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Projects
-                  </Link>
-                  <Link 
-                    href="/certifications" 
-                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
-                  >
-                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
-                    Certifications
-                  </Link>
-                  <Link 
-                    href="/blogs" 
-                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
-                  >
-                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                    Blog
-                  </Link>
-                  <Link 
-                    href="/about" 
-                    className={`${inter.className} px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm text-[#2e2e2e] hover:bg-white/80 hover:shadow-lg transition-all duration-300 flex items-center gap-2 group text-sm`}
-                  >
-                    <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-900 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Education & Experience
-                  </Link>
-                </div>
-                <p className="text-lg text-gray-600 font-serif text-justify" style={{ fontFamily: 'Times New Roman' }}>
-                  Feel free to contact me. I am always open to discussing new projects, creative ideas, or opportunities to contribute to your visions.
+                
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Currently focused on integrating{' '}
+                  <span className="font-medium text-orange-600">real world systems</span> with{' '}
+                  <span className="font-medium text-orange-600">intelligent automation</span>{' '}
+                  — across domains like{' '}
+                  <span className="font-medium text-orange-500">IoT</span>,{' '}
+                  <span className="font-medium text-orange-500">environmental tech</span>, and{' '}
+                  <span className="font-medium text-orange-500">health & safety</span>.
+                </p>
+                
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  Feel free to <span className="font-semibold text-gray-800">contact me</span>. I am always open to discussing{' '}
+                  <span className="font-medium text-orange-500">new projects</span>,{' '}
+                  <span className="font-medium text-orange-500">creative ideas</span>, or{' '}
+                  <span className="font-medium text-orange-500">opportunities</span>{' '}
+                  to contribute to your visions.
                 </p>
               </div>
             </div>
+          </div>
 
-            {/* Right Column - Contact Info */}
-            <div className="grid grid-cols-1 gap-8 pt-16">
-              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Get in Touch</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span className="text-gray-600">Frank Mathew Sajan</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <a href="mailto:frankmathewsajan@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
-                      frankmathewsajan@gmail.com
-                    </a>
-                  </div>
+          {/* Footer Section */}
+          <div className="border-t border-gray-300/50 pt-12">
+            <div className="flex flex-col md:flex-row md:justify-between md:space-x-8 relative">
+              {/* Site Map */}
+              <div className="mb-8 md:mb-0">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 font-sans">Quick Links</h4>
+                <div className="grid grid-cols-2 gap-x-0 gap-y-3">
+                  <Link href="/" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Home
+                  </Link>
+                  <Link href="/blogs" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Blog
+                  </Link>
+                  <Link href="/projects" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Projects
+                  </Link>
+                  <Link href="/case-studies" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Case Studies
+                  </Link>
+                  <Link href="/certifications" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Certifications
+                  </Link>
+                  <Link href="/about" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    About & Experience
+                  </Link>
                 </div>
               </div>
 
-              <div className="bg-white/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Connect with Me</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <a href="https://github.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                    <FaGithub className="w-5 h-5" />
-                    GitHub
+              {/* Social Links */}
+              <div className="relative mb-8 md:mb-0">
+                {/* Left separator */}
+                <div className="hidden md:block absolute -left-4 top-0 h-full w-px bg-gray-300/30"></div>
+                
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 font-sans">Explore</h4>
+                <div className="space-y-3">
+                  {/* Row 1: GitHub and LinkedIn (balanced length) */}
+                  <div className="grid grid-cols-2 gap-x-0">
+                    <a href="https://github.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                      <FaGithub className="w-5 h-5" />
+                      GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/frankmathewsajan" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                      <FaLinkedin className="w-5 h-5" />
+                      LinkedIn
+                    </a>
+                  </div>
+                  {/* Row 2: Discord and Instagram (balanced length) */}
+                  <div className="grid grid-cols-2 gap-x-0">
+                    <a href="https://discord.com/users/frankmathewsajan" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors duration-300">
+                      <FaDiscord className="w-5 h-5" />
+                      Discord
+                    </a>
+                    <a href="https://instagram.com/franklyy.idk" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors duration-300">
+                      <FaInstagram className="w-5 h-5" />
+                      Instagram
+                    </a>
+                  </div>
+                  {/* Row 3: Email (full width) */}
+                  <a href="mailto:frankmathewsajan@gmail.com"
+                    className="flex items-center gap-3 text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Gmail
                   </a>
-                  <a href="https://linkedin.com/in/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                    <FaLinkedin className="w-5 h-5" />
-                    LinkedIn
-                  </a>
-                  <a href="https://discord.com/users/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
-                    <FaDiscord className="w-5 h-5" />
-                    Discord
-                  </a>
-                  <a href="https://instagram.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-400 hover:text-gray-600 transition-colors">
-                    <FaInstagram className="w-5 h-5" />
-                    Instagram
-                  </a>
+                </div>
+                
+                {/* Right separator */}
+                <div className="hidden md:block absolute -right-4 top-0 h-full w-px bg-gray-300/30"></div>
+              </div>
+
+              {/* Info Section */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 mb-4 font-sans">About This Site</h4>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Built with Next.js, React, and Tailwind CSS. <br />Hosted on modern infrastructure for optimal performance and reliability.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2 py-1 bg-white/50 rounded text-xs text-gray-600">Next.js</span>
+                  <span className="px-2 py-1 bg-white/50 rounded text-xs text-gray-600">React</span>
+                  <span className="px-2 py-1 bg-white/50 rounded text-xs text-gray-600">Tailwind</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Copyright */}
+            <div className="mt-12 pt-8 border-t border-gray-300/30">
+              <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="text-sm text-gray-600">
+                  © {new Date().getFullYear()} Frank Mathew Sajan. All rights reserved.
+                </div>
+                <div className="flex items-center gap-6 text-sm text-gray-600">
+                  <span>Last updated: {new Date().toLocaleDateString()}</span>
                 </div>
               </div>
             </div>
