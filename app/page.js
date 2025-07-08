@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, memo, useMemo, useCallback } from "react";
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import PortfolioMap from './components/PortfolioMap';
+import DevNotice from './components/DevNotice';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ 
@@ -206,8 +207,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#e7dfd8]">
-      {/* Portfolio Explorer Map - Self-contained component */}
-      <PortfolioMap />
+      {/* Development Notice */}
+      <DevNotice />
+
+      {/* Main Content - Wrapped for blur control */}
+      <div id="main-content">
+        {/* Portfolio Explorer Map - Self-contained component */}
+        <PortfolioMap />
 
       {/* Hero Section */}
       <section
@@ -809,6 +815,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      </div> {/* End main-content */}
     </div>
   );
 }
