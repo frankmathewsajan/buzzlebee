@@ -123,11 +123,11 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
           cursor: isClickable ? 'pointer' : 'default',
           transition: 'all 0.3s ease'
         }}
-        onClick={(evt) => {
-          if (isClickable && !isCurrent) {
-            onNodeClick(evt);
-          } else {
-            toggleNode();
+        onClick={(e) => {
+          e.stopPropagation();
+          console.log('Circle clicked, path:', nodePath);
+          if (isClickable && onNodeClick) {
+            onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, e);
           }
         }}
         onMouseEnter={(e) => {
@@ -193,9 +193,11 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
             cursor: isClickable ? 'pointer' : 'default',
             letterSpacing: '0.025em'
           }}
-          onClick={(evt) => {
-            if (isClickable && !isCurrent) {
-              onNodeClick(evt);
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log('Text clicked, path:', nodePath);
+            if (isClickable && onNodeClick) {
+              onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, e);
             }
           }}
         >
@@ -219,10 +221,35 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNavi
 
   // Handle node clicks for navigation
   const handleNodeClick = useCallback((nodeDatum, evt) => {
-    const path = nodeDatum.attributes?.path;
+    // Prevent default behavior
+    evt?.preventDefault?.();
+    evt?.stopPropagation?.();
     
-    if (!path || path === currentPath) return;
+    // Debug: log the nodeDatum to see its structure
+    console.log('Clicked nodeDatum:', nodeDatum);
+    console.log('Full data object:', nodeDatum.data);
 
+    // Try all possible locations for the path
+    const path = 
+      nodeDatum.data?.attributes?.path ||
+      nodeDatum.attributes?.path ||
+      nodeDatum.data?.attributes?.href ||
+      nodeDatum.attributes?.href ||
+      nodeDatum.path;
+
+    console.log('Extracted path:', path, 'Current path:', currentPath);
+
+    if (!path) {
+      console.log('No path found in node data');
+      return;
+    }
+
+    if (path === currentPath) {
+      console.log('Same page, not navigating');
+      return;
+    }
+
+    console.log('Navigating to:', path); // Debug log
     onNavigate(path);
     onClose();
   }, [currentPath, onNavigate, onClose]);
@@ -422,7 +449,7 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNavi
         translate={{ x: 150, y: 220 }}
         nodeSize={{ x: 160, y: 60 }}
         separation={{ siblings: 1.0, nonSiblings: 1.2 }}
-        renderCustomNodeElement={(props) => renderCustomNodeElement({...props, pageScrollProgress})}
+        renderCustomNodeElement={(props) => renderCustomNodeElement({...props, pageScrollProgress, onNodeClick: handleNodeClick})}
         onNodeClick={handleNodeClick}
         collapsible={false}
         zoomable={true}
@@ -554,7 +581,7 @@ const PortfolioMap = () => {
   return (
     <>
       {/* Fixed Top-Right Explorer Button */}
-      <div className="fixed top-6 right-6 z-50">
+      <div className="fixed top-6 right-6 z-[9999]">
         <button
           onClick={() => setShowExplorationMap(prev => !prev)}
           className="group relative w-12 h-12 bg-white/80 backdrop-blur-xl rounded-full shadow-lg hover:shadow-xl transition-all duration-500 flex items-center justify-center border border-white/20 hover:scale-110 hover:bg-white/90"
@@ -606,7 +633,7 @@ const PortfolioMap = () => {
         </button>
       </div>      {/* Exploration Map Modal */}
       {showExplorationMap && (
-        <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop ${isClosing ? 'modal-backdrop-closing' : ''}`}
+        <div className={`fixed inset-0 z-[99999] flex items-center justify-center p-4 modal-backdrop ${isClosing ? 'modal-backdrop-closing' : ''}`}
              style={{
                background: 'rgba(231, 223, 216, 0.85)',
                backdropFilter: 'blur(0.5px)'

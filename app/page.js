@@ -42,40 +42,14 @@ const ProjectCard = memo(({ title, description, tags }) => {
 ProjectCard.displayName = 'ProjectCard';
 
 export default function Home() {
-  const [sectionVisibility, setSectionVisibility] = useState({
-    home: true,
-    about: false,
-    projects: false,
-    contact: false
+  // Consolidated state for better management
+  const [viewState, setViewState] = useState({
+    sectionVisibility: { home: true, about: false, projects: false, contact: false },
+    projectsOpacity: 0,
+    contactOpacity: 0
   });
 
-  const [projectsBlur, setProjectsBlur] = useState(true);
-  const [projectsOpacity, setProjectsOpacity] = useState(0);
-  const [contactOpacity, setContactOpacity] = useState(0);
-
-  // Add missing CSS keyframes
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      
-      .tooltip-hover .tooltip-content {
-        filter: none !important;
-        z-index: 9999;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
-      }
-      
-      .tooltip-hover .tooltip-text {
-        filter: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
+  // Refs for section elements - using useRef directly
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
   const projectsRef = useRef(null);
@@ -83,126 +57,152 @@ export default function Home() {
   const homeSectionRef = useRef(null);
   const aboutSectionRef = useRef(null);
 
-  // Track section visibility with intersection observer
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      
-      // Get the about section (Let me introduce myself)
-      const aboutSection = document.getElementById('about');
-      const contactSection = document.getElementById('contact');
-      
-      if (aboutSection && contactSection) {
-        // Get the offset positions from the top of the document
-        const aboutOffsetTop = aboutSection.offsetTop;
-        const aboutHeight = aboutSection.offsetHeight;
-        const aboutMiddle = aboutOffsetTop + (aboutHeight / 2);
-        
-        // Get projects and contact section positions
-        const projectsSection = document.getElementById('projects');
-        const contactOffsetTop = contactSection.offsetTop;
-        const projectsOffsetTop = projectsSection ? projectsSection.offsetTop : 0;
-        
-        // Calculate midpoints for consistent transitions (like other sections)
-        const projectsHeight = projectsSection ? projectsSection.offsetHeight : 0;
-        const contactHeight = contactSection.offsetHeight;
-        const projectsMiddle = projectsOffsetTop + (projectsHeight / 2);
-        const contactMiddle = contactOffsetTop + (contactHeight / 2);
-        
-        // Debug logging
-        console.log({
-          scrollY,
-          aboutMiddle,
-          projectsMiddle,
-          contactMiddle,
-          projectsVisible: scrollY >= aboutMiddle && scrollY < projectsMiddle,
-          contactVisible: scrollY >= projectsMiddle
-        });
-        
-        // Simple consistent logic: 
-        // Projects visible from about middle to projects middle
-        // Contact visible from projects middle onwards
-        if (scrollY >= aboutMiddle && scrollY < projectsMiddle) {
-          setProjectsOpacity(1);
-          setContactOpacity(0);
-        } else if (scrollY >= projectsMiddle) {
-          setProjectsOpacity(0);
-          setContactOpacity(1);
-        } else {
-          setProjectsOpacity(0);
-          setContactOpacity(0);
-        }
-      }
+  // Memoized refs object for easier access
+  const sectionRefs = useMemo(() => ({
+    home: homeRef,
+    about: aboutRef,
+    projects: projectsRef,
+    contact: contactRef,
+    homeSection: homeSectionRef,
+    aboutSection: aboutSectionRef
+  }), []);
 
-      // Update current section based on scroll position
-      const sections = ['home', 'about', 'projects', 'contact'];
-      const sectionElements = sections.map(id => document.getElementById(id));
-      
-      for (let i = sectionElements.length - 1; i >= 0; i--) {
-        if (sectionElements[i]) {
-          const rect = sectionElements[i].getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 2) {
-            break;
-          }
-        }
+  // Memoized scroll handler for better performance
+  const handleScroll = useCallback(() => {
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    
+    const aboutSection = document.getElementById('about');
+    const contactSection = document.getElementById('contact');
+    
+    if (!aboutSection || !contactSection) return;
+
+    const aboutOffsetTop = aboutSection.offsetTop;
+    const aboutHeight = aboutSection.offsetHeight;
+    const aboutMiddle = aboutOffsetTop + (aboutHeight / 2);
+    const contactQuarterTrigger = contactSection.offsetTop - (windowHeight * 0.75);
+    
+    // Batch state updates for better performance
+    let newProjectsOpacity = 0;
+    let newContactOpacity = 0;
+    
+    if (scrollY >= aboutMiddle && scrollY < contactQuarterTrigger) {
+      newProjectsOpacity = 1;
+    } else if (scrollY >= contactQuarterTrigger) {
+      newContactOpacity = 1;
+    }
+    
+    // Only update if values actually changed
+    setViewState(prev => {
+      if (prev.projectsOpacity !== newProjectsOpacity || prev.contactOpacity !== newContactOpacity) {
+        return {
+          ...prev,
+          projectsOpacity: newProjectsOpacity,
+          contactOpacity: newContactOpacity
+        };
       }
+      return prev;
+    });
+  }, []);
+
+  // Memoized intersection observer callback
+  const handleIntersection = useCallback((entries) => {
+    const updates = {};
+    entries.forEach((entry) => {
+      const sectionId = entry.target.id;
+      const isVisible = entry.intersectionRatio >= 0.5;
+      updates[sectionId] = isVisible;
+    });
+    
+    setViewState(prev => ({
+      ...prev,
+      sectionVisibility: { ...prev.sectionVisibility, ...updates }
+    }));
+  }, []);
+
+  // Add CSS styles once on mount
+  useEffect(() => {
+    const styleId = 'home-page-styles';
+    if (document.getElementById(styleId)) return;
+    
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .tooltip-hover .tooltip-content {
+        filter: none !important;
+        z-index: 9999;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      }
+      .tooltip-hover .tooltip-text {
+        filter: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      const existingStyle = document.getElementById(styleId);
+      if (existingStyle) existingStyle.remove();
+    };
+  }, []);
+
+  // Throttled scroll listener
+  useEffect(() => {
+    let timeoutId = null;
+    const throttledScroll = () => {
+      if (timeoutId) return;
+      timeoutId = requestAnimationFrame(() => {
+        handleScroll();
+        timeoutId = null;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', throttledScroll, { passive: true });
     handleScroll(); // Initial call
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    
+    return () => {
+      window.removeEventListener('scroll', throttledScroll);
+      if (timeoutId) cancelAnimationFrame(timeoutId);
+    };
+  }, [handleScroll]);
 
+  // Intersection observer for section visibility
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const sectionId = entry.target.id;
-          const ratio = entry.intersectionRatio;
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: [0.5],
+      rootMargin: '0px'
+    });
 
-          // Update visibility based on intersection ratio
-          setSectionVisibility(prev => ({
-            ...prev,
-            [sectionId]: ratio >= 0.5
-          }));
-        });
-      },
-      {
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-        rootMargin: '0px'
-      }
-    );
-
-    // Observe all sections
-    if (homeRef.current) observer.observe(homeRef.current);
-    if (aboutRef.current) observer.observe(aboutRef.current);
-    if (projectsRef.current) observer.observe(projectsRef.current);
-    if (contactRef.current) observer.observe(contactRef.current);
+    Object.values(sectionRefs).forEach(ref => {
+      if (ref.current) observer.observe(ref.current);
+    });
 
     return () => observer.disconnect();
-  }, []);
+  }, [handleIntersection, sectionRefs]);
 
-  // Save scroll position when leaving the page
+  // Combined scroll position management
   useEffect(() => {
     const handleBeforeUnload = () => {
       localStorage.setItem('indexScrollPosition', window.scrollY.toString());
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
+    const restoreScrollPosition = () => {
+      const savedPosition = localStorage.getItem('indexScrollPosition');
+      if (savedPosition) {
+        setTimeout(() => {
+          window.scrollTo(0, parseInt(savedPosition));
+          localStorage.removeItem('indexScrollPosition');
+        }, 100);
+      }
+    };
 
-  // Restore scroll position when returning to the page
-  useEffect(() => {
-    const savedScrollPosition = localStorage.getItem('indexScrollPosition');
-    if (savedScrollPosition) {
-      // Use setTimeout to ensure the page has rendered
-      setTimeout(() => {
-        window.scrollTo(0, parseInt(savedScrollPosition));
-        localStorage.removeItem('indexScrollPosition'); // Clear the saved position
-      }, 100);
-    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    restoreScrollPosition();
+
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
   return (
@@ -210,23 +210,21 @@ export default function Home() {
       {/* Development Notice */}
       <DevNotice />
 
-      {/* Main Content - Wrapped for blur control */}
-      <div id="main-content">
-        {/* Portfolio Explorer Map - Self-contained component */}
-        <PortfolioMap />
+      {/* Portfolio Explorer Map - Self-contained component */}
+      <PortfolioMap />
 
       {/* Hero Section */}
       <section
         id="home"
-        ref={homeRef}
-        className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-all duration-1000 ease-in-out ${sectionVisibility.home ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
+        ref={sectionRefs.home}
+        className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-all duration-1000 ease-in-out ${viewState.sectionVisibility.home ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             {/* Text Content */}
             <div className="text-left space-y-12 ml-8">
-              <div className="relative" ref={homeSectionRef}>
+              <div className="relative" ref={sectionRefs.homeSection}>
                 <h1 className="text-[4rem] md:text-[6rem] text-gray-800 font-caveat leading-[1.1] hover:scale-105 transition-transform cursor-default">
                   Just
                 </h1>
@@ -292,31 +290,25 @@ export default function Home() {
       {/* Introduction Article Section - Full Viewport */}
       <section
         id="about"
-        ref={aboutRef}
-        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        ref={sectionRefs.about}
+        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${viewState.sectionVisibility.about ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-screen flex items-center">
-          <div className="w-full" ref={aboutSectionRef}>
-            {/* Editorial Header - Playful Typography Mix */}
+          <div className="w-full" ref={sectionRefs.aboutSection}>
+            {/* Editorial Header - Refined */}
             <div className="mb-16">
               <div className="relative">
-                {/* Main Typography Composition - Strategic Red Accents */}
-                <div className="flex flex-wrap items-baseline gap-3 mb-6">
-                  <span className="text-5xl font-black text-gray-900 font-sans uppercase tracking-tight">LET</span>
-                  <span className="text-2xl font-light text-gray-700 font-serif lowercase italic">me</span>
-                  <span className="text-4xl font-black text-red-600 font-sans uppercase tracking-wide">INTRODUCE</span>
-                </div>
-                <div className="flex flex-wrap items-baseline gap-3">
-                  <span className="text-2xl font-medium text-gray-700 font-serif lowercase italic">my</span>
-                  <span className="text-6xl font-black text-gray-900 font-sans uppercase tracking-tight">SELF</span>
-                  <span className="text-2xl text-red-500 font-serif">...</span>
+                {/* Refined Typography */}
+                <div className="space-y-1">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-semibold text-gray-900 font-sans uppercase tracking-wide">Quick</span>
+                    <span className="text-4xl font-semibold text-red-600 font-sans uppercase tracking-wide">overview</span>
+                  </div>
                 </div>
                 
-                {/* Minimal Decorative Elements */}
-                <div className="absolute -top-2 -left-1 w-2 h-2 bg-red-600 rounded-full opacity-60"></div>
-                <div className="absolute top-1/4 -right-3 w-1.5 h-1.5 bg-red-400 rounded-full opacity-40"></div>
-                <div className="mt-8 w-20 h-px bg-gradient-to-r from-red-600 via-gray-800 to-transparent opacity-70"></div>
+                {/* Refined accent line */}
+                <div className="mt-4 w-12 h-px bg-red-600"></div>
               </div>
             </div>
 
@@ -324,7 +316,7 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
               {/* Left Column - Chess Illustration */}
               <div className="lg:col-span-2 flex justify-center lg:justify-start">
-                <div className="relative w-full max-w-[380px]">
+                <div className="relative w-full max-w-[300px]">
                   <div className="relative aspect-square">
                     <Image
                       src="/images/chess.png"
@@ -332,7 +324,7 @@ export default function Home() {
                       fill
                       className="object-contain"
                       priority
-                      sizes="(max-width: 768px) 380px, 380px"
+                      sizes="(max-width: 768px) 300px, 300px"
                     />
                   </div>
                   {/* Editorial Caption - Magazine Style */}
@@ -341,7 +333,7 @@ export default function Home() {
                       Strategic Thinking
                     </p>
                     <div className="w-16 h-px bg-red-500 mx-auto opacity-60"></div>
-                    <p className="text-sm text-gray-600 font-serif italic leading-relaxed max-w-xs mx-auto">
+                    <p className="text-sm text-gray-600 font-serif italic leading-relaxed whitespace-nowrap">
                       Every move counts, both on the board and in code
                     </p>
                   </div>
@@ -351,26 +343,16 @@ export default function Home() {
               {/* Right Column - Article Text */}
               <div className="lg:col-span-3 space-y-8 lg:-mt-20">
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  <span className="text-3xl font-black font-sans text-gray-900">HEY</span> 
-                  <span className="text-xl font-light font-serif italic text-gray-800 ml-2">there!</span> 
-                  <span className="text-lg font-medium text-red-600 ml-2">Frank</span> here. I could throw around buzzwords and tell you I'm 
-                  <span className="text-red-500 font-serif italic">"passionate about innovative solutions,"</span> but honestly? I just like building 
-                  <span className="font-sans font-medium text-gray-900 uppercase text-base tracking-wide"> STUFF</span> that works.
+                  <span className="text-2xl font-bold font-sans text-gray-900">HEY</span>
+                  <span className="text-xl font-medium font-serif italic text-gray-800 ml-1"> there!</span>
+                  <span className="text-lg font-semibold text-red-600 ml-2"> Frank</span>
+                  <span className="text-lg font-normal text-gray-700"> here. I love building</span>
+                  <span className="font-sans font-bold text-gray-900 uppercase text-lg tracking-wide ml-1"> STUFF</span>
+                  <span className="text-lg font-normal text-gray-700"> that works.</span>
                 </div>
                 
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  When I'm not <span className="font-sans text-gray-900 uppercase text-base tracking-wide">CODING</span>, I'm probably playing 
-                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> CHESS</span>&nbsp;
-                  <span className="text-red-500 font-serif italic text-base">(badly)</span>, watching 
-                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> ANIME</span>&nbsp;
-                  <span className="text-red-600 font-serif italic text-base">(obsessively)</span>, or 
-                  <span className="font-sans text-gray-900 uppercase text-sm tracking-wider"> SLEEPING</span>&nbsp;
-                  <span className="text-red-500 font-serif italic text-base">(not enough)</span>. It's a simple life, but it keeps me 
-                  <span className="text-red-600"> content</span>.
-                </div>
-                
-                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  <span className="text-2xl font-black font-sans text-gray-900 uppercase tracking-tight">LOOK</span>, instead of me rambling about what I can do, just&nbsp;
+                  Just&nbsp;
                   <span className="relative group tooltip-hover">
                     <Link href="/projects" className="text-red-600 font-bold underline decoration-red-300 text-lg hover:bg-red-50 px-1 rounded transition-colors cursor-pointer tooltip-text">
                       poke around
@@ -379,8 +361,8 @@ export default function Home() {
                       Check out my projects →
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
                     </span>
-                  </span>. Check out the projects, see what I've built. If something catches your eye, 
-                  <span className="font-sans font-semibold text-gray-900 uppercase text-sm tracking-wide"> GREAT</span>. If not, no worries—at least you got to see some 
+                  </span>. Check out the projects, see what I&apos;ve built. If something catches your eye, 
+                  <span className="font-sans font-semibold text-gray-900 uppercase text-sm tracking-wide"> GREAT</span>. If not, no worries, at least you got to see some 
                   <span className="text-red-500 font-serif italic"> decent</span> web design.
                 </div>
                 
@@ -393,11 +375,26 @@ export default function Home() {
                       See my thinking process →
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
                     </span>
-                  </span> section shows my&nbsp; 
+                  </span> page shows my&nbsp; 
                   <span className="text-red-600 font-serif italic text-lg">thinking process</span> and how I approach problems (the messy, iterative reality of development), and the projects are&nbsp; 
-                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> things I've built for&nbsp; 
-                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> problems. Some worked out better than others, but that's 
+                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> things I&apos;ve built for&nbsp; 
+                  <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> problems. Some worked out better than others, but that&apos;s 
                   <span className="text-red-500 font-serif italic"> how it goes</span>.
+                </div>
+
+                <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
+                  If you like reading some of my&nbsp;
+                  <span className="text-red-600 font-serif italic text-lg">backstory</span>, <span className="text-red-600 font-serif italic text-lg">education</span>, and <span className="text-red-600 font-serif italic text-lg">experience</span>, check out the&nbsp;
+                  <span className="relative group tooltip-hover">
+                    <Link href="/about" className="tooltip-text font-sans text-gray-900 uppercase text-base tracking-wider hover:text-red-600 transition-colors cursor-pointer border-b border-gray-400 hover:border-red-400">
+                      ABOUT
+                    </Link>
+                    <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
+                      Read my story →
+                      <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
+                    </span>
+                  </span> page. It&apos;s written like an&nbsp;
+                  <span className="text-red-500 font-serif italic">autobiography</span>, so grab some coffee first.
                 </div>
 
                 {/* Editorial Signature */}
@@ -417,13 +414,13 @@ export default function Home() {
       {/* Projects Preview Section */}
       <section
         id="projects"
-        ref={projectsRef}
-        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.projects ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
+        ref={sectionRefs.projects}
+        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${viewState.sectionVisibility.projects ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
           }`}
       >
         <div 
           className="w-full px-4 sm:px-6 lg:px-8 py-16 transition-opacity duration-700 ease-in-out"
-          style={{ opacity: projectsOpacity }}
+          style={{ opacity: viewState.projectsOpacity }}
         >
           <div className="max-w-7xl mx-auto">
             {/* Title Section */}
@@ -552,7 +549,7 @@ export default function Home() {
                     {/* Description */}
                     <div>
                       <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        Gamified banking system inspired by Monopoly's Ultimate Banking, featuring 
+                        Gamified banking system inspired by Monopoly&apos;s Ultimate Banking, featuring 
                         real-time balance updates and comprehensive transaction management.
                       </p>
                       <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
@@ -637,13 +634,13 @@ export default function Home() {
       {/* Contact Section */}
       <section
         id="contact"
-        ref={contactRef}
-        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${sectionVisibility.contact ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
+        ref={sectionRefs.contact}
+        className={`min-h-screen flex items-center justify-center bg-[#e7dfd8] transition-all duration-1000 ease-in-out ${viewState.sectionVisibility.contact ? 'opacity-100 translate-y-0' : 'opacity-100 translate-y-0'
           }`}
       >
         <div 
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 transition-opacity duration-700 ease-in-out"
-          style={{ opacity: contactOpacity }}
+          style={{ opacity: viewState.contactOpacity }}
         >
           {/* Main Contact Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
@@ -660,7 +657,7 @@ export default function Home() {
             <div className="">
               <div className="space-y-6">
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  If you're here to understand what I have{' '}
+                  If you&apos;re here to understand what I have{' '}
                   <span className="relative group tooltip-hover">
                     <Link href="/projects" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
                       built
@@ -815,8 +812,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
-      </div> {/* End main-content */}
     </div>
   );
 }
