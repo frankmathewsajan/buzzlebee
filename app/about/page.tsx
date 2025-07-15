@@ -13,20 +13,20 @@ export default function AboutPage() {
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
-  const decodeSequence = [
-    "Kapitel Eins: Einführung",
-    "K@p1t3l E1ns: E1nführung", 
-    "Kap1tel 31ns: 31nführung",
-    "Chapt3l 0ne: 1ntroduct10n",
-    "Chapt3r 0ne: 1ntr0duct10n",
-    "Chap7er On3: Intr0ducti0n",
-    "Chapter 0ne: Introduct1on",
-    "Chapter On3: Introduction",
-    "Chapter One: Intro@uction",
-    "Chapter One: Introduction"
-  ];
-
   useEffect(() => {
+    const decodeSequence = [
+      "Kapitel Eins: Einführung",
+      "K@p1t3l E1ns: E1nführung", 
+      "Kap1tel 31ns: 31nführung",
+      "Chapt3l 0ne: 1ntroduct10n",
+      "Chapt3r 0ne: 1ntr0duct10n",
+      "Chap7er On3: Intr0ducti0n",
+      "Chapter 0ne: Introduct1on",
+      "Chapter On3: Introduction",
+      "Chapter One: Intro@uction",
+      "Chapter One: Introduction"
+    ];
+
     const timer = setTimeout(() => {
       let index = 0;
       const interval = setInterval(() => {
@@ -167,7 +167,7 @@ export default function AboutPage() {
             >
               <div className="prose prose-xl max-w-none">
                 <p className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
-                  I'm <span className="text-gray-900">Frank Mathew Sajan</span>, originally from <span className="text-gray-900">Kerala</span> but currently studying in <span className="text-gray-900">Andhra Pradesh</span>. 
+                  I&apos;m <span className="text-gray-900">Frank Mathew Sajan</span>, originally from <span className="text-gray-900">Kerala</span> but currently studying in <span className="text-gray-900">Andhra Pradesh</span>. 
                   I spend my time <span className="text-gray-900">coding</span>, <span className="text-gray-900">learning German</span>, and occasionally playing chess or watching anime.
                 </p>
                 <p className="text-xl font-serif leading-9 mb-8 text-gray-800 text-justify">
@@ -220,7 +220,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-serif font-normal text-gray-900 mb-3 text-center">Chapter 2: Education</h2>
             <p className="text-base text-gray-600 max-w-2xl mx-auto font-serif italic text-center">
-              "The journey of learning never truly begins in classrooms. It starts with curiosity."
+              &ldquo;The journey of learning never truly begins in classrooms. It starts with curiosity.&rdquo;
             </p>
           </motion.div>
 
@@ -239,13 +239,13 @@ export default function AboutPage() {
                 >
                   My educational journey began like most others, with small steps in primary school, 
                   learning to read and write, discovering numbers and their relationships. Those early years at various 
-                  institutions laid a foundation I didn't fully appreciate at the time. During my time at <span className="text-gray-900 underline decoration-1 underline-offset-2">St. Joseph's</span>, 
-                  I became a <span className="text-gray-900">Rajya Puraskar Scout</span> and was awarded <span className="text-gray-900">Nanammudra in the Chief Minister's Shield competition</span>, 
+                  institutions laid a foundation I didn&apos;t fully appreciate at the time. During my time at <span className="text-gray-900 underline decoration-1 underline-offset-2">St. Joseph&apos;s</span>, 
+                  I became a <span className="text-gray-900">Rajya Puraskar Scout</span> and was awarded <span className="text-gray-900">Nanammudra in the Chief Minister&apos;s Shield competition</span>, 
                   experiences that taught me <span className="text-gray-900">leadership, teamwork, and service to community</span>.
                 </motion.p>
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
-                  The transition to <em>St. Joseph's Higher Secondary School</em> marked a turning point. 
+                  The transition to <em>St. Joseph&apos;s Higher Secondary School</em> marked a turning point. 
                   Here, mathematics began to make sense not just as abstract formulas, but as a language 
                   that could describe the world around me. It was during these years 
                   that I first encountered a computer, and something clicked.
@@ -253,8 +253,8 @@ export default function AboutPage() {
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
                   <span className="text-gray-900 underline decoration-1 underline-offset-2">VIT-AP University</span>, Amaravati became the next chapter. Moving from Kerala to Andhra Pradesh 
-                  wasn't just a geographic shift but was stepping into independence. The <span className="text-gray-900">B.Tech Computer Science and Engineering </span> 
-                  program here isn't just about learning programming languages; it's about learning to <span className="text-gray-900">think systematically, 
+                  wasn&apos;t just a geographic shift but was stepping into independence. The <span className="text-gray-900">B.Tech Computer Science and Engineering </span> 
+                  program here isn&apos;t just about learning programming languages; it&apos;s about learning to <span className="text-gray-900">think systematically, 
                   to break down complex problems, and to build solutions</span> that matter.
                 </motion.p>
 
@@ -281,7 +281,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-serif font-normal text-gray-900 mb-3 text-center">Chapter 3: Experience</h2>
             <p className="text-base text-gray-600 max-w-2xl mx-auto font-serif italic text-center">
-              "Experience is not what happens to you; it's what you do with what happens to you."
+              &ldquo;Experience is not what happens to you; it&apos;s what you do with what happens to you.&rdquo;
             </p>
           </motion.div>
 
@@ -300,12 +300,12 @@ export default function AboutPage() {
                 >
                   My first real taste of the professional world came through the <span className="text-gray-900 underline decoration-1 underline-offset-2">Innovation, Incubation, and Entrepreneurship Center (IIEC) </span> 
                   at <span className="text-gray-900 underline decoration-1 underline-offset-2">VIT-AP University</span>, where I work as a <span className="text-gray-900 underline decoration-1 underline-offset-2">Research and Development Software Engineer</span>. Under the guidance of 
-                  <span className="text-gray-900"> Dr. Santanu Mandal</span>, I've been involved in developing <span className="text-gray-900">innovative software solutions</span> that bridge academic 
+                  <span className="text-gray-900"> Dr. Santanu Mandal</span>, I&apos;ve been involved in developing <span className="text-gray-900">innovative software solutions</span> that bridge academic 
                   research with practical applications.
                 </motion.p>
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
-                  But experience isn't just about prestigious programs. It's built in the quiet hours spent 
+                  But experience isn&apos;t just about prestigious programs. It&apos;s built in the quiet hours spent 
                   debugging code that refuses to work, in the satisfaction of finally solving a problem that 
                   seemed impossible yesterday. My internship at <span className="text-gray-900 underline decoration-1 underline-offset-2">TechtoGreen Drone & Robotics Private Limited</span> expanded 
                   my horizons into the world of <span className="text-gray-900">autonomous systems and robotics</span>, where software meets hardware 
@@ -315,25 +315,25 @@ export default function AboutPage() {
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
                   Leadership opportunities have also shaped my journey significantly. As <span className="text-gray-900 underline decoration-1 underline-offset-2">Deputy Captain</span> of the 
                   <span className="text-gray-900 underline decoration-1 underline-offset-2">Institution of Electronics and Telecommunication Engineers (IETE)</span> student chapter on campus, 
-                  I've learned that effective leadership isn't about having all the answers but is about asking 
+                  I&apos;ve learned that effective leadership isn&apos;t about having all the answers but is about asking 
                   the right questions and creating space for others to contribute their best work.
                 </motion.p>
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
-                  I've learned that <span className="text-gray-900">full-stack development</span> is less about mastering every framework and more 
-                  about understanding how to connect ideas to implementation. Whether it's a <span className="text-gray-900">React frontend </span> 
+                  I&apos;ve learned that <span className="text-gray-900">full-stack development</span> is less about mastering every framework and more 
+                  about understanding how to connect ideas to implementation. Whether it&apos;s a <span className="text-gray-900">React frontend </span> 
                   that users love interacting with, or a <span className="text-gray-900">Node.js backend</span> that handles thousands of requests 
                   without breaking, each project teaches something new.
                 </motion.p>
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 mb-6 text-gray-800 text-justify">
-                  Some of my most valuable experience comes from <span className="text-gray-900">research projects</span>: those moments when you're 
-                  exploring questions that don't have Stack Overflow answers. These projects teach <span className="text-gray-900">patience, 
-                  systematic thinking, and the humility</span> that comes with realizing how much you don't know.
+                  Some of my most valuable experience comes from <span className="text-gray-900">research projects</span>: those moments when you&apos;re 
+                  exploring questions that don&apos;t have Stack Overflow answers. These projects teach <span className="text-gray-900">patience, 
+                  systematic thinking, and the humility</span> that comes with realizing how much you don&apos;t know.
                 </motion.p>
 
                 <motion.p variants={fadeInUp} className="text-xl font-serif leading-9 text-gray-800 text-justify">
-                  The most rewarding experiences have been those where everyone grows together. Whether it's 
+                  The most rewarding experiences have been those where everyone grows together. Whether it&apos;s 
                   collaborating on <span className="text-gray-900">research projects at IIEC</span>, organizing <span className="text-gray-900">technical events through IETE</span>, or 
                   working with teams on <span className="text-gray-900">complex software solutions</span>, the best outcomes emerge when diverse 
                   perspectives combine toward a common goal.
@@ -356,7 +356,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-serif font-normal text-white mb-4">Epilogue</h2>
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto font-serif leading-7">
             This story is still being written. Each project, each collaboration, each challenge adds new chapters 
-            to a narrative that continues to evolve. If you'd like to be part of the next chapter, I'd love to hear from you.
+            to a narrative that continues to evolve. If you&apos;d like to be part of the next chapter, I&apos;d love to hear from you.
           </p>
           <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center"
