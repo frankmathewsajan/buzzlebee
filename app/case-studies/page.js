@@ -4,6 +4,7 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
+import PortfolioMap from '../components/PortfolioMap';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -89,6 +90,9 @@ export default function CaseStudies() {
 
   return (
     <>
+      {/* Portfolio Explorer Map */}
+      <PortfolioMap />
+      
       <style jsx global>{`
         .group\/card:hover ~ .group\/card,
         .group\/card:has(~ .group\/card:hover) {

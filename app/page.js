@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, memo, useMemo, useCallback } from "react";
 
 import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import PortfolioMap from './components/PortfolioMap';
 import DevNotice from './components/DevNotice';
+import ContactModal from './components/ContactModal';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ 
@@ -42,6 +44,8 @@ const ProjectCard = memo(({ title, description, tags }) => {
 ProjectCard.displayName = 'ProjectCard';
 
 export default function Home() {
+  const router = useRouter();
+  
   // Consolidated state for better management
   const [viewState, setViewState] = useState({
     sectionVisibility: { home: true, about: false, projects: false, contact: false },
@@ -49,6 +53,17 @@ export default function Home() {
     contactOpacity: 0
   });
 
+  // Contact Modal state
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+
+  // Handle social link clicks - shows modal for private accounts and follow-back requests
+  const handleSocialLinkClick = useCallback((platform, url) => {
+    if (platform === 'instagram' || platform === 'discord' || platform === 'github' || platform === 'gmail') {
+      setContactModalOpen(true);
+    } else {
+      window.open(url, '_blank');
+    }
+  }, []);
   // Refs for section elements - using useRef directly
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -343,12 +358,18 @@ export default function Home() {
               {/* Right Column - Article Text */}
               <div className="lg:col-span-3 space-y-8 lg:-mt-20">
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  <span className="text-2xl font-bold font-sans text-gray-900">HEY</span>
-                  <span className="text-xl font-medium font-serif italic text-gray-800 ml-1"> there!</span>
-                  <span className="text-lg font-semibold text-red-600 ml-2"> Frank</span>
-                  <span className="text-lg font-normal text-gray-700"> here. I love building</span>
-                  <span className="font-sans font-bold text-gray-900 uppercase text-lg tracking-wide ml-1"> STUFF</span>
-                  <span className="text-lg font-normal text-gray-700"> that works.</span>
+                  <span className="text-2xl font-medium font-sans text-gray-900">Hey</span>
+                  <span className="text-xl font-medium font-serif italic text-gray-800 ml-1"> there! I&apos;m</span>
+                  <span className="text-lg font-semibold text-red-600 ml-2">Frank</span>
+                  <span className="text-lg font-normal text-gray-700">, and I build software when I feel someone might </span>
+                  <span className="font-sans font-medium text-red-600 text-base tracking-wide">need</span>
+                  <span className="text-lg font-normal text-gray-700"> it, started as </span>
+                  <span className="font-sans font-medium text-gray-900 text-base tracking-wide">small fixes</span>
+                  <span className="text-lg font-normal text-gray-700"> for </span>
+                  <span className="font-sans font-medium text-red-600 text-base tracking-wide">my own problems</span>
+                  <span className="text-lg font-normal text-gray-700">, and I later realized they could </span>
+                  <span className="font-sans font-medium text-red-600 text-base tracking-wide">help others</span>
+                  <span className="text-lg font-normal text-gray-700"> as well.</span>
                 </div>
                 
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
@@ -363,7 +384,7 @@ export default function Home() {
                     </span>
                   </span>. Check out the projects, see what I&apos;ve built. If something catches your eye, 
                   <span className="font-sans font-semibold text-gray-900 uppercase text-sm tracking-wide"> GREAT</span>. If not, no worries, at least you got to see some 
-                  <span className="text-red-500 font-serif italic"> decent</span> web design.
+                  <span className="text-red-500 font-serif italic"> decent</span> designs.
                 </div>
                 
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
@@ -426,7 +447,7 @@ export default function Home() {
             {/* Title Section */}
             <div className="mb-12 text-center">
               <p className="text-base text-gray-600 font-light max-w-xl mx-auto">
-                Top 4 projects solving real problems with clean, functional design
+                Hand-picked projects across various domains.
               </p>
             </div>
 
@@ -437,7 +458,7 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 
                 {/* Intelligent Safety Helmet System */}
-                <div className="group cursor-pointer">
+                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -445,9 +466,28 @@ export default function Home() {
                   <div className="space-y-5 mb-8">
                     {/* Project Name & Tech Stack */}
                     <div>
-                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                        INTELLIGENT SAFETY HELMET SYSTEM
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                          INTELLIGENT SAFETY HELMET SYSTEM
+                        </h3>
+                        <div className="relative group/badge">
+                          <div 
+                            className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push('/certifications');
+                            }}
+                          >
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            AWARDED
+                          </div>
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/badge:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                            View award details →
+                          </div>
+                        </div>
+                      </div>
                       <div className="flex flex-wrap gap-1.5">
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Arduino</span>
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">C++</span>
@@ -479,8 +519,8 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* AI-Ignite Educational Platform */}
-                <div className="group cursor-pointer">
+                {/* School Education Platform */}
+                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -488,24 +528,62 @@ export default function Home() {
                   <div className="space-y-5 mb-8">
                     {/* Project Name & Tech Stack */}
                     <div>
-                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                        AI-IGNITE EDUCATIONAL PLATFORM
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                          ST. G. D. CONVENT SCHOOL PLATFORM
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <div className="relative group/certified">
+                            <div 
+                              className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push('/certifications');
+                              }}
+                            >
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              CERTIFIED
+                            </div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/certified:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                              View certification →
+                            </div>
+                          </div>
+                          <div className="relative group/deployed">
+                            <div 
+                              className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-green-200 transition-colors"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open('https://stgdconventschool.com/', '_blank');
+                              }}
+                            >
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              DEPLOYED
+                            </div>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/deployed:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                              Visit live site →
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">TensorFlow</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Python</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">AWS</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Machine Learning</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Next.js</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Supabase</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">React</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">PostgreSQL</span>
                       </div>
                     </div>
                     
                     {/* Description */}
                     <div>
                       <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        AI-powered learning platform with adaptive testing that personalizes education 
-                        based on individual learning patterns and progress analytics.
+                        Full-featured educational platform for St. G. D. Convent School, Agra, UP with 
+                        comprehensive backend using Supabase for complete school administration management.
                       </p>
-                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
+                      <span className="text-xs text-gray-400 font-mono mt-2 block">2024</span>
                     </div>
                   </div>
                   
@@ -527,7 +605,7 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 
                 {/* Banking Simulation System */}
-                <div className="group cursor-pointer">
+                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -535,14 +613,34 @@ export default function Home() {
                   <div className="space-y-5 mb-8">
                     {/* Project Name & Tech Stack */}
                     <div>
-                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                        DIGITAL BANKING SIMULATION
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                          MONOPOLY DIGITAL BANKING SIMULATION
+                        </h3>
+                        <div className="relative group/deployed">
+                          <div 
+                            className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-green-200 transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open('https://fms-monopoly.web.app/', '_blank');
+                            }}
+                          >
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            DEPLOYED
+                          </div>
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/deployed:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                            Visit live app →
+                          </div>
+                        </div>
+                      </div>
                       <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Node.js</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">MongoDB</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Express</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Real-time</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">HTML</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">CSS</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">jQuery</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Vanilla JS</span>
+                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Firebase</span>
                       </div>
                     </div>
                     
@@ -561,16 +659,16 @@ export default function Home() {
                     <div className="text-center p-8">
                       <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
                         <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h3a1 1 0 011 1v1a1 1 0 01-1 1v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7a1 1 0 01-1-1V5a1 1 0 011-1h3zM9 4h6V3H9v1zm5 8a1 1 0 11-2 0 1 1 0 012 0z" />
                         </svg>
                       </div>
-                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">FINTECH SIMULATION</div>
+                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">BOARD GAMES</div>
                     </div>
                   </div>
                 </div>
 
                 {/* Library Management System */}
-                <div className="group cursor-pointer">
+                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -578,9 +676,28 @@ export default function Home() {
                   <div className="space-y-5 mb-8">
                     {/* Project Name & Tech Stack */}
                     <div>
-                      <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                        LIBRARY MANAGEMENT SYSTEM
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+                          LIBRARY MANAGEMENT SYSTEM
+                        </h3>
+                        <div className="relative group/badge">
+                          <div 
+                            className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push('/certifications');
+                            }}
+                          >
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            CERTIFIED
+                          </div>
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/badge:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                            View certification →
+                          </div>
+                        </div>
+                      </div>
                       <div className="flex flex-wrap gap-1.5">
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Python</span>
                         <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Tkinter</span>
@@ -746,38 +863,57 @@ export default function Home() {
                 <div className="space-y-3">
                   {/* Row 1: GitHub and LinkedIn (balanced length) */}
                   <div className="grid grid-cols-2 gap-x-0">
-                    <a href="https://github.com/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    <button 
+                      onClick={() => handleSocialLinkClick('github', 'https://github.com/frankmathewsajan')}
+                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300 text-left relative group"
+                    >
                       <FaGithub className="w-5 h-5" />
                       GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors duration-300">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Connect
+                      </span>
+                    </button>
+                    <button 
+                      onClick={() => handleSocialLinkClick('linkedin', 'https://linkedin.com/in/frankmathewsajan')}
+                      className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors duration-300 text-left"
+                    >
                       <FaLinkedin className="w-5 h-5" />
                       LinkedIn
-                    </a>
+                    </button>
                   </div>
                   {/* Row 2: Discord and Instagram (balanced length) */}
                   <div className="grid grid-cols-2 gap-x-0">
-                    <a href="https://discord.com/users/frankmathewsajan" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors duration-300">
+                    <button 
+                      onClick={() => handleSocialLinkClick('discord', 'https://discord.com/users/frankmathewsajan')}
+                      className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors duration-300 text-left relative group"
+                    >
                       <FaDiscord className="w-5 h-5" />
                       Discord
-                    </a>
-                    <a href="https://instagram.com/franklyy.idk" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors duration-300">
+                      <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Private
+                      </span>
+                    </button>
+                    <button 
+                      onClick={() => handleSocialLinkClick('instagram', 'https://instagram.com/franklyy.idk')}
+                      className="flex items-center gap-2 text-gray-600 hover:text-pink-600 transition-colors duration-300 text-left relative group"
+                    >
                       <FaInstagram className="w-5 h-5" />
                       Instagram
-                    </a>
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        Private
+                      </span>
+                    </button>
                   </div>
                   {/* Row 3: Email (full width) */}
-                  <a href="mailto:frankmathewsajan@gmail.com"
-                    className="flex items-center gap-3 text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                  <button 
+                    onClick={() => handleSocialLinkClick('gmail', 'mailto:frankmathewsajan@gmail.com')}
+                    className="flex items-center gap-3 text-gray-600 hover:text-gray-900 transition-colors duration-300 text-left w-full"
+                  >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     Gmail
-                  </a>
+                  </button>
                 </div>
                 
                 {/* Right separator */}
@@ -812,6 +948,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Contact Modal */}
+      <ContactModal 
+        isOpen={contactModalOpen} 
+        onClose={() => setContactModalOpen(false)}
+        variant="social"
+      />
     </div>
   );
 }

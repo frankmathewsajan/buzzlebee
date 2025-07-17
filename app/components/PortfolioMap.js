@@ -9,7 +9,8 @@ import {
   FaPen, 
   FaAward, 
   FaChartBar, 
-  FaBriefcase 
+  FaBriefcase,
+  FaBroom
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
 
@@ -488,44 +489,64 @@ const PortfolioMap = () => {
     return {};
   });
 
-  // Track scroll progress
+  // Track current page visit - Enhanced to handle direct visits
   useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = window.scrollY;
-      const progress = Math.min(100, (currentScroll / totalHeight) * 100);
-      setScrollProgress(progress);
-      
-      // Save page-specific scroll progress
-      setPageScrollProgress(prev => {
-        const updated = { ...prev, [pathname]: Math.round(progress) };
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('portfolioPageScrollProgress', JSON.stringify(updated));
-        }
-        return updated;
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [pathname]);
-
-  // Track current page visit
-  useEffect(() => {
+    // Add current page to visited pages immediately on component mount
     setVisitedPages(prev => {
       const newSet = new Set(prev);
       newSet.add(pathname);
+      
+      // Also save to localStorage immediately for direct visits
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('portfolioVisitedPages', JSON.stringify([...newSet]));
+      }
+      
       return newSet;
     });
   }, [pathname]);
 
-  // Persist visited pages to localStorage
+  // Track scroll progress and save page-specific progress
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('portfolioVisitedPages', JSON.stringify([...visitedPages]));
-    }
-  }, [visitedPages]);
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+      const progress = totalHeight > 0 ? Math.min(100, (currentScroll / totalHeight) * 100) : 0;
+      setScrollProgress(progress);
+      
+      // Save page-specific scroll progress with debouncing
+      setPageScrollProgress(prev => {
+        const updated = { ...prev, [pathname]: Math.round(progress) };
+        
+        // Debounced localStorage save
+        if (typeof window !== 'undefined') {
+          clearTimeout(window.portfolioScrollTimer);
+          window.portfolioScrollTimer = setTimeout(() => {
+            localStorage.setItem('portfolioPageScrollProgress', JSON.stringify(updated));
+          }, 100);
+        }
+        
+        return updated;
+      });
+    };
+
+    // Initial call to capture page state
+    setTimeout(handleScroll, 100);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (typeof window !== 'undefined' && window.portfolioScrollTimer) {
+        clearTimeout(window.portfolioScrollTimer);
+      }
+    };
+  }, [pathname]);
+
+  // Persist visited pages to localStorage - Remove this duplicate effect since we handle it above
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     localStorage.setItem('portfolioVisitedPages', JSON.stringify([...visitedPages]));
+  //   }
+  // }, [visitedPages]);
 
   // Handle smooth modal close
   const handleCloseModal = useCallback(() => {
@@ -736,12 +757,30 @@ const PortfolioMap = () => {
                     <span>PENDING</span>
                   </div>
                 </div>
-                <div className="text-xs text-neutral-600 font-mono uppercase tracking-wider">
-                  {unexploredCount > 0 ? (
-                    <span>{unexploredCount} NODES.REMAINING</span>
-                  ) : (
-                    <span className="text-black">SYSTEM.COMPLETE</span>
-                  )}
+                <div className="flex items-center gap-4">
+                  <div className="text-xs text-neutral-600 font-mono uppercase tracking-wider">
+                    {unexploredCount > 0 ? (
+                      <span>{unexploredCount} NODES.REMAINING</span>
+                    ) : (
+                      <span className="text-black">SYSTEM.COMPLETE</span>
+                    )}
+                  </div>
+                  {/* Clear Progress Button */}
+                  <button
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        localStorage.removeItem('portfolioVisitedPages');
+                        localStorage.removeItem('portfolioPageScrollProgress');
+                        setVisitedPages(new Set([pathname]));
+                        setPageScrollProgress({});
+                      }
+                    }}
+                    className="group flex items-center gap-2 px-3 py-1.5 text-xs text-neutral-600 hover:text-neutral-900 font-mono uppercase tracking-wider transition-all duration-200 hover:bg-neutral-100 rounded border border-neutral-300 hover:border-neutral-400"
+                    title="Clear all progress data"
+                  >
+                    <FaBroom className="w-3 h-3 group-hover:rotate-12 transition-transform duration-200" />
+                    CLEAR
+                  </button>
                 </div>
               </div>
             </div>
