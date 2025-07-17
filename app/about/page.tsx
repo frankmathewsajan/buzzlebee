@@ -5,11 +5,13 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import PortfolioMap from '../components/PortfolioMap';
+import ContactModal from '../components/ContactModal';
 
 export default function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [titleText, setTitleText] = useState("Kapitel Eins: Einführung");
+  const [contactModalOpen, setContactModalOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
@@ -171,7 +173,7 @@ export default function AboutPage() {
                   I spend my time <span className="text-gray-900">coding</span>, <span className="text-gray-900">learning German</span>, and occasionally playing chess or watching anime.
                 </p>
                 <p className="text-xl font-serif leading-9 mb-8 text-gray-800 text-justify">
-                  I build software that works across platforms: <span className="text-gray-900">web apps, mobile apps, and desktop applications</span> 
+                  I build software that works across platforms: <span className="text-gray-900">web apps, mobile apps, and desktop applications </span> 
                   that solve real problems. My work spans from <span className="text-gray-900">system architecture to research projects</span> depending 
                   on the challenge, with some <span className="text-gray-900">freelance work</span> when interesting opportunities arise.
                 </p>
@@ -365,25 +367,35 @@ export default function AboutPage() {
             whileInView="animate"
             viewport={{ once: true }}
           >
-            <motion.button
-              variants={fadeInUp}
-              className="px-6 py-3 bg-white text-gray-900 rounded-md font-serif font-medium hover:bg-gray-100 transition-colors duration-300"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              View My Work
-            </motion.button>
+            <Link href="/projects">
+              <motion.button
+                variants={fadeInUp}
+                className="px-6 py-3 bg-white text-gray-900 rounded-md font-serif font-medium hover:bg-gray-100 transition-colors duration-300"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                View My Work
+              </motion.button>
+            </Link>
             <motion.button
               variants={fadeInUp}
               className="px-6 py-3 border border-white text-white rounded-md font-serif font-medium hover:bg-white hover:text-gray-900 transition-all duration-300"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => setContactModalOpen(true)}
             >
               Start a Conversation
             </motion.button>
           </motion.div>
         </motion.div>
       </section>
+
+      {/* Contact Modal */}
+      <ContactModal 
+        isOpen={contactModalOpen} 
+        onClose={() => setContactModalOpen(false)}
+        variant="contact"
+      />
     </div>
   );
 } 

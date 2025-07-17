@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import PortfolioMap from '../components/PortfolioMap';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -389,14 +390,19 @@ export default function Certifications() {
 
   return (
     <div className="min-h-screen">
+      {/* Portfolio Explorer Map */}
+      <PortfolioMap />
+      
       {/* Navigation Links */}
       <div className="fixed top-8 right-8 z-50 flex gap-4">
         {activeCert !== 'overview' && (
           <button
             onClick={() => certRefs.overview.current?.scrollIntoView({ behavior: 'smooth' })}
-            className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200`}
+            className="p-3 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white/90"
           >
-            Back to Top
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+            </svg>
           </button>
         )}
         {activeCert === 'overview' && (
