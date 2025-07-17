@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-const ContactModal = ({ isOpen, onClose, variant = 'contact' }) => {
+const ContactModal = ({ isOpen, onClose, variant = 'contact', hideDirectAccess = false }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -187,8 +187,8 @@ GitHub: ${formData.github || 'Not provided'}`;
           </button>
         </div>
 
-        {/* Social Direct Access (only for social variant) */}
-        {variant === 'social' && (
+        {/* Social Direct Access (only for social variant and when not hidden) */}
+        {variant === 'social' && !hideDirectAccess && (
           <div className="p-6 border-b border-neutral-200 bg-neutral-50">
             <h3 className="text-sm font-mono text-neutral-700 uppercase tracking-wider mb-3">
               DIRECT.ACCESS

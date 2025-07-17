@@ -55,10 +55,12 @@ export default function Home() {
 
   // Contact Modal state
   const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [contactModalSource, setContactModalSource] = useState('social'); // 'social' or 'gmail'
 
   // Handle social link clicks - shows modal for private accounts and follow-back requests
   const handleSocialLinkClick = useCallback((platform, url) => {
     if (platform === 'instagram' || platform === 'discord' || platform === 'github' || platform === 'gmail') {
+      setContactModalSource(platform === 'gmail' ? 'gmail' : 'social');
       setContactModalOpen(true);
     } else {
       window.open(url, '_blank');
@@ -454,11 +456,11 @@ export default function Home() {
             {/* Projects List */}
             <div className="space-y-16 mb-8">
               
-              {/* Row 1: Intelligent Safety Helmet System & AI-Ignite Educational Platform */}
+              {/* Row 1: Intelligent Safety Helmet System & St. G. D. Convent School Platform */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 
                 {/* Intelligent Safety Helmet System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
+                <div className="group cursor-pointer" onClick={() => router.push('/projects#helmet-system')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -520,7 +522,7 @@ export default function Home() {
                 </div>
 
                 {/* School Education Platform */}
-                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
+                <div className="group cursor-pointer" onClick={() => router.push('/projects#st-gd-convent')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -605,7 +607,7 @@ export default function Home() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 
                 {/* Banking Simulation System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
+                <div className="group cursor-pointer" onClick={() => router.push('/projects#banking-sim')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -668,7 +670,7 @@ export default function Home() {
                 </div>
 
                 {/* Library Management System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/case-studies')}>
+                <div className="group cursor-pointer" onClick={() => router.push('/projects#library-management')}>
                   {/* Divider Line */}
                   <div className="w-full h-px bg-gray-300 mb-6"></div>
                   
@@ -924,7 +926,7 @@ export default function Home() {
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-4 font-sans">About This Site</h4>
                 <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                  Built with Next.js, React, and Tailwind CSS. <br />Hosted on modern infrastructure for optimal performance and reliability.
+                  Built with Next.js, React, and Tailwind CSS. <br />Hosted on Google Firebase for optimal performance and reliability.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-2 py-1 bg-white/50 rounded text-xs text-gray-600">Next.js</span>
@@ -953,7 +955,8 @@ export default function Home() {
       <ContactModal 
         isOpen={contactModalOpen} 
         onClose={() => setContactModalOpen(false)}
-        variant="social"
+        variant={contactModalSource === 'gmail' ? 'contact' : 'social'}
+        hideDirectAccess={contactModalSource === 'gmail'}
       />
     </div>
   );

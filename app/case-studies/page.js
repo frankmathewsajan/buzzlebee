@@ -13,14 +13,6 @@ const inter = Inter({ subsets: ['latin'] });
 // Case studies data
 const caseStudies = [
   {
-    id: 'agridrone',
-    title: "AgriDrone",
-    category: "IoT/Agriculture",
-    timeline: "Jan 2024 - Mar 2024",
-    description: "An autonomous drone system designed for agricultural monitoring and crop health assessment. The system uses computer vision and machine learning to analyze crop conditions and provide actionable insights to farmers.",
-    tags: ["IoT", "Computer Vision", "Machine Learning", "Agriculture"]
-  },
-  {
     id: 'helmet-system',
     title: "Intelligent Safety Helmet System",
     category: "IoT/Industrial Safety",
@@ -29,12 +21,12 @@ const caseStudies = [
     tags: ["IoT", "GPS", "Embedded Systems", "Real-time Monitoring"]
   },
   {
-    id: 'hss-manager',
-    title: "HSSManager",
-    category: "Education Management",
-    timeline: "2023",
-    description: "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
-    tags: ["Web Development", "Education", "Management System"]
+    id: 'st-gd-convent',
+    title: "St. G. D. Convent School Platform",
+    category: "Full-stack Development",
+    timeline: "2024",
+    description: "Full-featured educational platform for St. G. D. Convent School, Agra, UP with comprehensive backend using Supabase for complete school administration management.",
+    tags: ["Next.js", "Supabase", "React", "PostgreSQL", "Education"]
   },
   {
     id: 'banking-sim',
@@ -53,28 +45,12 @@ const caseStudies = [
     tags: ["Python", "GUI", "Database", "Library Systems"]
   },
   {
-    id: 'ai-ignite',
-    title: "AI-Ignite Educational Platform",
-    category: "AI/ML",
-    timeline: "Nov 2023 - Dec 2023",
-    description: "An AI-powered personalized learning platform with adaptive testing modules that adjusts to individual learning patterns and progress.",
-    tags: ["AI", "Machine Learning", "EdTech", "Adaptive Learning"]
-  },
-  {
-    id: 'smart-home',
-    title: "Smart Home Automation System",
-    category: "IoT/Home Automation",
-    timeline: "Oct 2023 - Nov 2023",
-    description: "A comprehensive home automation system that integrates various IoT devices and provides centralized control through a mobile app.",
-    tags: ["IoT", "Mobile App", "Home Automation", "Cloud Integration"]
-  },
-  {
-    id: 'health-tracker',
-    title: "Health & Fitness Tracker",
-    category: "Health Tech",
-    timeline: "Aug 2023 - Sep 2023",
-    description: "A wearable device and companion app that tracks vital signs, activity levels, and provides personalized health insights.",
-    tags: ["IoT", "Health Tech", "Mobile App", "Data Analytics"]
+    id: 'hss-manager',
+    title: "HSSManager",
+    category: "Education Management",
+    timeline: "2023",
+    description: "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
+    tags: ["Web Development", "Education", "Management System"]
   }
 ];
 
