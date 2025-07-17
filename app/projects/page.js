@@ -43,23 +43,23 @@ export default function Projects() {
       }
     },
     {
-      id: 'ai-ignite',
-      title: "AI-Ignite Educational Platform",
-      category: "AI/ML",
-      timeline: "Nov 2023 - Dec 2023",
-      role: "ML Engineer & Backend Developer",
-      description: "An AI-powered personalized learning platform with adaptive testing modules that adjusts to individual learning patterns and progress.",
-      achievements: "Won 1st place at NextGenCloud Club Hackathon, securing an internship offer",
-      tags: ["AI", "Machine Learning", "EdTech", "Adaptive Learning"],
+      id: 'st-gd-convent',
+      title: "St. G. D. Convent School Platform",
+      category: "Full-stack Development",
+      timeline: "2024",
+      role: "Full Stack Developer",
+      description: "Full-featured educational platform for St. G. D. Convent School, Agra, UP with comprehensive backend using Supabase for complete school administration management.",
+      achievements: "Successfully deployed and certified platform serving real school administration needs",
+      tags: ["Next.js", "Supabase", "React", "PostgreSQL", "Education"],
       skills: {
-        "AI/ML": ["TensorFlow", "scikit-learn", "NLP"],
-        "Backend": ["Python", "FastAPI", "PostgreSQL"],
-        "DevOps": ["Docker", "AWS"]
+        "Frontend": ["Next.js", "React", "TailwindCSS"],
+        "Backend": ["Supabase", "PostgreSQL", "REST APIs"],
+        "Tools": ["Git", "Vercel", "Firebase"]
       },
       links: {
-        demo: "#",
+        demo: "https://stgdconventschool.com/",
         github: "#",
-        caseStudy: "/case-studies/ai-ignite"
+        caseStudy: "/case-studies/st-gd-convent"
       }
     },
     {
@@ -99,7 +99,7 @@ export default function Projects() {
       links: {
         demo: "#",
         github: "#",
-        caseStudy: "/case-studies/lms"
+        caseStudy: "/case-studies/library-management"
       },
       relatedMiniProjects: [
         { name: "Indoor Voice", tech: "Python" },
@@ -144,14 +144,13 @@ export default function Projects() {
 
   const categories = {
     "IoT/Embedded": ["helmet-system"],
-    "AI/ML": ["ai-ignite"],
-    "Full Stack": ["banking-sim"],
+    "Full Stack": ["st-gd-convent", "banking-sim"],
     "Course Projects": ["library-management", "hss-manager"]
   };
 
   const overviewRef = useRef(null);
   const helmetSystemRef = useRef(null);
-  const aiIgniteRef = useRef(null);
+  const stGdConventRef = useRef(null);
   const bankingSimRef = useRef(null);
   const libraryManagementRef = useRef(null);
   const hssManagerRef = useRef(null);
@@ -159,7 +158,7 @@ export default function Projects() {
   const projectRefs = useMemo(() => ({
     overview: overviewRef,
     'helmet-system': helmetSystemRef,
-    'ai-ignite': aiIgniteRef,
+    'st-gd-convent': stGdConventRef,
     'banking-sim': bankingSimRef,
     'library-management': libraryManagementRef,
     'hss-manager': hssManagerRef
