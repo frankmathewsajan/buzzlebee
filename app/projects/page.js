@@ -7,6 +7,7 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import projects from '../projects.json'; // Assuming projects.json is in the same directory
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
@@ -19,139 +20,20 @@ export default function Projects() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [visibleSection, setVisibleSection] = useState('overview');
   const [showMiniProjectsModal, setShowMiniProjectsModal] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
 
-  const projects = [
-    {
-      id: 'helmet-system',
-      title: "Intelligent Safety Helmet System",
-      category: "IoT/Embedded Systems",
-      timeline: "Jan 2024 - Mar 2024",
-      role: "Lead Developer & Hardware Engineer",
-      description: "A real-time hazard detection helmet with GPS tracking and emergency communication capabilities. The system provides immediate alerts and location data in emergency situations.",
-      achievements: "Secured S-Grade in Engineering Clinics and 1st Prize at HackAP Transport and Logistics Hackathon",
-      tags: ["IoT", "GPS", "Embedded Systems", "Real-time Monitoring"],
-      skills: {
-        "Hardware": ["Arduino", "Sensors", "GPS Module"],
-        "Software": ["C++", "Python", "MQTT"],
-        "Tools": ["Arduino IDE", "ThingSpeak", "Fusion 360"]
-      },
-      links: {
-        demo: "#",
-        github: "#",
-        caseStudy: "/case-studies/helmet-system"
-      }
-    },
-    {
-      id: 'st-gd-convent',
-      title: "St. G. D. Convent School Platform",
-      category: "Full-stack Development",
-      timeline: "2024",
-      role: "Full Stack Developer",
-      description: "Full-featured educational platform for St. G. D. Convent School, Agra, UP with comprehensive backend using Supabase for complete school administration management.",
-      achievements: "Successfully deployed and certified platform serving real school administration needs",
-      tags: ["Next.js", "Supabase", "React", "PostgreSQL", "Education"],
-      skills: {
-        "Frontend": ["Next.js", "React", "TailwindCSS"],
-        "Backend": ["Supabase", "PostgreSQL", "REST APIs"],
-        "Tools": ["Git", "Vercel", "Firebase"]
-      },
-      links: {
-        demo: "https://stgdconventschool.com/",
-        github: "#",
-        caseStudy: "/case-studies/st-gd-convent"
-      }
-    },
-    {
-      id: 'banking-sim',
-      title: "Digital Banking Simulation System",
-      category: "Full-stack Development",
-      timeline: "Sep 2023 - Oct 2023",
-      role: "Full Stack Developer",
-      description: "A gamified banking system inspired by Monopoly's 'Ultimate Banking', featuring real-time balance updates and transaction history.",
-      achievements: "Successfully implemented real-time transaction processing and intuitive UI design",
-      tags: ["JavaScript", "UI/UX", "Real-time Updates", "Banking Simulation"],
-      skills: {
-        "Frontend": ["HTML5", "CSS3", "JavaScript"],
-        "Backend": ["Node.js", "Express", "MongoDB"],
-        "Tools": ["Git", "Heroku"]
-      },
-      links: {
-        demo: "#",
-        github: "#",
-        caseStudy: "/case-studies/banking-sim"
-      }
-    },
-    {
-      id: 'library-management',
-      title: "Library Management System",
-      category: "CS50P Final Project",
-      timeline: "2023",
-      role: "Full Stack Python Developer",
-      description: "A GUI-based Library Management System (LMS) designed to handle primary housekeeping functions of a library. Built as the final project for Harvard's CS50P course, featuring inventory management, member tracking, and automated fine calculations.",
-      achievements: "Perfect score in CS50P final project evaluation",
-      tags: ["Python", "GUI", "Database", "Library Systems"],
-      skills: {
-        "Frontend": ["Tkinter", "CustomTkinter"],
-        "Backend": ["Python", "SQLite"],
-        "Features": ["Barcode Integration", "Fine Calculator", "Report Generation"]
-      },
-      links: {
-        demo: "#",
-        github: "#",
-        caseStudy: "/case-studies/library-management"
-      },
-      relatedMiniProjects: [
-        { name: "Indoor Voice", tech: "Python" },
-        { name: "Deep Thought", tech: "Python" },
-        { name: "Camel Case", tech: "Python" },
-        { name: "Outdated", tech: "Python" },
-        { name: "Adieu, Adieu", tech: "Python" },
-        { name: "Back to the Bank", tech: "Python" },
-        { name: "Lines of Code", tech: "Python" },
-        { name: "Regular, um, Expressions", tech: "Python" },
-        { name: "Cookie Jar", tech: "Python" }
-      ]
-    },
-    {
-      id: 'hss-manager',
-      title: "HSSManager",
-      category: "CS50W Final Project",
-      timeline: "2023",
-      role: "Full Stack Web Developer",
-      description: "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
-      achievements: "Successfully deployed in 3 pilot schools",
-      tags: ["Web Development", "Education", "Management System"],
-      skills: {
-        "Frontend": ["React", "TailwindCSS"],
-        "Backend": ["Django", "PostgreSQL"],
-        "DevOps": ["Docker", "Nginx"]
-      },
-      links: {
-        demo: "#",
-        github: "#",
-        caseStudy: "/case-studies/hss-manager"
-      },
-      relatedMiniProjects: [
-        { name: "Search", tech: "HTML, CSS" },
-        { name: "Wiki", tech: "Django" },
-        { name: "Commerce", tech: "Django" },
-        { name: "Mail", tech: "Django, JavaScript" },
-        { name: "Network", tech: "Django, JavaScript" }
-      ]
-    }
-  ];
+  
+  
 
   const categories = {
     "IoT/Embedded": ["helmet-system"],
-    "Full Stack": ["st-gd-convent", "banking-sim"],
+    "Full Stack": ["st-gd-convent", "monopoly-banking"],
     "Course Projects": ["library-management", "hss-manager"]
   };
 
   const overviewRef = useRef(null);
   const helmetSystemRef = useRef(null);
   const stGdConventRef = useRef(null);
-  const bankingSimRef = useRef(null);
+  const monopolyBankingRef = useRef(null);
   const libraryManagementRef = useRef(null);
   const hssManagerRef = useRef(null);
 
@@ -159,7 +41,7 @@ export default function Projects() {
     overview: overviewRef,
     'helmet-system': helmetSystemRef,
     'st-gd-convent': stGdConventRef,
-    'banking-sim': bankingSimRef,
+    'monopoly-banking': monopolyBankingRef,
     'library-management': libraryManagementRef,
     'hss-manager': hssManagerRef
   }), []);
@@ -228,6 +110,16 @@ export default function Projects() {
       text: '#321b15',
       accent: '#5D503A'
     },
+    'Financial Technology': {
+      bg: '#E8F4F8',
+      text: '#2B6CB0',
+      accent: '#2C5282'
+    },
+    'Educational Software': {
+      bg: '#F0FDF4',
+      text: '#2F855A',
+      accent: '#276749'
+    },
     'CS50P Final Project': {
       bg: '#E8F4F8',
       text: '#2B6CB0',
@@ -244,77 +136,89 @@ export default function Projects() {
     let scrollTimeout;
 
     const handleScroll = () => {
-      setIsScrolling(true);
-      
+      const currentScroll = window.scrollY;
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(100, (currentScroll / Math.max(1, totalHeight)) * 100);
+      setScrollProgress(progress);
+
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
 
-      scrollTimeout = setTimeout(() => {
-        setIsScrolling(false);
+      scrollTimeout = setTimeout(() => {        
+        // Find the section that's most visible in the viewport
+        const sections = ['overview', ...projects.map(p => p.id)];
+        let currentSection = 'overview';
+        let maxVisibility = 0;
         
-        const sections = Object.keys(projectRefs);
-        const sectionElements = sections.map(id => document.getElementById(id));
-        
-        // Find the current section based on viewport visibility
-        const currentSection = sectionElements.find(element => {
-          if (!element) return false;
+        sections.forEach(sectionId => {
+          const element = document.getElementById(sectionId);
+          if (!element) return;
+          
           const rect = element.getBoundingClientRect();
           const viewportHeight = window.innerHeight;
           
           // Calculate how much of the section is visible
-          const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
-          const sectionHeight = Math.max(1, rect.height); // Prevent division by zero
-          const visibilityPercentage = (visibleHeight / sectionHeight) * 100;
+          const visibleTop = Math.max(0, -rect.top);
+          const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
           
-          // If more than 75% of the section is visible, consider it the current section
-          return visibilityPercentage > 75;
+          const visibilityPercentage = (visibleHeight / Math.max(1, rect.height)) * 100;
+          
+          if (visibilityPercentage > maxVisibility) {
+            maxVisibility = visibilityPercentage;
+            currentSection = sectionId;
+          }
         });
-
-        if (currentSection) {
-          setActiveProject(currentSection.id);
+        
+        if (currentSection !== activeProject) {
+          setActiveProject(currentSection);
+          setVisibleSection(currentSection);
         }
-
-        // Calculate scroll progress with bounds checking
-        const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        const currentScroll = Math.max(0, Math.min(window.scrollY, totalHeight));
-        const progress = (currentScroll / totalHeight) * 100;
-        setScrollProgress(progress);
-      }, 150);
+      }, 100);
     };
 
-    const handleWheel = (e) => {
-      if (isScrolling) return;
-      
-      e.preventDefault();
-      
-      const sections = Object.keys(projectRefs);
-      const currentIndex = sections.indexOf(activeProject);
-      
-      if (e.deltaY > 0 && currentIndex < sections.length - 1) {
-        const nextSection = projectRefs[sections[currentIndex + 1]].current;
-        if (nextSection) {
-          nextSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else if (e.deltaY < 0 && currentIndex > 0) {
-        const prevSection = projectRefs[sections[currentIndex - 1]].current;
-        if (prevSection) {
-          prevSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    };
+    // Remove the wheel event handler to allow natural scrolling
+    // const handleWheel = (e) => {
+    //   if (isScrolling) return;
+    //   
+    //   e.preventDefault();
+    //   
+    //   const sections = ['overview', ...projects.map(p => p.id)];
+    //   const currentIndex = sections.indexOf(activeProject);
+    //   
+    //   if (e.deltaY > 0 && currentIndex < sections.length - 1) {
+    //     const nextSection = projectRefs[sections[currentIndex + 1]].current;
+    //     if (nextSection) {
+    //       nextSection.scrollIntoView({ behavior: 'smooth' });
+    //       setActiveProject(sections[currentIndex + 1]);
+    //       setVisibleSection(sections[currentIndex + 1]);
+    //     }
+    //   } else if (e.deltaY < 0 && currentIndex > 0) {
+    //     const prevSection = projectRefs[sections[currentIndex - 1]].current;
+    //     if (prevSection) {
+    //       prevSection.scrollIntoView({ behavior: 'smooth' });
+    //       setActiveProject(sections[currentIndex - 1]);
+    //       setVisibleSection(sections[currentIndex - 1]);
+    //     }
+    //   }
+    // };
+
+    // Initial scroll calculation
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    // Removed wheel event listener to allow natural scrolling
+    // window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleWheel);
+      // window.removeEventListener('wheel', handleWheel);
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [activeProject, isScrolling, projectRefs]);
+  }, [activeProject, projectRefs, projects]);
 
   // Add CSS for smooth scrolling
   useEffect(() => {
@@ -335,24 +239,39 @@ export default function Projects() {
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '-50% 0px',
-      threshold: 0
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     };
 
     const observer = new IntersectionObserver((entries) => {
+      let mostVisibleEntry = null;
+      let maxVisibilityRatio = 0;
+
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setVisibleSection(entry.target.id);
+        if (entry.intersectionRatio > maxVisibilityRatio) {
+          maxVisibilityRatio = entry.intersectionRatio;
+          mostVisibleEntry = entry;
         }
       });
+
+      if (mostVisibleEntry && mostVisibleEntry.intersectionRatio > 0.3) {
+        const sectionId = mostVisibleEntry.target.id;
+        setVisibleSection(sectionId);
+        setActiveProject(sectionId);
+      }
     }, options);
 
     // Observe all sections
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => observer.observe(section));
+    const sections = ['overview', ...projects.map(p => p.id)];
+    sections.forEach(sectionId => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
 
     return () => observer.disconnect();
-  }, []);
+  }, [projects]);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -561,7 +480,13 @@ export default function Projects() {
                     const sections = ['overview', ...projects.map(p => p.id)];
                     const currentIndex = sections.indexOf(visibleSection);
                     if (currentIndex < sections.length - 1) {
-                      projectRefs[sections[currentIndex + 1]].current?.scrollIntoView({ behavior: 'smooth' });
+                      const nextSectionId = sections[currentIndex + 1];
+                      const nextElement = projectRefs[nextSectionId]?.current;
+                      if (nextElement) {
+                        nextElement.scrollIntoView({ behavior: 'smooth' });
+                        setActiveProject(nextSectionId);
+                        setVisibleSection(nextSectionId);
+                      }
                     }
                   }}
                   animate={{
@@ -711,36 +636,42 @@ export default function Projects() {
                   </div>
 
                   <div className="flex gap-6">
-                    <a
-                      href={project.links.demo}
-                      className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
-                      style={{ 
-                        backgroundColor: colors.text,
-                        color: colors.bg
-                      }}
-                    >
-                      View Demo
-                    </a>
-                    <a
-                      href={project.links.github}
-                      className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
-                      style={{ 
-                        border: `1px solid ${colors.text}`,
-                        color: colors.text
-                      }}
-                    >
-                      GitHub
-                    </a>
-                    <Link
-                      href={project.links.caseStudy}
-                      className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
-                      style={{ 
-                        border: `1px solid ${colors.text}`,
-                        color: colors.text
-                      }}
-                    >
-                      View Case Study
-                    </Link>
+                    {project.has_demo && (
+                      <a
+                        href={project.links.demo}
+                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                        style={{ 
+                          backgroundColor: colors.text,
+                          color: colors.bg
+                        }}
+                      >
+                        View Demo
+                      </a>
+                    )}
+                    {project.has_github && (
+                      project.has_github === "in_progress" ? (
+                        <span
+                          className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200 opacity-60`}
+                          style={{ 
+                            border: `1px solid ${colors.text}`,
+                            color: colors.text
+                          }}
+                        >
+                          GitHub - In Progress
+                        </span>
+                      ) : (
+                        <a
+                          href={project.links.github}
+                          className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                          style={{ 
+                            border: `1px solid ${colors.text}`,
+                            color: colors.text
+                          }}
+                        >
+                          GitHub
+                        </a>
+                      )
+                    )}
                   </div>
                 </motion.div>
 
@@ -826,7 +757,12 @@ export default function Projects() {
                 <button
                   key={id}
                   onClick={() => {
-                    projectRefs[id].current?.scrollIntoView({ behavior: 'smooth' });
+                    const element = projectRefs[id].current;
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                      setActiveProject(id);
+                      setVisibleSection(id);
+                    }
                   }}
                   className={`group flex items-center gap-3 ${activeProject === 'overview' ? 'cursor-default' : ''}`}
                 >
@@ -838,10 +774,10 @@ export default function Projects() {
                   </span>
                   <div className={`w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-150`}
                     style={{ 
-                      backgroundColor: activeProject === id 
+                      backgroundColor: visibleSection === id 
                         ? colors.text 
                         : `${colors.text}4D`,
-                      transform: activeProject === id ? 'scale(1.5)' : 'scale(1)'
+                      transform: visibleSection === id ? 'scale(1.5)' : 'scale(1)'
                     }} />
                 </button>
               );

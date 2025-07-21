@@ -2,11 +2,11 @@ import CaseStudyClient from './CaseStudyClient';
 
 export async function generateStaticParams() {
   return [
-    { id: 'gd-convent-school' },
-    { id: 'portfolio-website' },
-    { id: 'ai-trading-bot' },
-    { id: 'task-management-app' },
-    { id: 'e-commerce-platform' }
+    { id: 'helmet-system' },
+    { id: 'st-gd-convent' },
+    { id: 'monopoly-banking' },
+    { id: 'library-management' },
+    { id: 'hss-manager' }
   ];
 }
 
@@ -198,7 +198,7 @@ const caseStudiesData = {
       { src: "/images/school-analytics.jpg", alt: "Analytics view", caption: "Student performance analytics" }
     ]
   },
-  'banking-sim': {
+  'monopoly-banking': {
     title: "Digital Banking Simulation System",
     category: "Financial Technology",
     timeline: "Sep 2023 - Oct 2023",
