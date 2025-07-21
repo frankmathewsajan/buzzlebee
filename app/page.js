@@ -10,6 +10,7 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import PortfolioMap from './components/PortfolioMap';
 import DevNotice from './components/DevNotice';
 import ContactModal from './components/ContactModal';
+import projectsData from './projects.json';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ 
@@ -22,8 +23,6 @@ const inter = Inter({
   display: 'swap',
   variable: '--font-inter',
 });
-
-
 
 const ProjectCard = memo(({ title, description, tags }) => {
   return (
@@ -43,8 +42,132 @@ const ProjectCard = memo(({ title, description, tags }) => {
 
 ProjectCard.displayName = 'ProjectCard';
 
+// Project display component for homepage
+const ProjectDisplayCard = memo(({ project, router, spaceGrotesk }) => {
+  return (
+    <div className="group cursor-pointer" onClick={() => router.push(`/projects#${project.id}`)}>
+      {/* Divider Line */}
+      <div className="w-full h-px bg-gray-300 mb-6"></div>
+      
+      {/* Project Info */}
+      <div className="space-y-5 mb-8">
+        {/* Project Name & Tech Stack */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className={`text-sm lg:text-base font-mono text-gray-900 ${project.id === 'monopoly-banking' ? 'mb-2 ' : ''}group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
+              {project.id === 'monopoly-banking' ? 'MONOPOLY DIGITAL BANKING SIMULATION' : project.title.replace(/System/g, 'SYSTEM').replace(/Platform/g, 'PLATFORM').toUpperCase()}
+            </h3>
+            <div className="flex items-center gap-2">
+                {project.badges?.AWARDED && (
+                  <div className="relative group/badge">
+                    <div 
+                      className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(project.badges.AWARDED);
+                      }}
+                    >
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      AWARDED
+                    </div>
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/badge:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                      View award details →
+                    </div>
+                  </div>
+                )}
+                {project.badges?.CERTIFIED && (
+                  <div className="relative group/certified">
+                    <div 
+                      className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(project.badges.CERTIFIED);
+                      }}
+                    >
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      CERTIFIED
+                    </div>
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/certified:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                      View certification →
+                    </div>
+                  </div>
+                )}
+                {project.badges?.DEPLOYED && (
+                  <div className="relative group/deployed">
+                    <div 
+                      className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-green-200 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(project.badges.DEPLOYED, '_blank');
+                      }}
+                    >
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      DEPLOYED
+                    </div>
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/deployed:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
+                      Visit live {project.id === 'monopoly-banking' ? 'app' : 'site'} →
+                    </div>
+                  </div>
+                )}
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {project.tags.map(tag => (
+              <span key={tag} className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">{tag}</span>
+            ))}
+          </div>
+        </div>
+        
+        {/* Project Description */}
+        <div>
+          <p className="text-gray-600 text-sm leading-relaxed font-mono">
+            {project.id === 'monopoly-banking' 
+              ? "Gamified banking system inspired by Monopoly's Ultimate Banking, featuring real-time balance updates and comprehensive transaction management."
+              : project.id === 'library-management'
+              ? "Comprehensive GUI-based system handling library operations with inventory management, member tracking, and automated fine calculations."
+              : project.description}
+          </p>
+          <span className="text-xs text-gray-400 font-mono mt-2 block">{project.timeline.split(' - ')[0] || project.timeline}</span>
+        </div>
+      </div>
+      
+      {/* Read More Button */}
+      <div className="mt-6">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/projects#${project.id}`);
+          }}
+          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors font-mono group/button"
+        >
+          <svg 
+            className="w-4 h-4 transition-transform group-hover/button:translate-x-1" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+          Read more
+        </button>
+      </div>
+    </div>
+  );
+});
+
+ProjectDisplayCard.displayName = 'ProjectDisplayCard';
+
 export default function Home() {
   const router = useRouter();
+  
+  // Get projects that should be shown on the index page
+  const indexProjects = projectsData.filter(project => project.SHOW_IN_INDEX);
   
   // Consolidated state for better management
   const [viewState, setViewState] = useState({
@@ -390,7 +513,7 @@ export default function Home() {
                 </div>
                 
                 <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                  The <span className="relative group tooltip-hover">
+                  {/* The <span className="relative group tooltip-hover">
                     <Link href="/case-studies" className="tooltip-text font-sans text-gray-900 uppercase text-base tracking-wider hover:text-red-600 transition-colors cursor-pointer border-b border-gray-400 hover:border-red-400">
                       CASE STUDIES
                     </Link>
@@ -399,7 +522,8 @@ export default function Home() {
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
                     </span>
                   </span> page shows my&nbsp; 
-                  <span className="text-red-600 font-serif italic text-lg">thinking process</span> and how I approach problems (the messy, iterative reality of development), and the projects are&nbsp; 
+                  <span className="text-red-600 font-serif italic text-lg">thinking process</span> and how I approach problems (the messy, iterative reality of development), and the projects are&nbsp; */}
+                  The projects are&nbsp; 
                   <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> things I&apos;ve built for&nbsp; 
                   <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> problems. Some worked out better than others, but that&apos;s 
                   <span className="text-red-500 font-serif italic"> how it goes</span>.
@@ -453,283 +577,21 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Projects List */}
+            {/* Projects List - Dynamic from projects.json */}
             <div className="space-y-16 mb-8">
               
-              {/* Row 1: Intelligent Safety Helmet System & St. G. D. Convent School Platform */}
+              {/* Row 1: First two projects */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                {/* Intelligent Safety Helmet System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/projects#helmet-system')}>
-                  {/* Divider Line */}
-                  <div className="w-full h-px bg-gray-300 mb-6"></div>
-                  
-                  {/* Project Info */}
-                  <div className="space-y-5 mb-8">
-                    {/* Project Name & Tech Stack */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                          INTELLIGENT SAFETY HELMET SYSTEM
-                        </h3>
-                        <div className="relative group/badge">
-                          <div 
-                            className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              router.push('/certifications');
-                            }}
-                          >
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            AWARDED
-                          </div>
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/badge:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
-                            View award details →
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Arduino</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">C++</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">IoT</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">GPS</span>
-                      </div>
-                    </div>
-                    
-                    {/* Description */}
-                    <div>
-                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        Award-winning IoT solution providing real-time hazard detection with GPS tracking 
-                        and emergency communication for industrial safety applications.
-                      </p>
-                      <span className="text-xs text-gray-400 font-mono mt-2 block">2024</span>
-                    </div>
-                  </div>
-                  
-                  {/* Project Mockup/Image */}
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
-                    <div className="text-center p-8">
-                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                      </div>
-                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">SAFETY TECHNOLOGY</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* School Education Platform */}
-                <div className="group cursor-pointer" onClick={() => router.push('/projects#st-gd-convent')}>
-                  {/* Divider Line */}
-                  <div className="w-full h-px bg-gray-300 mb-6"></div>
-                  
-                  {/* Project Info */}
-                  <div className="space-y-5 mb-8">
-                    {/* Project Name & Tech Stack */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                          ST. G. D. CONVENT SCHOOL PLATFORM
-                        </h3>
-                        <div className="flex items-center gap-2">
-                          <div className="relative group/certified">
-                            <div 
-                              className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                router.push('/certifications');
-                              }}
-                            >
-                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              CERTIFIED
-                            </div>
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/certified:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
-                              View certification →
-                            </div>
-                          </div>
-                          <div className="relative group/deployed">
-                            <div 
-                              className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-green-200 transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open('https://stgdconventschool.com/', '_blank');
-                              }}
-                            >
-                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              DEPLOYED
-                            </div>
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/deployed:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
-                              Visit live site →
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Next.js</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Supabase</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">React</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">PostgreSQL</span>
-                      </div>
-                    </div>
-                    
-                    {/* Description */}
-                    <div>
-                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        Full-featured educational platform for St. G. D. Convent School, Agra, UP with 
-                        comprehensive backend using Supabase for complete school administration management.
-                      </p>
-                      <span className="text-xs text-gray-400 font-mono mt-2 block">2024</span>
-                    </div>
-                  </div>
-                  
-                  {/* Project Mockup/Image */}
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
-                    <div className="text-center p-8">
-                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                      </div>
-                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">AI EDUCATION</div>
-                    </div>
-                  </div>
-                </div>
+                {indexProjects.slice(0, 2).map((project, index) => (
+                  <ProjectDisplayCard key={project.id} project={project} router={router} spaceGrotesk={spaceGrotesk} />
+                ))}
               </div>
 
-              {/* Row 2: Banking Simulation System & Library Management System */}
+              {/* Row 2: Last two projects */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                {/* Banking Simulation System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/projects#banking-sim')}>
-                  {/* Divider Line */}
-                  <div className="w-full h-px bg-gray-300 mb-6"></div>
-                  
-                  {/* Project Info */}
-                  <div className="space-y-5 mb-8">
-                    {/* Project Name & Tech Stack */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 mb-2 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                          MONOPOLY DIGITAL BANKING SIMULATION
-                        </h3>
-                        <div className="relative group/deployed">
-                          <div 
-                            className="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-green-200 transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              window.open('https://fms-monopoly.web.app/', '_blank');
-                            }}
-                          >
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            DEPLOYED
-                          </div>
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/deployed:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
-                            Visit live app →
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">HTML</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">CSS</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">jQuery</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Vanilla JS</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Firebase</span>
-                      </div>
-                    </div>
-                    
-                    {/* Description */}
-                    <div>
-                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        Gamified banking system inspired by Monopoly&apos;s Ultimate Banking, featuring 
-                        real-time balance updates and comprehensive transaction management.
-                      </p>
-                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
-                    </div>
-                  </div>
-                  
-                  {/* Project Mockup/Image */}
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
-                    <div className="text-center p-8">
-                      <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h3a1 1 0 011 1v1a1 1 0 01-1 1v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7a1 1 0 01-1-1V5a1 1 0 011-1h3zM9 4h6V3H9v1zm5 8a1 1 0 11-2 0 1 1 0 012 0z" />
-                        </svg>
-                      </div>
-                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">BOARD GAMES</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Library Management System */}
-                <div className="group cursor-pointer" onClick={() => router.push('/projects#library-management')}>
-                  {/* Divider Line */}
-                  <div className="w-full h-px bg-gray-300 mb-6"></div>
-                  
-                  {/* Project Info */}
-                  <div className="space-y-5 mb-8">
-                    {/* Project Name & Tech Stack */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className={`text-sm lg:text-base font-mono text-gray-900 group-hover:text-red-600 transition-colors uppercase tracking-wider leading-tight ${spaceGrotesk.className}`}>
-                          LIBRARY MANAGEMENT SYSTEM
-                        </h3>
-                        <div className="relative group/badge">
-                          <div 
-                            className="flex items-center gap-1 bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-mono cursor-pointer hover:bg-yellow-200 transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              router.push('/certifications');
-                            }}
-                          >
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            CERTIFIED
-                          </div>
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900/95 text-white text-xs rounded-lg opacity-0 group-hover/badge:opacity-100 transition-all duration-200 whitespace-nowrap z-10 pointer-events-none">
-                            View certification →
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Python</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">Tkinter</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">SQLite</span>
-                        <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded font-mono">GUI</span>
-                      </div>
-                    </div>
-                    
-                    {/* Description */}
-                    <div>
-                      <p className="text-gray-600 text-sm leading-relaxed font-mono">
-                        Comprehensive GUI-based system handling library operations with inventory 
-                        management, member tracking, and automated fine calculations.
-                      </p>
-                      <span className="text-xs text-gray-400 font-mono mt-2 block">2023</span>
-                    </div>
-                  </div>
-                  
-                  {/* Project Mockup/Image */}
-                  <div className="aspect-[16/10] bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl flex items-center justify-center relative overflow-hidden group-hover:shadow-lg transition-shadow">
-                    <div className="text-center p-8">
-                      <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                      </div>
-                      <div className="text-xs font-mono text-gray-600 tracking-wider uppercase">LIBRARY SYSTEM</div>
-                    </div>
-                  </div>
-                </div>
+                {indexProjects.slice(2, 4).map((project, index) => (
+                  <ProjectDisplayCard key={project.id} project={project} router={router} spaceGrotesk={spaceGrotesk} />
+                ))}
               </div>
 
             </div>
@@ -795,7 +657,7 @@ export default function Home() {
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
                     </span>
                   </span>, or what I can{' '}
-                  <span className="relative group tooltip-hover">
+                  {/* <span className="relative group tooltip-hover">
                     <Link href="/case-studies" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
                       contribute
                     </Link>
@@ -803,7 +665,8 @@ export default function Home() {
                       See case studies →
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
                     </span>
-                  </span>{' '}
+                  </span>{' '} */}
+                  <span className="text-orange-600 font-semibold">contribute</span>{' '}
                   — this is a good place to start.
                 </p>
                 
@@ -844,9 +707,9 @@ export default function Home() {
                   <Link href="/projects" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Projects
                   </Link>
-                  <Link href="/case-studies" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                  {/* <Link href="/case-studies" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Case Studies
-                  </Link>
+                  </Link> */}
                   <Link href="/certifications" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Certifications
                   </Link>

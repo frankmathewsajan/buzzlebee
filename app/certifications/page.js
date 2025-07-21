@@ -1,344 +1,172 @@
 'use client';
 
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { ArrowUpCircle, ArrowDownCircle } from '@geist-ui/icons';
 import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import certifications from '../certifications.json';
 
-// Font setup
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
-const inter = Inter({ subsets: ['latin'] });
+// Font setup to match index page
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export default function Certifications() {
   const [activeCert, setActiveCert] = useState('overview');
-  const [showNavMenu, setShowNavMenu] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [visibleSection, setVisibleSection] = useState('overview');
-  const [isScrolling, setIsScrolling] = useState(false);
 
-  const certifications = [
-    {
-      id: 'hackathon1',
-      title: "Global AI Hackathon 2023",
-      category: "Participation",
-      date: "2023",
-      issuer: "TechCrunch",
-      description: "Participated in a 48-hour AI development challenge, developing innovative solutions for healthcare sector.",
-      credential: "GAH-2023-001",
-      skills: {
-        "AI/ML": ["Machine Learning", "Deep Learning", "NLP"],
-        "Development": ["Rapid Prototyping", "Team Collaboration", "Problem Solving"],
-        "Domain": ["Healthcare Tech", "Data Analysis", "User Research"]
-      },
-      links: {
-        verify: "https://verify.techcrunch.com/hack/001"
-      }
-    },
-    {
-      id: 'hackathon2',
-      title: "Web3 Builders Summit",
-      category: "Participation",
-      date: "2023",
-      issuer: "ETHGlobal",
-      description: "Blockchain and Web3 development competition focusing on decentralized applications and smart contracts.",
-      credential: "WBS-2023-002",
-      skills: {
-        "Blockchain": ["Smart Contracts", "Solidity", "Web3.js"],
-        "Development": ["DApp Development", "Security", "Testing"],
-        "Tools": ["Hardhat", "Truffle", "MetaMask"]
-      },
-      links: {
-        verify: "https://verify.ethglobal.com/hack/002"
-      }
-    },
-    {
-      id: 'django',
-      title: "Django Certified Developer",
-      category: "Technical",
-      date: "2023",
-      issuer: "Django Software Foundation",
-      description: "Advanced certification in Django web framework development, covering core concepts, security, and best practices.",
-      credential: "DCD-2023-1234",
-      skills: {
-        "Core": ["Python", "Django", "REST APIs"],
-        "Database": ["PostgreSQL", "ORM", "Migrations"],
-        "Security": ["Authentication", "Authorization", "CSRF Protection"]
-      },
-      links: {
-        verify: "https://verify.djangoproject.com/cert/1234"
-      }
-    },
-    {
-      id: 'nextjs',
-      title: "Next.js Professional",
-      category: "Technical",
-      date: "2023",
-      issuer: "Vercel",
-      description: "Expert-level certification in Next.js framework, focusing on performance optimization and modern web development practices.",
-      credential: "NEXT-2023-5678",
-      skills: {
-        "Frontend": ["React", "Next.js", "TypeScript"],
-        "Performance": ["SSR", "SSG", "ISR"],
-        "Deployment": ["Vercel", "Edge Functions", "Image Optimization"]
-      },
-      links: {
-        verify: "https://verify.vercel.com/cert/5678"
-      }
-    },
-    {
-      id: 'docker',
-      title: "Docker Certified Associate",
-      category: "Professional",
-      date: "2023",
-      issuer: "Docker Inc.",
-      description: "Professional containerization and orchestration certification covering Docker and container best practices.",
-      credential: "DCA-2023-3456",
-      skills: {
-        "Containerization": ["Docker", "Docker Compose", "Multi-stage Builds"],
-        "Orchestration": ["Swarm", "Kubernetes", "Service Discovery"],
-        "Security": ["Image Security", "Network Security", "Secrets Management"]
-      },
-      links: {
-        verify: "https://verify.docker.com/cert/3456"
-      }
-    },
-    {
-      id: 'tensorflow',
-      title: "TensorFlow Developer",
-      category: "Professional",
-      date: "2023",
-      issuer: "Google",
-      description: "Machine learning and deep learning certification focusing on TensorFlow implementation and model deployment.",
-      credential: "TFD-2023-7890",
-      skills: {
-        "ML": ["TensorFlow", "Keras", "scikit-learn"],
-        "Deep Learning": ["Neural Networks", "CNNs", "RNNs"],
-        "Deployment": ["TF Serving", "TF Lite", "Model Optimization"]
-      },
-      links: {
-        verify: "https://verify.google.com/cert/7890"
-      }
-    },
-    {
-      id: 'win1',
-      title: "Best AI Implementation",
-      category: "Acheived",
-      date: "2023",
-      issuer: "AI Summit 2023",
-      description: "Awarded for innovative AI solution in healthcare, demonstrating excellence in machine learning implementation.",
-      credential: "AI-2023-001",
-      skills: {
-        "AI/ML": ["Machine Learning", "Deep Learning", "Computer Vision"],
-        "Healthcare": ["Medical Imaging", "Patient Data Analysis", "Clinical Decision Support"],
-        "Impact": ["Accuracy Improvement", "Cost Reduction", "Patient Outcomes"]
-      },
-      links: {
-        verify: "https://verify.aisummit.com/award/001"
-      }
-    },
-    {
-      id: 'win2',
-      title: "Top 10 Global Hackers",
-      category: "Acheived",
-      date: "2023",
-      issuer: "Hack the World",
-      description: "Recognized among top global hackers for innovative solutions and technical excellence.",
-      credential: "HTW-2023-002",
-      skills: {
-        "Technical": ["Problem Solving", "Innovation", "Rapid Development"],
-        "Leadership": ["Team Management", "Project Planning", "Communication"],
-        "Impact": ["User Adoption", "Technical Innovation", "Business Value"]
-      },
-      links: {
-        verify: "https://verify.hacktheworld.com/award/002"
-      }
-    }
-  ];
-
-  const categories = {
-    "Participation": ["hackathon1", "hackathon2"],
-    "Technical": ["django", "nextjs"],
-    "Professional": ["docker", "tensorflow"],
-    "Acheived": ["win1", "win2"]
-  };
-
+  // Create refs at the top level - one for each certificate
   const overviewRef = useRef(null);
-  const djangoRef = useRef(null);
-  const nextjsRef = useRef(null);
-  const reactNativeRef = useRef(null);
-  const dockerRef = useRef(null);
-  const tensorflowRef = useRef(null);
+  const stGdConventRef = useRef(null);
+  const cs50pRef = useRef(null);
+  const hackathonWinnerRef = useRef(null);
+  const engineeringClinicsRef = useRef(null);
 
-  const certRefs = useMemo(() => ({
+  const certRefs = {
     overview: overviewRef,
-    'django': djangoRef,
-    'nextjs': nextjsRef,
-    'react-native': reactNativeRef,
-    'docker': dockerRef,
-    'tensorflow': tensorflowRef
-  }), []);
-
-  const themes = {
-    dark: {
-      bg: '#0A0F1E',
-      card: '#111827',
-      text: {
-        primary: '#F9FAFB',
-        secondary: '#D1D5DB'
-      },
-      accent: {
-        primary: '#3B82F6',
-        secondary: '#8B5CF6'
-      }
-    },
-    light: {
-      bg: '#F9FAFB',
-      card: '#FFFFFF',
-      text: {
-        primary: '#111827',
-        secondary: '#4B5563'
-      },
-      accent: {
-        primary: '#2563EB',
-        secondary: '#7C3AED'
-      }
-    }
+    'st-gd-convent-completion': stGdConventRef,
+    'cs50p-certificate': cs50pRef,
+    'hackathon-winner': hackathonWinnerRef,
+    'engineering-clinics-s-grade': engineeringClinicsRef
   };
 
-  const theme = isDarkMode ? themes.dark : themes.light;
+  // Group certifications by tags
+  const certificationsByTag = useMemo(() => {
+    const grouped = {
+      skill: [],
+      academic: [],
+      professional: [],
+      wins: [],
+      participation: []
+    };
 
-  const domainColors = {
-    'Participation': {
-      bg: '#F0F4FF',
-      text: '#2e2e2e',
-      accent: '#3B82F6'
-    },
-    'Technical': {
-      bg: '#F0FDF4',
-      text: '#2e2e2e',
-      accent: '#22C55E'
-    },
-    'Professional': {
-      bg: '#FEF3F2',
-      text: '#2e2e2e',
-      accent: '#EF4444'
-    },
-    'Acheived': {
-      bg: '#FDF4FF',
-      text: '#2e2e2e',
-      accent: '#D946EF'
-    }
+    certifications.forEach(cert => {
+      cert.tags.forEach(tag => {
+        if (grouped[tag]) {
+          grouped[tag].push(cert);
+        }
+      });
+    });
+
+    return grouped;
+  }, []);
+
+  // Single professional color scheme inspired by Credly
+  const brandColors = {
+    bg: '#FFFFFF',
+    text: '#1A1A1A',
+    secondary: '#6B7280',
+    accent: '#2563EB',
+    border: '#E5E7EB',
+    hoverBg: '#F8FAFC',
+    cardBg: '#FEFEFE'
   };
 
   useEffect(() => {
     let scrollTimeout;
 
     const handleScroll = () => {
-      setIsScrolling(true);
-      
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
 
-      scrollTimeout = setTimeout(() => {
-        setIsScrolling(false);
+      scrollTimeout = setTimeout(() => {        
+        // Find the section that's most visible in the viewport
+        const sections = ['overview', ...certifications.map(c => c.id)];
+        let currentSection = 'overview';
+        let maxVisibility = 0;
         
-        const sections = Object.keys(certRefs);
-        const sectionElements = sections.map(id => document.getElementById(id));
-        
-        const currentSection = sectionElements.find(element => {
-          if (!element) return false;
+        sections.forEach(sectionId => {
+          const element = document.getElementById(sectionId);
+          if (!element) return;
+          
           const rect = element.getBoundingClientRect();
           const viewportHeight = window.innerHeight;
-          const visibleHeight = Math.max(0, Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0));
-          const sectionHeight = Math.max(1, rect.height);
-          const visibilityPercentage = (visibleHeight / sectionHeight) * 100;
-          return visibilityPercentage > 75;
+          
+          // Calculate how much of the section is visible
+          const visibleTop = Math.max(0, -rect.top);
+          const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+          
+          const visibilityPercentage = (visibleHeight / Math.max(1, rect.height)) * 100;
+          
+          if (visibilityPercentage > maxVisibility) {
+            maxVisibility = visibilityPercentage;
+            currentSection = sectionId;
+          }
         });
-
-        if (currentSection) {
-          setActiveCert(currentSection.id);
+        
+        if (currentSection !== activeCert) {
+          setActiveCert(currentSection);
+          setVisibleSection(currentSection);
         }
 
-        const totalHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-        const currentScroll = Math.max(0, Math.min(window.scrollY, totalHeight));
-        const progress = (currentScroll / totalHeight) * 100;
+        // Update scroll progress
+        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = Math.min(100, (window.scrollY / Math.max(1, totalHeight)) * 100);
         setScrollProgress(progress);
-      }, 150);
+      }, 100);
     };
 
-    const handleWheel = (e) => {
-      if (isScrolling) return;
-      
-      e.preventDefault();
-      
-      const sections = Object.keys(certRefs);
-      const currentIndex = sections.indexOf(activeCert);
-      
-      if (e.deltaY > 0 && currentIndex < sections.length - 1) {
-        const nextSection = certRefs[sections[currentIndex + 1]].current;
-        if (nextSection) {
-          nextSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else if (e.deltaY < 0 && currentIndex > 0) {
-        const prevSection = certRefs[sections[currentIndex - 1]].current;
-        if (prevSection) {
-          prevSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    };
+    // Initial scroll calculation
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleWheel);
       if (scrollTimeout) {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [activeCert, isScrolling, certRefs]);
-
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      html {
-        scroll-behavior: smooth;
-      }
-      section {
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
+  }, [activeCert, certifications]);
 
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '-50% 0px',
-      threshold: 0
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     };
 
     const observer = new IntersectionObserver((entries) => {
+      let mostVisibleEntry = null;
+      let maxVisibilityRatio = 0;
+
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setVisibleSection(entry.target.id);
+        if (entry.intersectionRatio > maxVisibilityRatio) {
+          maxVisibilityRatio = entry.intersectionRatio;
+          mostVisibleEntry = entry;
         }
       });
+
+      if (mostVisibleEntry && mostVisibleEntry.intersectionRatio > 0.3) {
+        const sectionId = mostVisibleEntry.target.id;
+        setVisibleSection(sectionId);
+        setActiveCert(sectionId);
+      }
     }, options);
 
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => observer.observe(section));
+    // Observe all sections
+    const sections = ['overview', ...certifications.map(c => c.id)];
+    sections.forEach(sectionId => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        observer.observe(element);
+      }
+    });
 
     return () => observer.disconnect();
-  }, []);
+  }, [certifications]);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -393,298 +221,316 @@ export default function Certifications() {
       {/* Portfolio Explorer Map */}
       <PortfolioMap />
       
-      {/* Navigation Links */}
-      <div className="fixed top-8 right-8 z-50 flex gap-4">
-        {activeCert !== 'overview' && (
+      {/* Back to Top Button - Moved to bottom right */}
+      {activeCert !== 'overview' && (
+        <div className="fixed bottom-8 right-8 z-50">
           <button
             onClick={() => certRefs.overview.current?.scrollIntoView({ behavior: 'smooth' })}
-            className="p-3 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+            className="p-3 rounded-full border border-[#E5E7EB] hover:border-[#2563EB] text-[#6B7280] hover:text-[#2563EB] transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
             </svg>
           </button>
-        )}
-        {activeCert === 'overview' && (
-          <Link 
-            href="/"
-            className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200`}
-          >
-            Return Home
-          </Link>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Overview Section */}
       <section
         id="overview"
         ref={certRefs.overview}
-        className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#ece7f0] via-[#e8e2ed] to-[#ece7f0] pt-16"
+        className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
       >
         <motion.div 
-          className="max-w-[90vw] mx-auto w-full"
+          className="max-w-6xl mx-auto w-full"
           initial="hidden"
           animate={visibleSection === 'overview' ? 'visible' : 'exit'}
           variants={fadeInUp}
         >
-          <motion.h1 
-            className={`${spaceGrotesk.className} text-5xl md:text-7xl leading-none text-[#2e2e2e] mb-12`}
+          <motion.div 
+            className="mb-16"
             variants={{
-              hidden: { opacity: 0, x: -20 },
+              hidden: { opacity: 0, y: 20 },
               visible: { 
                 opacity: 1, 
-                x: 0,
-                transition: { duration: 0.8, ease: 'easeOut', delay: 0.2 }
+                y: 0,
+                transition: { duration: 0.6, ease: 'easeOut' }
               }
             }}
           >
-            Validated<br />Expertise
-          </motion.h1>
+            <h1 className={`${spaceGrotesk.className} text-5xl md:text-6xl font-medium leading-tight text-[#1A1A1A] mb-4`}>
+              Certifications
+            </h1>
+            <p className={`${inter.className} text-lg text-[#6B7280] max-w-2xl`}>
+              Verified credentials and achievements demonstrating expertise across multiple domains.
+            </p>
+          </motion.div>
           
+          {/* Certificate Table of Contents - 2 per row */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+            className="space-y-8"
             variants={sectionVariants}
             initial="hidden"
             animate={visibleSection === 'overview' ? 'visible' : 'exit'}
           >
-            {/* Left Column - Participation & Technical Certifications */}
-            <motion.div className="space-y-8" variants={sectionVariants}>
-              <motion.div className="space-y-4" variants={sectionVariants}>
-                <motion.h3 variants={itemVariants} className={`${spaceGrotesk.className} text-base md:text-lg text-[#2e2e2e] uppercase tracking-wider`}>
-                  Participation & Technical
-                </motion.h3>
-                <motion.div className="space-y-4" variants={staggerContainer}>
-                  {certifications.filter(c => c.category === 'Participation' || c.category === 'Technical').map((cert) => (
-                    <motion.button
-                      key={cert.id}
-                      variants={itemVariants}
-                      onClick={() => certRefs[cert.id].current?.scrollIntoView({ behavior: 'smooth' })}
-                      className="group block text-left w-full"
-                    >
-                      <div className="flex items-baseline justify-between border-b border-[#2e2e2e]/20 pb-2 group-hover:border-[#2e2e2e] transition-all duration-200"
-                        style={{
-                          boxShadow: `0 2px 4px -2px ${domainColors[cert.category]?.text}10`,
-                        }}
-                      >
-                        <div className="space-y-0.5">
-                          <span className={`${inter.className} text-base text-[#2e2e2e] block`}>{cert.title}</span>
-                          <span className={`${inter.className} text-xs text-[#2e2e2e]/60`}>{cert.category}</span>
-                        </div>
-                        <span className={`${inter.className} text-xs text-[#2e2e2e]/60`}>{cert.date}</span>
-                      </div>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              </motion.div>
-            </motion.div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {certifications.map((cert, index) => (
+                <motion.button
+                  key={cert.id}
+                  variants={itemVariants}
+                  onClick={() => {
+                    const element = certRefs[cert.id]?.current;
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                      setActiveCert(cert.id);
+                      setVisibleSection(cert.id);
+                    }
+                  }}
+                  className="group flex items-center gap-6 p-6 rounded-lg border border-[#E5E7EB] hover:border-[#2563EB] transition-all duration-300 bg-white hover:bg-[#F8FAFC] text-left w-full"
+                >
+                  {/* Tiny Certificate Preview */}
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-12 bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] rounded border border-[#E5E7EB] flex items-center justify-center">
+                      <svg className="w-4 h-4 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  {/* Certificate Info */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className={`${inter.className} text-lg font-semibold text-[#1A1A1A] group-hover:text-[#2563EB] transition-colors mb-1`}>
+                      {cert.title}
+                    </h3>
+                    <p className={`${inter.className} text-sm text-[#6B7280] mb-2`}>
+                      {cert.issuer}
+                    </p>
+                    <div className={`${inter.className} flex items-center gap-4 text-sm text-[#6B7280]`}>
+                      <span>{cert.issueDate}</span>
+                      <span>•</span>
+                      <span className="capitalize">{cert.category}</span>
+                    </div>
+                  </div>
 
-            {/* Right Column - Professional & Acheived Certifications */}
-            <motion.div className="space-y-8" variants={sectionVariants}>
-              <motion.div className="space-y-4" variants={sectionVariants}>
-                <motion.h3 variants={itemVariants} className={`${spaceGrotesk.className} text-base md:text-lg text-[#2e2e2e] uppercase tracking-wider`}>
-                  Professional & Acheived
-                </motion.h3>
-                <motion.div className="space-y-4" variants={staggerContainer}>
-                  {certifications.filter(c => c.category === 'Professional' || c.category === 'Acheived').map((cert) => (
-                    <motion.button
-                      key={cert.id}
-                      variants={itemVariants}
-                      onClick={() => certRefs[cert.id].current?.scrollIntoView({ behavior: 'smooth' })}
-                      className="group block text-left w-full"
-                    >
-                      <div className="flex items-baseline justify-between border-b border-[#2e2e2e]/20 pb-2 group-hover:border-[#2e2e2e] transition-all duration-200"
-                        style={{
-                          boxShadow: `0 2px 4px -2px ${domainColors[cert.category]?.text}10`,
-                        }}
-                      >
-                        <div className="space-y-0.5">
-                          <span className={`${inter.className} text-base text-[#2e2e2e] block`}>{cert.title}</span>
-                          <span className={`${inter.className} text-xs text-[#2e2e2e]/60`}>{cert.category}</span>
-                        </div>
-                        <span className={`${inter.className} text-xs text-[#2e2e2e]/60`}>{cert.date}</span>
-                      </div>
-                    </motion.button>
-                  ))}
-                </motion.div>
-              </motion.div>
-            </motion.div>
+                  {/* Arrow Icon */}
+                  <div className="flex-shrink-0">
+                    <svg className="w-5 h-5 text-[#6B7280] group-hover:text-[#2563EB] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Individual Certification Sections */}
-      {certifications.map((cert) => {
-        const colors = domainColors[cert.category];
-        
-        return (
-          <section
-            key={cert.id}
-            id={cert.id}
-            ref={certRefs[cert.id]}
-            className="min-h-screen flex items-center relative"
-            style={{ backgroundColor: colors.bg }}
+      {/* Individual Certificate Sections */}
+      {certifications.map((cert) => (
+        <section
+          key={cert.id}
+          id={cert.id}
+          ref={certRefs[cert.id]}
+          className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
+        >
+          <motion.div
+            className="max-w-6xl mx-auto w-full"
+            initial="hidden"
+            animate={visibleSection === cert.id ? 'visible' : 'exit'}
+            variants={fadeInUp}
           >
-            <motion.div 
-              className="max-w-[90vw] mx-auto w-full px-8 py-16"
-              initial="hidden"
-              animate={visibleSection === cert.id ? 'visible' : 'exit'}
-              variants={fadeInUp}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <motion.div 
-                  className="space-y-12"
-                  variants={{
-                    hidden: { opacity: 0, x: -20 },
-                    visible: { 
-                      opacity: 1, 
-                      x: 0,
-                      transition: { duration: 0.6, ease: 'easeOut' }
-                    }
-                  }}
-                >
+            {/* Certificate Header */}
+            <div className="flex flex-col lg:flex-row gap-12 mb-16">
+              {/* Bigger Certificate Preview */}
+              <div className="flex-shrink-0">
+                <div className="w-[500px] h-[375px] bg-gradient-to-br from-[#F8FAFC] to-[#F3F4F6] rounded-xl border border-[#E5E7EB] flex items-center justify-center shadow-xl">
+                  <div className="text-center text-[#6B7280] p-12">
+                    <svg className="w-32 h-32 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                    <h3 className={`${spaceGrotesk.className} text-2xl font-medium text-[#1A1A1A] mb-3`}>
+                      {cert.title}
+                    </h3>
+                    <p className={`${inter.className} text-lg text-[#6B7280]`}>
+                      {cert.issuer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Certificate Details */}
+              <div className="flex-1 space-y-8">
+                <div>
+                  <h1 className={`${spaceGrotesk.className} text-4xl md:text-5xl font-medium leading-tight text-[#1A1A1A] mb-4`}>
+                    {cert.title}
+                  </h1>
+                  <p className={`${inter.className} text-xl text-[#6B7280] mb-6`}>
+                    {cert.description}
+                  </p>
+                </div>
+
+                {/* Certificate Meta - Very small text */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <p className={`${inter.className} text-sm mb-2`} style={{ color: colors.accent }}>
+                    <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-2`}>
+                      Issuing Organization
+                    </h3>
+                    <p className={`${inter.className} text-sm text-[#1A1A1A]`}>
+                      {cert.issuer}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-2`}>
+                      Issue Date
+                    </h3>
+                    <p className={`${inter.className} text-sm text-[#1A1A1A]`}>
+                      {cert.issueDate}
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-2`}>
+                      Category
+                    </h3>
+                    <p className={`${inter.className} text-sm text-[#1A1A1A] capitalize`}>
                       {cert.category}
                     </p>
-                    <h2 className={`${spaceGrotesk.className} text-6xl`} style={{ color: colors.text }}>
-                      {cert.title}
-                    </h2>
                   </div>
 
-                  <div className="space-y-8">
-                    <div className="space-y-2">
-                      <h3 className={`${spaceGrotesk.className} text-sm uppercase tracking-wider`}
-                        style={{ color: colors.accent }}>
-                        Overview
-                      </h3>
-                      <p className={`${inter.className} text-lg`} style={{ color: `${colors.text}CC` }}>
-                        {cert.description}
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h3 className={`${spaceGrotesk.className} text-sm uppercase tracking-wider`}
-                        style={{ color: colors.accent }}>
-                        Credential
-                      </h3>
-                      <p className={`${inter.className} italic`} style={{ color: colors.text }}>
-                        {cert.credential}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <a
-                      href={cert.links.verify}
-                      className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
-                      style={{ 
-                        backgroundColor: colors.text,
-                        color: colors.bg
-                      }}
-                    >
-                      Verify Credential
-                    </a>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  className="space-y-12"
-                  variants={{
-                    hidden: { opacity: 0, x: 20 },
-                    visible: { 
-                      opacity: 1, 
-                      x: 0,
-                      transition: { duration: 0.6, ease: 'easeOut', delay: 0.2 }
-                    }
-                  }}
-                >
-                  <div className="grid grid-cols-2 gap-4">
+                  {cert.verificationLink && (
                     <div>
-                      <h3 className={`${spaceGrotesk.className} text-sm uppercase tracking-wider mb-2`}
-                        style={{ color: colors.accent }}>
-                        Issuer
+                      <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-2`}>
+                        Verification
                       </h3>
-                      <p className={`${inter.className}`} style={{ color: `${colors.text}CC` }}>
-                        {cert.issuer}
-                      </p>
+                      <a
+                        href={cert.verificationLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${inter.className} inline-flex items-center gap-1 text-[#2563EB] hover:text-[#1D4ED8] transition-colors text-sm`}
+                      >
+                        Verify Certificate
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
                     </div>
-                    <div>
-                      <h3 className={`${spaceGrotesk.className} text-sm uppercase tracking-wider mb-2`}
-                        style={{ color: colors.accent }}>
-                        Date
-                      </h3>
-                      <p className={`${inter.className}`} style={{ color: `${colors.text}CC` }}>
-                        {cert.date}
-                      </p>
-                    </div>
-                  </div>
+                  )}
+                </div>
 
-                  <div className="space-y-6">
-                    <h3 className={`${spaceGrotesk.className} text-sm uppercase tracking-wider mb-4`}
-                      style={{ color: colors.accent }}>
+                {/* Skills & Tags - Very small */}
+                {cert.skills && cert.skills.length > 0 && (
+                  <div>
+                    <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-3`}>
                       Skills Demonstrated
                     </h3>
-                    <div className="space-y-6">
-                      {Object.entries(cert.skills).map(([category, skills]) => (
-                        <div key={category}>
-                          <p className={`${inter.className} text-sm mb-2`} style={{ color: `${colors.text}99` }}>
-                            {category}
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {skills.map((skill, index) => (
-                              <span
-                                key={index}
-                                className={`${inter.className} px-3 py-1 rounded-full text-sm`}
-                                style={{ 
-                                  backgroundColor: `${colors.text}22`,
-                                  color: colors.text
-                                }}
-                              >
-                                {skill}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
+                    <div className="flex flex-wrap gap-1">
+                      {cert.skills.map((skill, skillIndex) => (
+                        <span
+                          key={skillIndex}
+                          className={`${inter.className} px-2 py-1 bg-[#F3F4F6] text-[#374151] rounded text-xs`}
+                        >
+                          {skill}
+                        </span>
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                )}
+
+                {/* Additional Details - Very small */}
+                {cert.details && (
+                  <div className="bg-white rounded p-4 border border-[#E5E7EB]">
+                    <h3 className={`${inter.className} text-xs font-medium text-[#1A1A1A] mb-2`}>
+                      Achievement Details
+                    </h3>
+                    <p className={`${inter.className} text-xs text-[#374151] leading-relaxed`}>
+                      {cert.details}
+                    </p>
+                  </div>
+                )}
+
+                {/* Credential ID - Very small */}
+                {cert.credential && (
+                  <div className="bg-white rounded p-4 border border-[#E5E7EB]">
+                    <h3 className={`${inter.className} text-xs font-medium text-[#374151] uppercase tracking-wide mb-2`}>
+                      Credential ID
+                    </h3>
+                    <p className="font-mono text-xs text-[#1A1A1A] bg-[#FAF5EE] px-2 py-1 rounded">
+                      {cert.credential}
+                    </p>
+                  </div>
+                )}
               </div>
-            </motion.div>
-          </section>
-        );
-      })}
+            </div>
+
+            {/* Navigation - Very small */}
+            <div className="flex justify-between items-center pt-6 border-t border-[#E5E7EB]">
+              <button
+                onClick={() => {
+                  const element = certRefs.overview.current;
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    setVisibleSection('overview');
+                  }
+                }}
+                className={`${inter.className} inline-flex items-center gap-1 text-[#6B7280] hover:text-[#2563EB] transition-colors text-xs`}
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Overview
+              </button>
+
+              <div className="flex items-center gap-2">
+                {certifications.map((c, index) => (
+                  <button
+                    key={c.id}
+                    onClick={() => {
+                      const element = certRefs[c.id].current;
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        setActiveCert(c.id);
+                        setVisibleSection(c.id);
+                      }
+                    }}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      cert.id === c.id ? 'bg-[#2563EB]' : 'bg-[#D1D5DB] hover:bg-[#9CA3AF]'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </section>
+      ))}
 
       {/* Navigation Dots */}
       <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
-        <div className={`flex flex-col items-end ${activeCert === 'overview' ? 'gap-6' : 'gap-3'}`}>
+        <div className="flex flex-col items-end gap-3">
           {['overview', ...certifications.map(c => c.id)].map((id, index) => {
             const cert = certifications.find(c => c.id === id);
-            const colors = id === 'overview' 
-              ? { text: '#2e2e2e' } 
-              : domainColors[cert?.category];
             
             return (
               <button
                 key={id}
                 onClick={() => {
-                  certRefs[id].current?.scrollIntoView({ behavior: 'smooth' });
+                  const element = certRefs[id].current;
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                    setActiveCert(id);
+                    setVisibleSection(id);
+                  }
                 }}
-                className={`group flex items-center gap-3 ${activeCert === 'overview' ? 'cursor-default' : ''}`}
+                className="group flex items-center gap-3"
               >
-                <span className={`${inter.className} text-sm transition-all duration-300 ${activeCert === 'overview' ? 'hidden' : 'opacity-0 group-hover:opacity-100'}`}
-                  style={{ 
-                    color: colors.text
-                  }}>
+                <span className={`${inter.className} text-sm transition-all duration-300 opacity-0 group-hover:opacity-100 text-[#374151]`}>
                   {id === 'overview' ? 'Overview' : cert?.title}
                 </span>
-                <div className={`w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-150`}
-                  style={{ 
-                    backgroundColor: activeCert === id 
-                      ? colors.text 
-                      : `${colors.text}4D`,
-                    transform: activeCert === id ? 'scale(1.5)' : 'scale(1)'
-                  }} />
+                <div className={`w-2 h-2 rounded-full transition-all duration-300 group-hover:scale-150 ${
+                  visibleSection === id 
+                    ? 'bg-[#2563EB] scale-150' 
+                    : 'bg-[#D1D5DB] hover:bg-[#9CA3AF]'
+                }`} />
               </button>
             );
           })}
@@ -692,19 +538,10 @@ export default function Certifications() {
       </nav>
 
       {/* Scroll Progress Bar */}
-      <div 
-        className="fixed top-0 left-0 w-full h-1 bg-opacity-20"
-        style={{ 
-          backgroundColor: visibleSection === 'overview' 
-            ? '#2e2e2e20' 
-            : `${domainColors[certifications.find(c => c.id === visibleSection)?.category]?.text}20` 
-        }}>
+      <div className="fixed top-0 left-0 w-full h-1 z-50 bg-[#F0E6D6]">
         <motion.div 
-          className="h-full"
+          className="h-full bg-[#2563EB]"
           style={{ 
-            backgroundColor: visibleSection === 'overview' 
-              ? '#2e2e2e' 
-              : domainColors[certifications.find(c => c.id === visibleSection)?.category]?.text,
             scaleX: scrollProgress / 100,
             transformOrigin: '0%'
           }}

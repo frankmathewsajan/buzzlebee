@@ -13,7 +13,7 @@ export default function NotFound() {
   const siteMap = [
     { name: 'Home', href: '/' },
     { name: 'Projects', href: '/projects' },
-    { name: 'Case Studies', href: '/case-studies' },
+    // { name: 'Case Studies', href: '/case-studies' },
     { name: 'Blog', href: '/blogs' },
     { name: 'Certifications', href: '/certifications' },
     { name: 'About & Experience', href: '/about' },

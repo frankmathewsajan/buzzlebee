@@ -5,54 +5,23 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import projectsData from '../projects.json';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
-// Case studies data
-const caseStudies = [
-  {
-    id: 'helmet-system',
-    title: "Intelligent Safety Helmet System",
-    category: "IoT/Industrial Safety",
-    timeline: "Jan 2024 - Mar 2024",
-    description: "A real-time hazard detection helmet with GPS tracking and emergency communication capabilities. The system provides immediate alerts and location data in emergency situations.",
-    tags: ["IoT", "GPS", "Embedded Systems", "Real-time Monitoring"]
-  },
-  {
-    id: 'st-gd-convent',
-    title: "St. G. D. Convent School Platform",
-    category: "Full-stack Development",
-    timeline: "2024",
-    description: "Full-featured educational platform for St. G. D. Convent School, Agra, UP with comprehensive backend using Supabase for complete school administration management.",
-    tags: ["Next.js", "Supabase", "React", "PostgreSQL", "Education"]
-  },
-  {
-    id: 'banking-sim',
-    title: "Digital Banking Simulation System",
-    category: "Financial Technology",
-    timeline: "Sep 2023 - Oct 2023",
-    description: "A gamified banking system inspired by Monopoly's 'Ultimate Banking', featuring real-time balance updates and transaction history.",
-    tags: ["JavaScript", "UI/UX", "Real-time Updates", "Banking Simulation"]
-  },
-  {
-    id: 'library-management',
-    title: "Library Management System",
-    category: "Educational Software",
-    timeline: "2023",
-    description: "A GUI-based Library Management System (LMS) designed to handle primary housekeeping functions of a library. Built as the final project for Harvard's CS50P course.",
-    tags: ["Python", "GUI", "Database", "Library Systems"]
-  },
-  {
-    id: 'hss-manager',
-    title: "HSSManager",
-    category: "Education Management",
-    timeline: "2023",
-    description: "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
-    tags: ["Web Development", "Education", "Management System"]
-  }
-];
+// Extract case studies from projects data
+const caseStudies = projectsData
+  .filter(project => project.caseStudy) // Only projects with case studies
+  .map(project => ({
+    id: project.id,
+    title: project.title,
+    category: project.category,
+    timeline: project.timeline,
+    description: project.description,
+    tags: project.tags
+  }));
 
 export default function CaseStudies() {
   const [currentPage, setCurrentPage] = useState(1);

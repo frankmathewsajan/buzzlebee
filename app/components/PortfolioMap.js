@@ -42,11 +42,11 @@ const SITE_STRUCTURE = {
       path: '/projects',
       icon: 'FaTools',
       children: [
-        {
-          name: 'Case Studies',
-          path: '/case-studies',
-          icon: 'FaChartBar'
-        }
+        // {
+        //   name: 'Case Studies',
+        //   path: '/case-studies',
+        //   icon: 'FaChartBar'
+        // }
       ]
     }
   ]

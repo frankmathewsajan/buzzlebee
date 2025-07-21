@@ -1,0 +1,58 @@
+[
+  {
+    "id": "st-gd-convent-completion",
+    "title": "Website Development Certificate of Completion",
+    "category": "Professional",
+    "issuer": "St. GD Convent School",
+    "issueDate": "March 2024",
+    "description": "Certificate of completion for successfully developing and deploying the official school website with modern web technologies.",
+    "credential": "STGDC-2024-WEB-001",
+    "verificationLink": "https://stgdconventschool.com/certificates/web-dev-001",
+    "tags": ["skill", "professional"],
+    "skills": ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development"],
+    "achievements": "Successfully developed and launched the official school website serving 500+ students and staff",
+    "image": "/images/certificates/st-gd-convent-certificate.png"
+  },
+  {
+    "id": "cs50p-certificate",
+    "title": "CS50's Introduction to Programming with Python",
+    "category": "Academic",
+    "issuer": "Harvard University (via edX)",
+    "issueDate": "2023",
+    "description": "Completed Harvard University's introduction to programming with Python, covering fundamental programming concepts, data structures, and algorithm design.",
+    "credential": "CS50P-2023-PYTHON-002",
+    "verificationLink": "https://cs50.harvard.edu/certificates/verify/002",
+    "tags": ["skill", "academic"],
+    "skills": ["Python", "Data Structures", "Algorithms", "Object-Oriented Programming", "Testing"],
+    "achievements": "Completed all problem sets and final project with distinction",
+    "image": "/images/certificates/cs50p-certificate.png"
+  },
+  {
+    "id": "hackathon-winner",
+    "title": "HackAP Transport & Logistics - 1st Place",
+    "category": "Achievement",
+    "issuer": "Government of Andhra Pradesh",
+    "issueDate": "March 2024",
+    "description": "First place winner in the state-level hackathon for developing an intelligent safety helmet system for transportation and logistics sector.",
+    "credential": "HACKAP-2024-WINNER-001",
+    "verificationLink": "https://hackap.gov.in/winners/2024/001",
+    "tags": ["wins", "participation"],
+    "skills": ["IoT Development", "Arduino", "C++", "Hardware Integration", "Innovation"],
+    "achievements": "1st Prize winner among 200+ participants for innovative IoT safety solution",
+    "image": "/images/certificates/hackap-winner.png"
+  },
+  {
+    "id": "engineering-clinics-s-grade",
+    "title": "Engineering Clinics - S Grade Achievement",
+    "category": "Academic",
+    "issuer": "VIT-AP University",
+    "issueDate": "March 2024",
+    "description": "Achieved S Grade (highest grade) in Engineering Clinics for the intelligent safety helmet project demonstrating exceptional engineering skills.",
+    "credential": "VITAP-EC-2024-S-003",
+    "verificationLink": "https://vitap.edu.in/verify/ec/003",
+    "tags": ["skill", "academic"],
+    "skills": ["Engineering Design", "Project Management", "Technical Documentation", "Presentation"],
+    "achievements": "S Grade achievement for innovative engineering solution",
+    "image": "/images/certificates/vitap-s-grade.png"
+  }
+]
