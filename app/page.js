@@ -707,9 +707,9 @@ export default function Home() {
                   <Link href="/projects" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Projects
                   </Link>
-                  {/* <Link href="/case-studies" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                  <Link href="/case-studies" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Case Studies
-                  </Link> */}
+                  </Link>
                   <Link href="/certifications" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Certifications
                   </Link>

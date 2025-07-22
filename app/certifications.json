@@ -4,28 +4,39 @@
     "title": "Website Development Certificate of Completion",
     "category": "Professional",
     "issuer": "St. GD Convent School",
-    "issueDate": "March 2024",
+    "issueDate": "July 2025",
     "description": "Certificate of completion for successfully developing and deploying the official school website with modern web technologies.",
-    "credential": "STGDC-2024-WEB-001",
-    "verificationLink": "https://stgdconventschool.com/certificates/web-dev-001",
     "tags": ["skill", "professional"],
     "skills": ["HTML", "CSS", "JavaScript", "Responsive Design", "Web Development"],
     "achievements": "Successfully developed and launched the official school website serving 500+ students and staff",
-    "image": "/images/certificates/st-gd-convent-certificate.png"
+    "image": false,
+    "hidden": true
   },
   {
     "id": "cs50p-certificate",
     "title": "CS50's Introduction to Programming with Python",
     "category": "Academic",
     "issuer": "Harvard University (via edX)",
-    "issueDate": "2023",
+    "issueDate": "2024",
     "description": "Completed Harvard University's introduction to programming with Python, covering fundamental programming concepts, data structures, and algorithm design.",
-    "credential": "CS50P-2023-PYTHON-002",
-    "verificationLink": "https://cs50.harvard.edu/certificates/verify/002",
+    "credential": "29a0905b-ec84-4878-91d2-5df3916f9e83",
+    "verificationLink": "https://cs50.harvard.edu/certificates/29a0905b-ec84-4878-91d2-5df3916f9e83",
     "tags": ["skill", "academic"],
     "skills": ["Python", "Data Structures", "Algorithms", "Object-Oriented Programming", "Testing"],
     "achievements": "Completed all problem sets and final project with distinction",
-    "image": "/images/certificates/cs50p-certificate.png"
+    "image": "CS50P.png"
+  },
+  {
+    "id": "hacksagon-2025",
+    "title": "HACKSAGON 2025 - Top Performer",
+    "category": "Achievement",
+    "issuer": "ABV-IIITM Gwalior & IIIT Partners",
+    "issueDate": "June 2025",
+    "description": "HACKSAGON 2025, hosted by ABV-IIITM, Gwalior, and six IIIT partners! After clearing online ideation and video rounds, our team competed in the Smart Wearables for Safety track. We are ranked among the top performers!",
+    "tags": ["wins", "participation"],
+    "skills": ["Wearable Technology", "IoT Development", "Safety Systems", "Team Collaboration", "Innovation"],
+    "achievements": "SafeFit: A Smart Bracelet - Where fashion meets innovation. One-stop solution for health, fitness, and safety. Ranked among top performers with teammates Revanth Modalavalasa, Mithun Gullapalli and Abhiram Jasti.",
+    "image": "BTY.jpg"
   },
   {
     "id": "hackathon-winner",
@@ -39,7 +50,8 @@
     "tags": ["wins", "participation"],
     "skills": ["IoT Development", "Arduino", "C++", "Hardware Integration", "Innovation"],
     "achievements": "1st Prize winner among 200+ participants for innovative IoT safety solution",
-    "image": "/images/certificates/hackap-winner.png"
+    "image": "hackap-winner.png",
+    "hidden": true
   },
   {
     "id": "engineering-clinics-s-grade",
@@ -53,6 +65,7 @@
     "tags": ["skill", "academic"],
     "skills": ["Engineering Design", "Project Management", "Technical Documentation", "Presentation"],
     "achievements": "S Grade achievement for innovative engineering solution",
-    "image": "/images/certificates/vitap-s-grade.png"
+    "image": "vitap-s-grade.png",
+    "hidden": true
   }
 ]

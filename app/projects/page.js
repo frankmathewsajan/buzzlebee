@@ -672,6 +672,18 @@ export default function Projects() {
                         </a>
                       )
                     )}
+                    {project.has_case_study && !project.case_study_hidden && (
+                      <Link
+                        href={project.links.caseStudy}
+                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                        style={{ 
+                          border: `1px solid ${colors.text}`,
+                          color: colors.text
+                        }}
+                      >
+                        View Case Study
+                      </Link>
+                    )}
                   </div>
                 </motion.div>
 

@@ -25,19 +25,22 @@ export default function Certifications() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [visibleSection, setVisibleSection] = useState('overview');
 
-  // Create refs at the top level - one for each certificate
+  // Filter out hidden certificates
+  const visibleCertifications = useMemo(() => {
+    return certifications.filter(cert => !cert.hidden);
+  }, []);
+
+  // Create refs at the top level - one for each visible certificate
   const overviewRef = useRef(null);
   const stGdConventRef = useRef(null);
   const cs50pRef = useRef(null);
-  const hackathonWinnerRef = useRef(null);
-  const engineeringClinicsRef = useRef(null);
+  const hacksagonRef = useRef(null);
 
   const certRefs = {
     overview: overviewRef,
     'st-gd-convent-completion': stGdConventRef,
     'cs50p-certificate': cs50pRef,
-    'hackathon-winner': hackathonWinnerRef,
-    'engineering-clinics-s-grade': engineeringClinicsRef
+    'hacksagon-2025': hacksagonRef
   };
 
   // Group certifications by tags
@@ -274,7 +277,7 @@ export default function Certifications() {
             animate={visibleSection === 'overview' ? 'visible' : 'exit'}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {certifications.map((cert, index) => (
+              {visibleCertifications.map((cert, index) => (
                 <motion.button
                   key={cert.id}
                   variants={itemVariants}
@@ -290,16 +293,26 @@ export default function Certifications() {
                 >
                   {/* Tiny Certificate Preview */}
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-12 bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] rounded border border-[#E5E7EB] flex items-center justify-center">
-                      <svg className="w-4 h-4 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                      </svg>
+                    <div className="w-20 h-16 bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] rounded border border-[#E5E7EB] overflow-hidden">
+                      {cert.image && cert.image !== false ? (
+                        <Image
+                          src={`/images/certifications/${cert.image}`}
+                          alt={`${cert.title} Certificate`}
+                          width={80}
+                          height={64}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <i className="fas fa-certificate text-[#6B7280] text-xl"></i>
+                        </div>
+                      )}
                     </div>
                   </div>
                   
                   {/* Certificate Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className={`${inter.className} text-lg font-semibold text-[#1A1A1A] group-hover:text-[#2563EB] transition-colors mb-1`}>
+                    <h3 className={`${inter.className} text-base font-semibold text-[#1A1A1A] group-hover:text-[#2563EB] transition-colors mb-1`}>
                       {cert.title}
                     </h3>
                     <p className={`${inter.className} text-sm text-[#6B7280] mb-2`}>
@@ -326,7 +339,7 @@ export default function Certifications() {
       </section>
 
       {/* Individual Certificate Sections */}
-      {certifications.map((cert) => (
+      {visibleCertifications.map((cert) => (
         <section
           key={cert.id}
           id={cert.id}
@@ -343,28 +356,38 @@ export default function Certifications() {
             <div className="flex flex-col lg:flex-row gap-12 mb-16">
               {/* Bigger Certificate Preview */}
               <div className="flex-shrink-0">
-                <div className="w-[500px] h-[375px] bg-gradient-to-br from-[#F8FAFC] to-[#F3F4F6] rounded-xl border border-[#E5E7EB] flex items-center justify-center shadow-xl">
-                  <div className="text-center text-[#6B7280] p-12">
-                    <svg className="w-32 h-32 mx-auto mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
-                    <h3 className={`${spaceGrotesk.className} text-2xl font-medium text-[#1A1A1A] mb-3`}>
-                      {cert.title}
-                    </h3>
-                    <p className={`${inter.className} text-lg text-[#6B7280]`}>
-                      {cert.issuer}
-                    </p>
-                  </div>
+                <div className="w-[600px] h-[450px] bg-gradient-to-br from-[#F8FAFC] to-[#F3F4F6] rounded-xl border border-[#E5E7EB] overflow-hidden shadow-xl">
+                  {cert.image && cert.image !== false ? (
+                    <Image
+                      src={`/images/certifications/${cert.image}`}
+                      alt={`${cert.title} Certificate`}
+                      width={600}
+                      height={450}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-center text-[#6B7280] p-12">
+                      <div>
+                        <i className="fas fa-certificate text-8xl mx-auto mb-6 text-[#6B7280]"></i>
+                        <h3 className={`${spaceGrotesk.className} text-2xl font-medium text-[#1A1A1A] mb-3`}>
+                          {cert.title}
+                        </h3>
+                        <p className={`${inter.className} text-lg text-[#6B7280]`}>
+                          {cert.issuer}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Certificate Details */}
               <div className="flex-1 space-y-8">
                 <div>
-                  <h1 className={`${spaceGrotesk.className} text-4xl md:text-5xl font-medium leading-tight text-[#1A1A1A] mb-4`}>
+                  <h1 className={`${spaceGrotesk.className} text-3xl md:text-4xl font-medium leading-tight text-[#1A1A1A] mb-4`}>
                     {cert.title}
                   </h1>
-                  <p className={`${inter.className} text-xl text-[#6B7280] mb-6`}>
+                  <p className={`${inter.className} text-lg text-[#6B7280] mb-6`}>
                     {cert.description}
                   </p>
                 </div>
@@ -462,44 +485,6 @@ export default function Certifications() {
                 )}
               </div>
             </div>
-
-            {/* Navigation - Very small */}
-            <div className="flex justify-between items-center pt-6 border-t border-[#E5E7EB]">
-              <button
-                onClick={() => {
-                  const element = certRefs.overview.current;
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                    setVisibleSection('overview');
-                  }
-                }}
-                className={`${inter.className} inline-flex items-center gap-1 text-[#6B7280] hover:text-[#2563EB] transition-colors text-xs`}
-              >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back to Overview
-              </button>
-
-              <div className="flex items-center gap-2">
-                {certifications.map((c, index) => (
-                  <button
-                    key={c.id}
-                    onClick={() => {
-                      const element = certRefs[c.id].current;
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                        setActiveCert(c.id);
-                        setVisibleSection(c.id);
-                      }
-                    }}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      cert.id === c.id ? 'bg-[#2563EB]' : 'bg-[#D1D5DB] hover:bg-[#9CA3AF]'
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
           </motion.div>
         </section>
       ))}
@@ -507,8 +492,8 @@ export default function Certifications() {
       {/* Navigation Dots */}
       <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
         <div className="flex flex-col items-end gap-3">
-          {['overview', ...certifications.map(c => c.id)].map((id, index) => {
-            const cert = certifications.find(c => c.id === id);
+          {['overview', ...visibleCertifications.map(c => c.id)].map((id, index) => {
+            const cert = visibleCertifications.find(c => c.id === id);
             
             return (
               <button
