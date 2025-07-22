@@ -5,23 +5,14 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
-import projectsData from '../projects.json';
+import caseStudiesData from '../case-studies.json';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
-// Extract case studies from projects data
-const caseStudies = projectsData
-  .filter(project => project.caseStudy) // Only projects with case studies
-  .map(project => ({
-    id: project.id,
-    title: project.title,
-    category: project.category,
-    timeline: project.timeline,
-    description: project.description,
-    tags: project.tags
-  }));
+// Get only visible case studies
+const caseStudies = caseStudiesData.filter(caseStudy => !caseStudy.hidden);
 
 export default function CaseStudies() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,19 +44,6 @@ export default function CaseStudies() {
       `}</style>
       <div className="h-screen bg-[#FFEBD0] overflow-hidden">
         <div className="h-full max-w-7xl mx-auto px-8 py-8 flex relative">
-          {/* Back Button */}
-          <Link 
-            href="/projects" 
-            className="absolute top-8 right-8 z-10"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`${inter.className} px-6 py-2 rounded-full bg-[#1A365D]/10 text-[#1A365D] hover:bg-[#1A365D]/20 transition-colors duration-200`}
-            >
-              Back to Projects
-            </motion.button>
-          </Link>
 
           <div className="flex-1 flex flex-col">
             <motion.div 
@@ -110,21 +88,21 @@ export default function CaseStudies() {
                           {caseStudy.title}
                         </h2>
                         <p className={`${inter.className} text-sm text-[#1A365D]/60`}>
-                          {caseStudy.timeline}
+                          {caseStudy.readTime} • {caseStudy.status}
                         </p>
                       </div>
 
                       <p className={`${inter.className} text-sm text-[#1A365D]/80 leading-relaxed line-clamp-3`}>
-                        {caseStudy.description}
+                        {caseStudy.summary}
                       </p>
 
                       <div className="flex flex-wrap gap-2">
-                        {caseStudy.tags.map((tag, tagIndex) => (
+                        {caseStudy.technologies && caseStudy.technologies.slice(0, 4).map((tech, techIndex) => (
                           <span
-                            key={tagIndex}
+                            key={techIndex}
                             className={`${inter.className} text-xs px-3 py-1 rounded-full bg-[#1A365D]/10 text-[#1A365D]`}
                           >
-                            {tag}
+                            {tech}
                           </span>
                         ))}
                       </div>
