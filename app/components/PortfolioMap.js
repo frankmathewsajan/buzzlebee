@@ -455,12 +455,12 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
 };
 
 // Main Portfolio Map Component - Completely Self-Contained
-const PortfolioMap = () => {
+const PortfolioMap = ({ onClose: externalOnClose, autoOpen = false }) => {
   const router = useRouter();
   const pathname = usePathname();
   
   // Component's own state management
-  const [showExplorationMap, setShowExplorationMap] = useState(false);
+  const [showExplorationMap, setShowExplorationMap] = useState(autoOpen);
   const [isClosing, setIsClosing] = useState(false);
   const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
   const [externalLinkUrl, setExternalLinkUrl] = useState('');
@@ -545,8 +545,12 @@ const PortfolioMap = () => {
     setTimeout(() => {
       setShowExplorationMap(false);
       setIsClosing(false);
+      // Call external onClose if provided (for resume page modal)
+      if (externalOnClose) {
+        externalOnClose();
+      }
     }, 300); // Match the animation duration
-  }, []);
+  }, [externalOnClose]);
 
   // Handle navigation
   const handleNavigate = useCallback((path) => {
