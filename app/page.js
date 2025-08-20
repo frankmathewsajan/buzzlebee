@@ -716,6 +716,9 @@ export default function Home() {
                   <Link href="/about" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     About & Experience
                   </Link>
+                  <Link href="/resume" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                    Resume
+                  </Link>
                 </div>
               </div>
 
