@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && firebase deploy && npm run copy",
-    "copy": "cp -r out/* ../frankmathewsajan/public && cd ../frankmathewsajan && firebase deploy"
+  "copy": "xcopy out\\* ..\\frankmathewsajan\\public /E /I /Y && cd ..\\frankmathewsajan && firebase deploy"
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",

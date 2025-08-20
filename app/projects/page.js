@@ -218,7 +218,7 @@ export default function Projects() {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [activeProject, projectRefs, projects]);
+  }, [activeProject, projectRefs]);
 
   // Add CSS for smooth scrolling
   useEffect(() => {
@@ -271,7 +271,7 @@ export default function Projects() {
     });
 
     return () => observer.disconnect();
-  }, [projects]);
+  }, []);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
