@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import PortfolioMap from "../components/PortfolioMap";
 import "./resume.css";
 
 export default function ResumePage() {
@@ -64,6 +65,11 @@ export default function ResumePage() {
       
       {!isLoading && (
         <div className="pdf-container">
+          {/* Portfolio Map - positioned on right middle */}
+          <div className="portfolio-map-wrapper">
+            <PortfolioMap />
+          </div>
+          
           <iframe
             src="/files/FrankMathewSajan_08202025.pdf#zoom=125"
             className="pdf-viewer"

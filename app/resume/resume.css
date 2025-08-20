@@ -223,6 +223,20 @@
   background: white;
 }
 
+/* Portfolio Map positioning for resume page */
+.portfolio-map-wrapper {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.portfolio-map-wrapper > * {
+  pointer-events: auto;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
