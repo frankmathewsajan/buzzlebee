@@ -132,7 +132,7 @@ export default function Certifications() {
         clearTimeout(scrollTimeout);
       }
     };
-  }, [activeCert, certifications]);
+  }, [activeCert]);
 
   useEffect(() => {
     const options = {
@@ -169,7 +169,7 @@ export default function Certifications() {
     });
 
     return () => observer.disconnect();
-  }, [certifications]);
+  }, []);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
