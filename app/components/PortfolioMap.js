@@ -455,7 +455,7 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
 };
 
 // Main Portfolio Map Component - Completely Self-Contained
-const PortfolioMap = ({ onClose: externalOnClose, autoOpen = false }) => {
+const PortfolioMap = ({ onClose: externalOnClose = null, autoOpen = false }) => {
   const router = useRouter();
   const pathname = usePathname();
   

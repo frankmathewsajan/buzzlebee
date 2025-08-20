@@ -1,11 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaLink, FaTimes, FaArrowRight } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Site' }) => {
   const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 300);
+  }, [onClose]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -23,15 +31,7 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'auto';
     };
-  }, [isOpen]);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setIsClosing(false);
-      onClose();
-    }, 300);
-  };
+  }, [isOpen, handleClose]);
 
   const handleProceed = () => {
     window.open(targetUrl, '_blank', 'noopener,noreferrer');
