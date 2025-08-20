@@ -3,21 +3,33 @@
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useState } from 'react';
+import { FaLink } from 'react-icons/fa';
 import PortfolioMap from './components/PortfolioMap';
+import ExternalLinkModal from './components/ExternalLinkModal';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
 export default function NotFound() {
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
+
   const siteMap = [
     { name: 'Home', href: '/' },
     { name: 'Projects', href: '/projects' },
     { name: 'Case Studies', href: '/case-studies' },
-    { name: 'Blog', href: '/blogs' },
+    { name: 'Resume', href: '/resume' },
     { name: 'Certifications', href: '/certifications' },
     { name: 'About & Experience', href: '/about' },
+    { name: 'Blog', external: true, externalUrl: 'https://medium.com/@frankmathewsajan' },
   ];
+
+  const handleExternalLink = (url) => {
+    setExternalLinkUrl(url);
+    setShowExternalLinkModal(true);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] px-4">
@@ -48,17 +60,37 @@ export default function NotFound() {
           </h3>
           <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
             {siteMap.map((page) => (
-              <Link
-                key={page.name}
-                href={page.href}
-                className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 text-center text-sm`}
-              >
-                {page.name}
-              </Link>
+              page.external ? (
+                <button
+                  key={page.name}
+                  onClick={() => handleExternalLink(page.externalUrl)}
+                  className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 text-center text-sm flex items-center justify-center gap-1`}
+                >
+                  {page.name}
+                  <FaLink className="w-3 h-3" />
+                </button>
+              ) : (
+                <Link
+                  key={page.name}
+                  href={page.href}
+                  className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 text-center text-sm`}
+                >
+                  {page.name}
+                </Link>
+              )
             ))}
           </div>
         </div>
       </motion.div>
+
+      {/* External Link Modal */}
+      {showExternalLinkModal && (
+        <ExternalLinkModal
+          isOpen={showExternalLinkModal}
+          onClose={() => setShowExternalLinkModal(false)}
+          targetUrl={externalLinkUrl}
+        />
+      )}
     </div>
   );
 } 

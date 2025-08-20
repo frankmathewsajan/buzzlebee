@@ -10,9 +10,11 @@ import {
   FaAward, 
   FaChartBar, 
   FaBriefcase,
-  FaBroom
+  FaBroom,
+  FaLink
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
+import ExternalLinkModal from './ExternalLinkModal';
 
 // Website sitemap structure - this represents the actual site structure
 const SITE_STRUCTURE = {
@@ -28,7 +30,9 @@ const SITE_STRUCTURE = {
         {
           name: 'Blog',
           path: '/blogs',
-          icon: 'FaPen'
+          icon: 'FaPen',
+          external: true,
+          externalUrl: 'https://medium.com/@frankmathewsajan'
         },
         {
           name: 'Certifications',
@@ -65,7 +69,9 @@ const createPortfolioTreeData = (siteStructure, visitedPages, currentPath) => {
         current: isCurrent,
         path: node.path,
         icon: node.icon,
-        href: node.path
+        href: node.path,
+        external: node.external || false,
+        externalUrl: node.externalUrl
       },
       children: node.children ? node.children.map(mapNode) : undefined
     };
@@ -83,13 +89,16 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
     'FaPen': FaPen,
     'FaAward': FaAward,
     'FaChartBar': FaChartBar,
-    'FaBriefcase': FaBriefcase
+    'FaBriefcase': FaBriefcase,
+    'FaLink': FaLink
   };
   
   const IconComponent = iconMap[nodeDatum.attributes?.icon];
   const isVisited = nodeDatum.attributes?.visited;
   const isCurrent = nodeDatum.attributes?.current;
   const isClickable = nodeDatum.attributes?.href;
+  const isExternal = nodeDatum.attributes?.external;
+  const externalUrl = nodeDatum.attributes?.externalUrl;
   const nodePath = nodeDatum.attributes?.path;
   const scrollProgress = pageScrollProgress?.[nodePath] || 0;
   
@@ -210,7 +219,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
 };
 
 // Portfolio D3 Tree Component
-const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNavigate, onClose }) => {
+const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNodeClick, onClose }) => {
   const [treeData, setTreeData] = useState(() => 
     createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath)
   );
@@ -222,38 +231,11 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNavi
 
   // Handle node clicks for navigation
   const handleNodeClick = useCallback((nodeDatum, evt) => {
-    // Prevent default behavior
-    evt?.preventDefault?.();
-    evt?.stopPropagation?.();
-    
-    // Debug: log the nodeDatum to see its structure
-    console.log('Clicked nodeDatum:', nodeDatum);
-    console.log('Full data object:', nodeDatum.data);
-
-    // Try all possible locations for the path
-    const path = 
-      nodeDatum.data?.attributes?.path ||
-      nodeDatum.attributes?.path ||
-      nodeDatum.data?.attributes?.href ||
-      nodeDatum.attributes?.href ||
-      nodeDatum.path;
-
-    console.log('Extracted path:', path, 'Current path:', currentPath);
-
-    if (!path) {
-      console.log('No path found in node data');
-      return;
+    // Pass through to the parent handler
+    if (onNodeClick) {
+      onNodeClick(nodeDatum, evt);
     }
-
-    if (path === currentPath) {
-      console.log('Same page, not navigating');
-      return;
-    }
-
-    console.log('Navigating to:', path); // Debug log
-    onNavigate(path);
-    onClose();
-  }, [currentPath, onNavigate, onClose]);
+  }, [onNodeClick]);
 
   // Handle surface clicks for ripple effect
   const handleSurfaceClick = useCallback((evt) => {
@@ -473,6 +455,8 @@ const PortfolioMap = () => {
   // Component's own state management
   const [showExplorationMap, setShowExplorationMap] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
   const [visitedPages, setVisitedPages] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('portfolioVisitedPages');
@@ -566,6 +550,54 @@ const PortfolioMap = () => {
     });
     router.push(path);
   }, [router]);
+
+  // Handle external link confirmation
+  const handleExternalLink = useCallback((url) => {
+    setExternalLinkUrl(url);
+    setShowExternalLinkModal(true);
+    // Auto-close the portfolio map when external link modal opens
+    handleCloseModal();
+  }, [handleCloseModal]);
+
+  // Handle node clicks - either navigate or show external modal
+  const handleNodeClick = useCallback((nodeDatum, evt) => {
+    // Prevent default behavior
+    evt?.preventDefault?.();
+    evt?.stopPropagation?.();
+    
+    console.log('Clicked nodeDatum:', nodeDatum);
+
+    // Check if this is an external link
+    const isExternal = nodeDatum.data?.attributes?.external || nodeDatum.attributes?.external;
+    const externalUrl = nodeDatum.data?.attributes?.externalUrl || nodeDatum.attributes?.externalUrl;
+    
+    if (isExternal && externalUrl) {
+      handleExternalLink(externalUrl);
+      return;
+    }
+
+    // Regular navigation
+    const path = 
+      nodeDatum.data?.attributes?.path ||
+      nodeDatum.attributes?.path ||
+      nodeDatum.data?.attributes?.href ||
+      nodeDatum.attributes?.href ||
+      nodeDatum.path;
+
+    if (!path) {
+      console.log('No path found in node data');
+      return;
+    }
+
+    if (path === pathname) {
+      console.log('Same page, not navigating');
+      return;
+    }
+
+    console.log('Navigating to:', path);
+    handleNavigate(path);
+    handleCloseModal();
+  }, [pathname, handleNavigate, handleExternalLink, handleCloseModal]);
 
   // Calculate exploration progress
   const getExplorationProgress = useCallback(() => {
@@ -734,7 +766,7 @@ const PortfolioMap = () => {
                   visitedPages={visitedPages}
                   currentPath={pathname}
                   pageScrollProgress={pageScrollProgress}
-                  onNavigate={handleNavigate}
+                  onNodeClick={handleNodeClick}
                   onClose={handleCloseModal}
                 />
               </div>
@@ -786,6 +818,15 @@ const PortfolioMap = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* External Link Modal */}
+      {showExternalLinkModal && (
+        <ExternalLinkModal
+          isOpen={showExternalLinkModal}
+          onClose={() => setShowExternalLinkModal(false)}
+          targetUrl={externalLinkUrl}
+        />
       )}
     </>
   );
