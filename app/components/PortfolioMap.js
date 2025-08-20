@@ -11,7 +11,8 @@ import {
   FaChartBar, 
   FaBriefcase,
   FaBroom,
-  FaLink
+  FaLink,
+  FaFileAlt
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
 import ExternalLinkModal from './ExternalLinkModal';
@@ -35,9 +36,9 @@ const SITE_STRUCTURE = {
           externalUrl: 'https://medium.com/@frankmathewsajan'
         },
         {
-          name: 'Certifications',
-          path: '/certifications',
-          icon: 'FaAward'
+          name: 'Resume',
+          path: '/resume',
+          icon: 'FaFileAlt'
         }
       ]
     },
@@ -50,6 +51,11 @@ const SITE_STRUCTURE = {
           name: 'Case Studies',
           path: '/case-studies',
           icon: 'FaChartBar'
+        },
+        {
+          name: 'Certifications',
+          path: '/certifications',
+          icon: 'FaAward'
         }
       ]
     }
@@ -90,7 +96,8 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
     'FaAward': FaAward,
     'FaChartBar': FaChartBar,
     'FaBriefcase': FaBriefcase,
-    'FaLink': FaLink
+    'FaLink': FaLink,
+    'FaFileAlt': FaFileAlt
   };
   
   const IconComponent = iconMap[nodeDatum.attributes?.icon];
@@ -192,9 +199,9 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
       <g className="rd3t-label">
         <text
           className="rd3t-label__title"
-          textAnchor={nodeDatum.name === 'Projects' ? 'middle' : 'start'}
-          x={nodeDatum.name === 'Projects' ? 0 : nodeRadius + 10}
-          y={nodeDatum.name === 'Projects' ? -(nodeRadius + 8) : 4}
+          textAnchor='start'
+          x={nodeRadius + 10}
+          y={4}
           style={{
             fontSize: isRoot ? '12px' : '10px',
             fontWeight: '400',
