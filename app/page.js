@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, memo, useMemo, useCallback } from "react";
 
-import { FaGithub, FaLinkedin, FaDiscord, FaInstagram } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaDiscord, FaInstagram, FaLink } from 'react-icons/fa';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import PortfolioMap from './components/PortfolioMap';
 import DevNotice from './components/DevNotice';
 import ContactModal from './components/ContactModal';
+import ExternalLinkModal from './components/ExternalLinkModal';
 import projectsData from './projects.json';
 
 // Font setup
@@ -179,6 +180,16 @@ export default function Home() {
   // Contact Modal state
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactModalSource, setContactModalSource] = useState('social'); // 'social' or 'gmail'
+
+  // External Link Modal state
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
+
+  // Handle external link confirmation
+  const handleExternalLink = useCallback((url) => {
+    setExternalLinkUrl(url);
+    setShowExternalLinkModal(true);
+  }, []);
 
   // Handle social link clicks - shows modal for private accounts and follow-back requests
   const handleSocialLinkClick = useCallback((platform, url) => {
@@ -649,9 +660,13 @@ export default function Home() {
                     </span>
                   </span>, what I{' '}
                   <span className="relative group tooltip-hover">
-                    <Link href="/blogs" className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer">
+                    <button 
+                      onClick={() => handleExternalLink('https://medium.com/@frankmathewsajan')}
+                      className="tooltip-text text-orange-600 font-semibold underline decoration-orange-300 hover:bg-orange-50 px-1 rounded transition-colors cursor-pointer inline-flex items-center gap-1"
+                    >
                       value
-                    </Link>
+                      <FaLink className="w-3 h-3" />
+                    </button>
                     <span className="tooltip-content absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 px-5 py-4 bg-gray-900/98 backdrop-blur-md text-white text-sm rounded-2xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out whitespace-nowrap z-50 pointer-events-none border border-gray-700/30 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.1)]">
                       Read my thoughts →
                       <span className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-gray-900/98 filter drop-shadow-lg"></span>
@@ -701,9 +716,13 @@ export default function Home() {
                   <Link href="/" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Home
                   </Link>
-                  <Link href="/blogs" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
+                  <button 
+                    onClick={() => handleExternalLink('https://medium.com/@frankmathewsajan')}
+                    className="block text-gray-600 hover:text-gray-900 transition-colors duration-300 text-left inline-flex items-center gap-1"
+                  >
                     Blog
-                  </Link>
+                    <FaLink className="w-3 h-3" />
+                  </button>
                   <Link href="/projects" className="block text-gray-600 hover:text-gray-900 transition-colors duration-300">
                     Projects
                   </Link>
@@ -824,6 +843,15 @@ export default function Home() {
         variant={contactModalSource === 'gmail' ? 'contact' : 'social'}
         hideDirectAccess={contactModalSource === 'gmail'}
       />
+
+      {/* External Link Modal */}
+      {showExternalLinkModal && (
+        <ExternalLinkModal
+          isOpen={showExternalLinkModal}
+          onClose={() => setShowExternalLinkModal(false)}
+          targetUrl={externalLinkUrl}
+        />
+      )}
     </div>
   );
 }
