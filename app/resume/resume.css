@@ -16,7 +16,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  background: linear-gradient(135deg, #87CEEB 0%, #87CEFA 30%, #B0E0E6 60%, #E0F6FF 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,6 +28,14 @@
   text-align: center;
   z-index: 1001;
   position: relative;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(25px);
+  border-radius: 30px;
+  padding: 3rem 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* Futuristic Loader */
@@ -48,8 +56,8 @@
 .loader-ring:nth-child(1) {
   width: 120px;
   height: 120px;
-  border-top: 3px solid #3b82f6;
-  border-right: 3px solid #3b82f6;
+  border-top: 3px solid #2d3748;
+  border-right: 3px solid #4a5568;
   animation-duration: 2s;
 }
 
@@ -58,8 +66,8 @@
   height: 90px;
   top: 15px;
   left: 15px;
-  border-top: 3px solid #8b5cf6;
-  border-left: 3px solid #8b5cf6;
+  border-top: 3px solid #4a5568;
+  border-left: 3px solid #2d3748;
   animation-duration: 1.5s;
   animation-direction: reverse;
 }
@@ -69,8 +77,8 @@
   height: 60px;
   top: 30px;
   left: 30px;
-  border-top: 3px solid #06b6d4;
-  border-bottom: 3px solid #06b6d4;
+  border-top: 3px solid #1a202c;
+  border-bottom: 3px solid #2d3748;
   animation-duration: 1s;
 }
 
@@ -84,20 +92,27 @@
   font-family: 'Orbitron', monospace;
   font-size: 3rem;
   font-weight: 900;
-  color: #1e293b;
+  color: #1a202c;
   margin-bottom: 0.5rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.9),
+    0 0 40px rgba(255, 255, 255, 0.6),
+    0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .loading-subtitle {
   font-family: 'Rajdhani', sans-serif;
   font-size: 1.3rem;
-  font-weight: 500;
-  color: #64748b;
+  font-weight: 600;
+  color: #2d3748;
   margin-bottom: 2rem;
   letter-spacing: 0.05em;
   text-transform: lowercase;
+  text-shadow: 
+    0 0 15px rgba(255, 255, 255, 0.8),
+    0 1px 3px rgba(0, 0, 0, 0.3);
   animation: fadeInUp 1s ease-out 0.5s both;
 }
 
@@ -109,59 +124,62 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  opacity: 0.1;
+  opacity: 1;
   z-index: 1000;
 }
 
 .geo-shape {
   position: absolute;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  animation: float 6s ease-in-out infinite;
+  animation: blob 6s ease-in-out infinite;
+  filter: blur(40px);
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+  border-radius: 50%;
 }
 
 .shape-1 {
-  width: 100px;
-  height: 100px;
-  top: 10%;
-  left: 10%;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  width: 200px;
+  height: 200px;
+  top: -10%;
+  left: -10%;
+  background: #00FF7F;
   animation-delay: 0s;
 }
 
 .shape-2 {
-  width: 80px;
-  height: 80px;
+  width: 160px;
+  height: 160px;
   top: 20%;
-  right: 15%;
-  border-radius: 50%;
-  animation-delay: 1s;
-}
-
-.shape-3 {
-  width: 120px;
-  height: 120px;
-  bottom: 20%;
-  left: 20%;
-  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  right: -5%;
+  background: #FFFF00;
   animation-delay: 2s;
 }
 
+.shape-3 {
+  width: 240px;
+  height: 240px;
+  bottom: -15%;
+  left: 15%;
+  background: #FF69B4;
+  animation-delay: 4s;
+}
+
 .shape-4 {
-  width: 60px;
-  height: 60px;
-  top: 60%;
-  right: 30%;
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  animation-delay: 3s;
+  width: 120px;
+  height: 120px;
+  top: 50%;
+  right: 25%;
+  background: #FF4500;
+  animation-delay: 1s;
 }
 
 .shape-5 {
-  width: 90px;
-  height: 90px;
-  bottom: 10%;
-  right: 10%;
-  clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 100%, 0% 100%);
-  animation-delay: 4s;
+  width: 180px;
+  height: 180px;
+  bottom: -10%;
+  right: -10%;
+  background: #00FFFF;
+  animation-delay: 3s;
 }
 
 @keyframes float {
@@ -173,6 +191,18 @@
   }
   66% {
     transform: translateY(10px) rotate(240deg);
+  }
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
   }
 }
 
@@ -231,6 +261,11 @@
     font-size: 1.1rem;
   }
   
+  .loading-content {
+    padding: 2rem 1.5rem;
+    margin: 0 1rem;
+  }
+  
   .futuristic-loader {
     width: 100px;
     height: 100px;
@@ -259,5 +294,10 @@
 @media (max-width: 480px) {
   .loading-title {
     font-size: 1.9rem;
+  }
+  
+  .loading-content {
+    padding: 1.5rem 1rem;
+    margin: 0 0.5rem;
   }
 }
