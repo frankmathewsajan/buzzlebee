@@ -16,6 +16,10 @@
         "destination": "/case-studies.html"
       },
       {
+        "source": "/resume",
+        "destination": "/resume.html"
+      },
+      {
         "source": "/",
         "destination": "/index.html"
       },
