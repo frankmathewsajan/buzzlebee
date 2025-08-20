@@ -7,6 +7,7 @@ import "./resume.css";
 export default function ResumePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [pdfLoaded, setPdfLoaded] = useState(false);
+  const [showPortfolioModal, setShowPortfolioModal] = useState(false);
 
   useEffect(() => {
     // Simulate PDF loading time with minimum 2 seconds for the loading animation
@@ -65,16 +66,44 @@ export default function ResumePage() {
       
       {!isLoading && (
         <div className="pdf-container">
-          {/* Portfolio Map - positioned on right middle */}
-          <div className="portfolio-map-wrapper">
-            <PortfolioMap />
+          {/* Fixed Portfolio Map Button */}
+          <div 
+            className="portfolio-map-button"
+            onClick={() => setShowPortfolioModal(true)}
+          >
+            <div className="portfolio-map-icon">
+              <svg 
+                className="w-6 h-6 text-gray-600 group-hover:text-gray-800 transition-all duration-300" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={1.5} 
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" 
+                />
+              </svg>
+            </div>
           </div>
           
+          {/* PDF Viewer */}
           <iframe
             src="/files/FrankMathewSajan_08202025.pdf#zoom=125"
-            className="pdf-viewer"
+            className={`pdf-viewer ${showPortfolioModal ? 'hidden' : ''}`}
             title="Frank Mathew Sajan Resume"
           />
+
+          {/* Portfolio Map Modal */}
+          {showPortfolioModal && (
+            <div className="portfolio-modal-overlay">
+              <div className="portfolio-modal-backdrop" onClick={() => setShowPortfolioModal(false)} />
+              <div className="portfolio-modal-content">
+                <PortfolioMap onClose={() => setShowPortfolioModal(false)} autoOpen={true} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
