@@ -455,7 +455,12 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
 };
 
 // Main Portfolio Map Component - Completely Self-Contained
-const PortfolioMap = ({ onClose: externalOnClose = null, autoOpen = false }) => {
+const PortfolioMap = ({ 
+  onClose: externalOnClose = null, 
+  autoOpen = false, 
+  onExternalLinkModal = null,
+  disableInternalExternalModal = false
+}) => {
   const router = useRouter();
   const pathname = usePathname();
   
@@ -564,11 +569,22 @@ const PortfolioMap = ({ onClose: externalOnClose = null, autoOpen = false }) => 
 
   // Handle external link confirmation
   const handleExternalLink = useCallback((url) => {
-    setExternalLinkUrl(url);
-    setShowExternalLinkModal(true);
+    console.log('handleExternalLink called with:', url);
+    
+    if (disableInternalExternalModal && onExternalLinkModal) {
+      // Use parent's external modal handling
+      console.log('Using parent external modal handling');
+      onExternalLinkModal(true, url);
+    } else {
+      // Use internal modal handling
+      console.log('Using internal external modal handling');
+      setExternalLinkUrl(url);
+      setShowExternalLinkModal(true);
+    }
+    
     // Auto-close the portfolio map when external link modal opens
     handleCloseModal();
-  }, [handleCloseModal]);
+  }, [handleCloseModal, onExternalLinkModal, disableInternalExternalModal]);
 
   // Handle node clicks - either navigate or show external modal
   const handleNodeClick = useCallback((nodeDatum, evt) => {
@@ -831,11 +847,19 @@ const PortfolioMap = ({ onClose: externalOnClose = null, autoOpen = false }) => 
         </div>
       )}
 
-      {/* External Link Modal */}
-      {showExternalLinkModal && (
+      {/* External Link Modal - only render if not disabled */}
+      {!disableInternalExternalModal && showExternalLinkModal && (
         <ExternalLinkModal
           isOpen={showExternalLinkModal}
-          onClose={() => setShowExternalLinkModal(false)}
+          onClose={() => {
+            console.log('External link modal closing');
+            setShowExternalLinkModal(false);
+            // Notify parent component that external link modal closed
+            console.log('Calling onExternalLinkModal with false');
+            if (onExternalLinkModal) {
+              onExternalLinkModal(false);
+            }
+          }}
           targetUrl={externalLinkUrl}
         />
       )}

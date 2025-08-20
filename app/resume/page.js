@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from "react";
 import PortfolioMap from "../components/PortfolioMap";
+import ExternalLinkModal from "../components/ExternalLinkModal";
 import "./resume.css";
 
 export default function ResumePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [pdfLoaded, setPdfLoaded] = useState(false);
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
+  const [showExternalModal, setShowExternalModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
 
   useEffect(() => {
     // Simulate PDF loading time with minimum 2 seconds for the loading animation
@@ -41,6 +44,17 @@ export default function ResumePage() {
     };
   }, []);
 
+  // Handle external link modal state from PortfolioMap
+  const handleExternalLinkModal = (isOpen, url = '') => {
+    console.log('External modal state changed:', isOpen, url);
+    setShowExternalModal(isOpen);
+    setExternalLinkUrl(url);
+    if (isOpen) {
+      // Hide portfolio modal when external link modal opens
+      setShowPortfolioModal(false);
+    }
+  };
+
   return (
     <div className="resume-container">
       {isLoading && (
@@ -68,7 +82,7 @@ export default function ResumePage() {
         <div className="pdf-container">
           {/* Fixed Portfolio Map Button */}
           <div 
-            className="portfolio-map-button"
+            className={`portfolio-map-button ${showExternalModal ? 'hidden' : ''}`}
             onClick={() => setShowPortfolioModal(true)}
           >
             <div className="portfolio-map-icon">
@@ -91,7 +105,7 @@ export default function ResumePage() {
           {/* PDF Viewer */}
           <iframe
             src="/files/FrankMathewSajan_08202025.pdf#zoom=125"
-            className={`pdf-viewer ${showPortfolioModal ? 'hidden' : ''}`}
+            className={`pdf-viewer ${showPortfolioModal || showExternalModal ? 'hidden' : ''}`}
             title="Frank Mathew Sajan Resume"
           />
 
@@ -100,9 +114,24 @@ export default function ResumePage() {
             <div className="portfolio-modal-overlay">
               <div className="portfolio-modal-backdrop" onClick={() => setShowPortfolioModal(false)} />
               <div className="portfolio-modal-content">
-                <PortfolioMap onClose={() => setShowPortfolioModal(false)} autoOpen={true} />
+                <PortfolioMap 
+                  onClose={() => setShowPortfolioModal(false)} 
+                  autoOpen={true}
+                  onExternalLinkModal={handleExternalLinkModal}
+                  disableInternalExternalModal={true}
+                />
               </div>
             </div>
+          )}
+          
+          {/* External Link Modal */}
+          {showExternalModal && (
+            <ExternalLinkModal
+              isOpen={showExternalModal}
+              onClose={() => handleExternalLinkModal(false)}
+              targetUrl={externalLinkUrl}
+              siteName="Medium Blog"
+            />
           )}
         </div>
       )}
