@@ -1,11 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 
-export const useScrollAnimation = (options = {}) => {
-  const ref = useRef(null);
+interface ScrollAnimationOptions {
+  once?: boolean;
+  margin?: string;
+}
+
+export const useScrollAnimation = (options: ScrollAnimationOptions = {}) => {
+  const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, {
     once: true,
-    margin: "-10% 0px",
+    margin: "-10% 0px" as any,
     ...options
   });
 
@@ -20,7 +25,7 @@ export const useScrollAnimation = (options = {}) => {
   return {
     ref,
     isInView: hasAnimated,
-    className: hasAnimated ? 'section-transition visible' : 'section-transition'
+    className: hasAnimated ? "section-transition visible" : "section-transition"
   };
 };
 
@@ -34,15 +39,15 @@ export const useScrollProgress = () => {
       setProgress(scrolled);
     };
 
-    window.addEventListener('scroll', updateProgress);
-    return () => window.removeEventListener('scroll', updateProgress);
+    window.addEventListener("scroll", updateProgress);
+    return () => window.removeEventListener("scroll", updateProgress);
   }, []);
 
   return progress;
 };
 
 export const useParallax = (speed = 0.5) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null);
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -56,8 +61,8 @@ export const useParallax = (speed = 0.5) => {
       setOffset(rate);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [speed]);
 
   return {
@@ -72,22 +77,22 @@ export const useMouseMove = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setPosition({
         x: e.clientX,
         y: e.clientY
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   return position;
 };
 
 export const useScrollToSection = () => {
-  const scrollToSection = (sectionId, offset = 0) => {
+  const scrollToSection = (sectionId: string, offset = 0) => {
     const element = document.getElementById(sectionId);
     if (element) {
       const elementPosition = element.getBoundingClientRect().top;
@@ -95,10 +100,10 @@ export const useScrollToSection = () => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth"
       });
     }
   };
 
   return scrollToSection;
-}; 
+};
