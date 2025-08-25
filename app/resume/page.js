@@ -11,35 +11,86 @@ export default function ResumePage() {
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
   const [showExternalModal, setShowExternalModal] = useState(false);
   const [externalLinkUrl, setExternalLinkUrl] = useState('');
+  const [pdfUrl, setPdfUrl] = useState('');
 
   useEffect(() => {
-    // Simulate PDF loading time with minimum 2 seconds for the loading animation
-    const minLoadTime = 2000;
-    const startTime = Date.now();
-
-    const handlePdfLoad = () => {
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, minLoadTime - elapsedTime);
-      
-      setTimeout(() => {
-        setPdfLoaded(true);
-        setIsLoading(false);
-      }, remainingTime);
+    // Function to get PDF URL based on hash
+    const getPdfUrl = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        return `/files/FrankMathewSajan_${hash}.pdf`;
+      }
+      return '/files/FrankMathewSajan_08202025.pdf'; // Default PDF
     };
 
-    // Create iframe to preload PDF
-    const iframe = document.createElement('iframe');
-    iframe.src = '/files/FrankMathewSajan_08202025.pdf';
-    iframe.style.display = 'none';
-    iframe.onload = handlePdfLoad;
-    iframe.onerror = handlePdfLoad; // Handle load errors gracefully
-    
-    document.body.appendChild(iframe);
+    // Function to check if PDF exists
+    const checkPdfExists = async (url) => {
+      try {
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    };
+
+    // Initialize PDF URL
+    const initializePdfUrl = async () => {
+      const targetPdfUrl = getPdfUrl();
+      const pdfExists = await checkPdfExists(targetPdfUrl);
+      
+      const finalPdfUrl = pdfExists ? targetPdfUrl : '/files/FrankMathewSajan_08202025.pdf';
+      setPdfUrl(finalPdfUrl);
+
+      // Simulate PDF loading time with minimum 2 seconds for the loading animation
+      const minLoadTime = 2000;
+      const startTime = Date.now();
+
+      const handlePdfLoad = () => {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadTime - elapsedTime);
+        
+        setTimeout(() => {
+          setPdfLoaded(true);
+          setIsLoading(false);
+        }, remainingTime);
+      };
+
+      // Create iframe to preload PDF
+      const iframe = document.createElement('iframe');
+      iframe.src = finalPdfUrl;
+      iframe.style.display = 'none';
+      iframe.onload = handlePdfLoad;
+      iframe.onerror = handlePdfLoad; // Handle load errors gracefully
+      
+      document.body.appendChild(iframe);
+
+      // Cleanup function
+      return () => {
+        if (document.body.contains(iframe)) {
+          document.body.removeChild(iframe);
+        }
+      };
+    };
+
+    // Handle hash changes
+    const handleHashChange = () => {
+      // Restart the loading process when hash changes
+      setIsLoading(true);
+      setPdfLoaded(false);
+      initializePdfUrl();
+    };
+
+    // Initialize on mount
+    const cleanup = initializePdfUrl();
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
 
     // Cleanup
     return () => {
-      if (document.body.contains(iframe)) {
-        document.body.removeChild(iframe);
+      window.removeEventListener('hashchange', handleHashChange);
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup();
       }
     };
   }, []);
@@ -104,7 +155,7 @@ export default function ResumePage() {
           
           {/* PDF Viewer */}
           <iframe
-            src="/files/FrankMathewSajan_08202025.pdf#zoom=125"
+            src={`${pdfUrl}#zoom=125`}
             className={`pdf-viewer ${showPortfolioModal || showExternalModal ? 'hidden' : ''}`}
             title="Frank Mathew Sajan Resume"
           />
