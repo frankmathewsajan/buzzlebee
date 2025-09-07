@@ -1,32 +1,40 @@
 {
-  "hosting": {
-    "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/projects",
-        "destination": "/projects.html"
-      },
-      {
-        "source": "/case-studies",
-        "destination": "/case-studies.html"
-      },
-      {
-        "source": "/resume",
-        "destination": "/resume.html"
-      },
-      {
-        "source": "/",
-        "destination": "/index.html"
-      },
-      {
-        "source": "**",
-        "destination": "/404.html"
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "target": "buzzlebee",
+      "public": "out",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/projects", "destination": "/projects.html" },
+        { "source": "/case-studies", "destination": "/case-studies.html" },
+        { "source": "/resume", "destination": "/resume.html" },
+        { "source": "/", "destination": "/index.html" },
+        { "source": "**", "destination": "/404.html" }
+      ]
+    },
+    {
+      "target": "frankmathewsajan",
+      "public": "out",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/projects", "destination": "/projects.html" },
+        { "source": "/case-studies", "destination": "/case-studies.html" },
+        { "source": "/resume", "destination": "/resume.html" },
+        { "source": "/", "destination": "/index.html" },
+        { "source": "**", "destination": "/404.html" }
+      ]
+    },
+    {
+      "target": "itsfrank",
+      "public": "out",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/projects", "destination": "/projects.html" },
+        { "source": "/case-studies", "destination": "/case-studies.html" },
+        { "source": "/resume", "destination": "/resume.html" },
+        { "source": "/", "destination": "/index.html" },
+        { "source": "**", "destination": "/404.html" }
+      ]
+    }
+  ]
 }

@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build && firebase deploy && npm run copy",
-  "copy": "xcopy out\\* ..\\frankmathewsajan\\public /E /I /Y && cd ..\\frankmathewsajan && firebase deploy"
+    "deploy": "npm run build && firebase deploy --only hosting"
+
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",

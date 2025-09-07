@@ -1,16 +1,34 @@
 {
   "projects": {
     "default": "buzzlebee",
-    "buzzlebee": "buzzlebee"
+    "buzzlebee": "buzzlebee",
+    "frankmathewsajan": "frankmathewsajan",
+    "itsfrank": "itsfrank"
   },
   "targets": {
     "buzzlebee": {
       "hosting": {
+        "buzzlebee": [
+          "buzzlebee"
+        ],
         "frankmathewsajan": [
           "frankmathewsajan"
         ],
+        "itsfrank": [
+          "itsfrank"
+        ]
+      }
+    },
+    "frankmathewsajan": {
+      "hosting": {
         "buzzlebee": [
           "buzzlebee"
+        ],
+        "frankmathewsajan": [
+          "frankmathewsajan"
+        ],
+        "itsfrank": [
+          "itsfrank"
         ]
       }
     }
