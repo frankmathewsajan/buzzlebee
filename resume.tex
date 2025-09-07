@@ -1,0 +1,234 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+	ignoreheadfoot, % set margins without considering header and footer
+	top=2 cm, % separation between body and page edge from the top
+	bottom=2 cm, % separation between body and page edge from the bottom
+	left=2 cm, % separation between body and page edge from the left
+	right=2 cm, % separation between body and page edge from the right
+	footskip=1.0 cm, % separation between body and footer
+	% show frame % for debugging
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed-width columns
+\usepackage{array} % tabular requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+	pdftitle={Frank Mathew Sajan - Resume},
+	pdfauthor={Frank Mathew Sajan},
+	pdfcreator={LaTeX with RenderCV},
+	colorlinks=true,
+	urlcolor=primaryColor
+]{hyperref} % for links, metadata, and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjust width environment)
+\usepackage{paracol} % for two and three-column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page breaks right after the section title
+\usepackage{iftex} % check if the engine is pdf latex, latex, or latex
+
+% Ensure that the generated pdf is machine readable/ATS parsable:
+\ifPDFTeX
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Some settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjust width environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column separation
+\pagenumbering{gobble} % no page numbering
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[
+\vspace{1pt}
+\titlerule]
+
+\titlespacing{\section}{
+% left space:
+-1pt }{
+% top space:
+0.3 cm }{
+% bottom space:
+0.2 cm } % section title spacing
+
+\renewcommand{\labelitemi}{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{ \begin{itemize}[ topsep=0.10 cm, parsep=0.10 cm, partopsep=0pt,
+itemsep=0pt, leftmargin=0 cm + 10pt ] }{ \end{itemize} } % new environment for highlights
+
+\newenvironment{highlightsforbulletentries}{ \begin{itemize}[ topsep=0.10 cm,
+parsep=0.10 cm, partopsep=0pt, itemsep=0pt, leftmargin=10pt ] }{ \end{itemize} } % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{ \begin{adjustwidth}{ 0 cm + 0.00001 cm }{ 0 cm + 0.00001 cm }
+}{ \end{adjustwidth} } % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{ \onecolentry \def\secondColumn{#2} \setcolumnwidth{\fill, 4.5 cm}
+\begin{paracol}{2} }{ \switchcolumn \raggedleft \secondColumn \end{paracol}
+\endonecolentry } % new environment for two-column entries
+
+\newenvironment{threecolentry}[3][]{ \onecolentry \def\thirdColumn{#3} \setcolumnwidth{, \fill, 4.5 cm}
+\begin{paracol}{3} {\raggedright #2} \switchcolumn }{ \switchcolumn \raggedleft \thirdColumn
+\end{paracol} \endonecolentry } % new environment for three column entries
+
+\newenvironment{header}{
+\setlength{\topsep}{0pt}
+\par\kern\topsep
+\centering
+\linespread{1.5} }{ \par\kern\topsep } % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+\AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+\put( \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm}, \LenToUnit{\paperheight-1.0 cm} ){\vtop{{\null}\makebox[0pt][c]{ \small\color{gray}\t\textit{Last updated in August 2025}\hspace{\widthof{Last updated in August 2025}} }}}%
+}%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+
+\begin{document}
+	\newcommand{\AND}{\unskip \cleaders\copy\ANDbox\hskip\wd\ANDbox \ignorespaces }
+	\newsavebox{\ANDbox}
+	\sbox{\ANDbox}{$|$}
+
+	\begin{header}
+		\fontsize{25 pt}{25 pt}\selectfont Frank Mathew Sajan
+
+		\vspace{5 pt}
+
+		\normalsize \mbox{Amaravati, India}%
+		\kern 5.0 pt%
+		\AND%
+		\kern 5.0 pt%
+		\mbox{\hrefWithoutArrow{mailto:frankmathewsajan@gmail.com}{frankmathewsajan@gmail.com}}%
+		\kern 5.0 pt%
+		\AND%
+		\kern 5.0 pt%
+		\mbox{\hrefWithoutArrow{https://frankmathewsajan.web.app/}{Portfolio}}%
+		\kern 5.0 pt%
+		\AND%
+		\kern 5.0 pt%
+		\mbox{\hrefWithoutArrow{https://linkedin.com/in/frankmathewsajan}{LinkedIn}}%
+		\kern 5.0 pt%
+		\AND%
+		\kern 5.0 pt%
+		\mbox{\hrefWithoutArrow{https://github.com/frankmathewsajan}{Github}}%
+	\end{header}
+
+	\vspace{5 pt - 0.3 cm}
+
+	\section{Objective}
+
+	\begin{onecolentry}
+	Aspiring Software Engineer Intern with a passion for technology, strong problem-solving skills, and a customer-first mindset. Seeking to contribute to American Express by building reliable APIs, customer-facing applications across web/mobile, and web-enabled data collection systems in an agile environment. Curious, data-driven, and eager to learn while delivering business impact.\\
+		\textit{Availability:} January 2026 (24 weeks) or May 2026 (8 weeks).
+	\end{onecolentry}
+
+	\section{Education}
+
+	\begin{twocolentry}
+		{ Expected May 2027 } \t\textbf{Vellore Institute of Technology, Amaravati}
+	\end{twocolentry}
+
+	\vspace{0.10 cm}
+	\begin{onecolentry}
+		\begin{highlights}
+			\item Bachelor of Technology in Computer Science | 8.68 (out of 10.00) CGPA \item \t\textbf{Relevant
+			Coursework:} Data Structures and Algorithms, Database Management Systems (DBMS), Statistics for Data Science, Object-Oriented Programming Systems (OOPS), Software Development Life Cycle (SDLC).
+		\end{highlights}
+	\end{onecolentry}
+
+	\section{Technical Skills}
+
+\begin{onecolentry}
+			\textbf{Programming Languages:} Python, SQL, JavaScript (ES6+), TypeScript, Java.\\
+	\vspace{0.10 cm}
+					\textbf{Web \& API Development:} React + Vite.js, Next.js, Node.js, Django, REST API design (JSON), responsive UI. \\
+	\vspace{0.10 cm}
+							\textbf{Mobile:} React Native, Flutter, Cordova, Android (basic), iOS (basic).\\
+	\vspace{0.10 cm}
+			\textbf{Data Analysis \& Visualization:} Pandas, NumPy, Matplotlib, Seaborn, Excel; data cleaning, transformation, statistical analysis. \\
+	\vspace{0.10 cm}
+			\textbf{Databases \& Cloud:} MySQL, PostgreSQL, Supabase, AWS, Firebase. \\
+	\vspace{0.10 cm}
+					\textbf{Software Engineering:} Git, CI/CD, SDLC, agile practices (sprints), code reviews, unit/integration testing (Jest, React Testing Library), API testing (Postman).\\
+	\vspace{0.10 cm}
+			\textbf{Analytics \& Reporting:} Data pipeline design, reporting solutions, business intelligence, performance optimization. \\
+\end{onecolentry}
+
+
+
+	\section{Experience}
+
+\begin{twocolentry}
+	{ Aug 2023 – Present } \t\textbf{Software Engineer Intern}, IIEC VIT-AP, Amaravati
+\end{twocolentry}
+
+\begin{onecolentry}
+	\begin{highlights}
+	\vspace{0.10 cm}
+		\item Analyzed sensor data patterns from agricultural drones to optimize path-planning, reducing fertilizer waste by 25\% through data-driven insights and statistical modeling. \\
+		\item Built real-time data processing pipelines for hazard detection (thermal/IR/gas), achieving 99.5\% detection accuracy in industrial environments. \\
+		\item Designed web-enabled systems for data collection and analytics dashboards to visualize KPIs, improving decision-making for safety protocols. \\
+		\item Designed and documented RESTful APIs for ingestion/reporting; contributed to API discussions/specs and peer code reviews within sprint cycles. \\
+		\item Implemented automated scripts/tests for data workflows; applied SDLC and agile practices to deliver reliable, maintainable features on schedule.
+	\end{highlights}
+\end{onecolentry}
+
+	\section{Projects}
+
+\begin{onecolentry}
+		\t\textbf{School Management System - Data Analytics Platform} \hfill \href{https://stgdconventschool.com}{\texttt{Live Demo}}
+\end{onecolentry}
+
+\begin{onecolentry}
+	\begin{highlights}
+		\vspace{0.1cm}
+		\item Delivered a customer-facing web application and analytics solution for a rural school in Agra, reducing manual tasks by 40\% via data-driven workflows. \\
+		\item Designed database schema and REST endpoints; implemented advanced SQL for reporting, improving report generation time by 35\%. \\
+		\item Built responsive React\,/\,TypeScript dashboards backed by PostgreSQL APIs, enabling stakeholders to explore student performance and operations in real time.
+	\end{highlights}
+\end{onecolentry}
+
+\vspace{0.10 cm}
+\begin{onecolentry}
+		\t\textbf{Industrial Data Monitoring \& Analytics (Smart Helmet System)}
+\end{onecolentry}
+\begin{onecolentry}
+	\begin{highlights}
+	\vspace{0.10 cm}
+		\item Built a web-enabled data collection and analytics platform for multi-sensor telemetry (gas, thermal, IR), supporting real-time hazard monitoring and alerting. \\
+		\item Exposed ingestion/analytics services via REST APIs and designed responsive dashboards; reduced false alerts by 30\% through anomaly detection and data quality checks.
+	\end{highlights}
+\end{onecolentry}
+
+\section{Achievements}
+\begin{onecolentry}
+    \begin{highlights}
+        \item \t\textbf{NASA Space Apps Challenge 2024 Global Nominee} (Top 1\% of 93,520+ participants)
+        \vspace{0.1cm}
+        \\Applied advanced data analysis techniques to satellite datasets, creating innovative solutions for ocean literacy education through data visualization and analytics.
+        \href{https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/cosmic-ninjas/}{[Results]}
+        
+	\item \t\textbf{1st Prize, HackAP Hackathon}\\\vspace{0.1cm}Engineered a data-driven hazard detection system with advanced analytics for industrial environments, leveraging statistical analysis and machine learning for improved safety outcomes.\\
+	\item \t\textbf{Collaboration \& Leadership}\\\vspace{0.1cm}Experience working in cross-functional teams; led feature delivery in sprints, participated in code reviews, and communicated technical approaches with stakeholders.
+    \end{highlights}
+\end{onecolentry}
+\end{document}
