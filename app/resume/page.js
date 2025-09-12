@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import PortfolioMap from "../components/PortfolioMap";
 import ExternalLinkModal from "../components/ExternalLinkModal";
+import { trackPortfolioEvents } from "../utils/analytics";
 import "./resume.css";
 
 export default function ResumePage() {
@@ -52,6 +53,9 @@ export default function ResumePage() {
         setTimeout(() => {
           setPdfLoaded(true);
           setIsLoading(false);
+          
+          // Track resume view
+          trackPortfolioEvents.resumeView();
         }, remainingTime);
       };
 

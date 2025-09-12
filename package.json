@@ -8,12 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "npm run build && firebase deploy --only hosting"
-
   },
   "dependencies": {
     "@babel/runtime": "^7.27.0",
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
+    "firebase": "^12.2.1",
     "framer-motion": "^12.6.2",
     "motion": "^12.6.2",
     "next": "15.2.4",
