@@ -4,6 +4,10 @@ import { useState, useEffect } from "react";
 import { Caveat, Outfit } from "next/font/google";
 import "./globals.css";
 import MobileMessage from "./components/MobileMessage";
+import Analytics from "./components/Analytics";
+
+// Initialize Firebase Analytics
+import "../lib/firebase";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -40,7 +44,10 @@ export default function RootLayout({ children }) {
           referrerPolicy="no-referrer"
         />
       </head>
-      <body>{isMobile ? <MobileMessage /> : children}</body>
+      <body>
+        <Analytics />
+        {isMobile ? <MobileMessage /> : children}
+      </body>
     </html>
   );
 }

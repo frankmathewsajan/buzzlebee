@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { trackPortfolioEvents } from '../utils/analytics';
 
 const ContactModal = ({ isOpen, onClose, variant = 'contact', hideDirectAccess = false }) => {
   const [formData, setFormData] = useState({
@@ -67,6 +68,12 @@ GitHub: ${formData.github || 'Not provided'}`;
       
       // Open email client
       window.location.href = mailtoLink;
+      
+      // Track contact form submission
+      trackPortfolioEvents.contactFormSubmit(
+        variant, 
+        !!(formData.linkedin || formData.instagram || formData.discord || formData.github)
+      );
       
       setSubmitStatus('success');
       

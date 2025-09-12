@@ -16,6 +16,7 @@ import {
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
 import ExternalLinkModal from './ExternalLinkModal';
+import { trackPortfolioEvents } from '../utils/analytics';
 
 // Website sitemap structure - this represents the actual site structure
 const SITE_STRUCTURE = {
@@ -564,12 +565,19 @@ const PortfolioMap = ({
       newSet.add(path);
       return newSet;
     });
+    
+    // Track navigation event
+    trackPortfolioEvents.portfolioNavigation(path);
+    
     router.push(path);
   }, [router]);
 
   // Handle external link confirmation
   const handleExternalLink = useCallback((url) => {
     console.log('handleExternalLink called with:', url);
+    
+    // Track external link click
+    trackPortfolioEvents.externalLinkClick(url, 'portfolio_map');
     
     if (disableInternalExternalModal && onExternalLinkModal) {
       // Use parent's external modal handling
