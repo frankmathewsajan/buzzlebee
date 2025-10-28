@@ -88,7 +88,7 @@ const ContactSection = memo(({
                 </Link>
                 <button 
                   onClick={() => handleExternalLink('https://medium.com/@frankmathewsajan')}
-                  className="block text-gray-600 hover:text-gray-900 transition-colors duration-300 text-left inline-flex items-center gap-1"
+                  className="flex text-gray-600 hover:text-gray-900 transition-colors duration-300 text-left items-center gap-1"
                 >
                   Blog
                   <FaLink className="w-3 h-3" />
@@ -194,7 +194,7 @@ const ContactSection = memo(({
                 © {new Date().getFullYear()} Frank Mathew Sajan. All rights reserved.
               </div>
               <div className="flex items-center gap-6 text-sm text-gray-600">
-                <span>Last updated: 22/08/2025</span>
+                <span>Last updated: 28/10/2025</span>
               </div>
             </div>
           </div>
