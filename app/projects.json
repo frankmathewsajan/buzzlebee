@@ -5,6 +5,7 @@
     "category": "IoT/Embedded Systems",
     "timeline": "Jan 2024 - Mar 2024",
     "role": "Lead Developer & Hardware Engineer",
+    "status": "completed",
     "description": "A real-time hazard detection helmet with GPS tracking and emergency communication capabilities. The system provides immediate alerts and location data in emergency situations.",
     "achievements": "Secured S-Grade in Engineering Clinics and 1st Prize at HackAP Transport and Logistics Hackathon",
     "tags": ["Arduino", "C++", "IoT", "GPS"],
@@ -26,90 +27,8 @@
     "has_github": false,
     "has_case_study": true,
     "case_study_hidden": true,
-    "caseStudy": {
-      "readTime": "10 min read",
-      "objective": "Develop an intelligent safety helmet system that can detect hazardous situations and provide immediate alerts with location tracking for enhanced worker safety.",
-      "aim": "Create a comprehensive IoT solution that combines real-time hazard detection, GPS tracking, and emergency communication to prevent workplace accidents.",
-      "history": "Construction and industrial workers face numerous safety hazards daily, with limited real-time monitoring and emergency response capabilities in existing safety equipment.",
-      "methodology": [
-        {
-          "title": "Research & Requirements",
-          "duration": "2 weeks",
-          "content": "Conducted field research on industrial safety requirements, analyzed existing safety equipment limitations, and defined technical specifications for the helmet system."
-        },
-        {
-          "title": "Hardware Design",
-          "duration": "4 weeks",
-          "content": "Designed and prototyped the helmet with integrated sensors, GPS module, and communication systems. Selected appropriate components for durability and reliability."
-        },
-        {
-          "title": "Software Development",
-          "duration": "6 weeks",
-          "content": "Developed embedded software for sensor data processing, implemented communication protocols, and created the monitoring dashboard interface."
-        },
-        {
-          "title": "Testing & Validation",
-          "duration": "3 weeks",
-          "content": "Conducted extensive field testing in various industrial environments, validated detection accuracy, and optimized system performance."
-        }
-      ],
-      "implementation": {
-        "architecture": "IoT-based system using Arduino microcontroller with multiple sensors, GPS module, and wireless communication capabilities. Data is processed locally and transmitted to a central monitoring system.",
-        "technologies": [
-          { "name": "Arduino Uno", "purpose": "Main microcontroller for sensor data processing and system control" },
-          { "name": "GPS Module", "purpose": "Real-time location tracking and emergency positioning" },
-          { "name": "Accelerometer & Gyroscope", "purpose": "Fall detection and orientation monitoring" },
-          { "name": "Gas Sensors", "purpose": "Toxic gas detection in hazardous environments" },
-          { "name": "LoRa/WiFi Module", "purpose": "Long-range wireless communication for data transmission" },
-          { "name": "ThingSpeak", "purpose": "IoT data visualization and real-time monitoring platform" }
-        ],
-        "features": [
-          { "feature": "Fall Detection", "description": "Automatic detection of worker falls or impacts using accelerometer and gyroscope sensors" },
-          { "feature": "Gas Detection", "description": "Real-time monitoring of toxic gas levels with immediate alert notifications" },
-          { "feature": "GPS Tracking", "description": "Continuous location tracking for emergency response and worker monitoring" },
-          { "feature": "Emergency Alerts", "description": "Instant notifications to supervisors and emergency contacts during hazardous situations" },
-          { "feature": "Battery Management", "description": "Efficient power management with low battery alerts and solar charging capability" },
-          { "feature": "Data Logging", "description": "Comprehensive logging of sensor data and incidents for analysis and compliance" }
-        ],
-        "challenges": [
-          {
-            "challenge": "Power Consumption Optimization",
-            "solution": "Implemented sleep modes and optimized sensor polling intervals to extend battery life while maintaining safety monitoring."
-          },
-          {
-            "challenge": "Environmental Durability",
-            "solution": "Used industrial-grade components and weatherproof enclosures to ensure reliable operation in harsh conditions."
-          },
-          {
-            "challenge": "False Alarm Reduction",
-            "solution": "Developed intelligent algorithms to distinguish between normal work activities and actual emergency situations."
-          }
-        ]
-      },
-      "results": {
-        "metrics": {
-          "Detection Accuracy": "95%",
-          "Response Time": "<30s",
-          "Battery Life": "12hrs",
-          "Range": "2km"
-        },
-        "achievements": [
-          "S-Grade achievement in Engineering Clinics course",
-          "1st Prize at HackAP Transport and Logistics Hackathon",
-          "Successfully detected 95% of simulated hazard scenarios",
-          "Achieved sub-30 second emergency response time",
-          "Demonstrated reliable operation in various environmental conditions"
-        ],
-        "impact": "The intelligent safety helmet system provides a comprehensive solution for worker safety monitoring, significantly reducing response times during emergencies and enabling proactive hazard management in industrial environments."
-      },
-      "conclusion": "The project successfully demonstrated the potential of IoT technology in enhancing workplace safety, combining multiple sensing capabilities with real-time communication to create an effective safety monitoring system.",
-      "futureWork": [
-        "Integration with existing safety management systems",
-        "Machine learning for predictive hazard analysis",
-        "Enhanced communication protocols for larger deployments",
-        "Integration with AR displays for enhanced situational awareness"
-      ]
-    }
+    "hidden": true,
+    "projectRef": "helmet-system"
   },
   {
     "id": "st-gd-convent",
@@ -117,8 +36,9 @@
     "category": "Full-stack Development",
     "timeline": "2024-2025",
     "role": "Full Stack Developer",
-    "description": "Complete Educational Management Platform - A comprehensive educational management platform specifically designed for St. G. D. Convent School, serving as a central hub for all school-related information, resources, and activities.",
-    "achievements": "Successfully deployed comprehensive platform with 95% performance score, 68% mobile traffic, and 87% improvement in administrative efficiency",
+    "status": "deployed",
+    "description": "A comprehensive educational management platform designed for St. G. D. Convent School, serving as a central hub for all school-related information, resources, and activities.",
+    "achievements": "Successfully deployed with 95% performance score, 68% mobile traffic, and 87% improvement in administrative efficiency.",
     "tags": ["React", "TypeScript", "Supabase", "Tailwind CSS", "Vite"],
     "SHOW_IN_INDEX": true,
     "badges": {
@@ -139,105 +59,9 @@
     "has_github": false,
     "has_case_study": true,
     "case_study_hidden": false,
-    "caseStudy": {
-      "readTime": "15 min read",
-      "objective": "Create a comprehensive educational management platform that serves as a central hub for all school-related information, resources, and activities, providing seamless access to students, parents, faculty, and administrative staff.",
-      "aim": "Centralize information access, enable dynamic content management, enhance user experience with responsive design, streamline resource distribution, showcase school activities, and ensure security and reliability.",
-      "history": "Educational institutions often struggle with fragmented information systems, making it difficult for students, parents, and staff to access essential resources. Traditional school websites lack real-time content management capabilities, secure administrative interfaces, and responsive design.",
-      "methodology": [
-        {
-          "title": "Agile Development Methodology",
-          "duration": "Throughout project",
-          "content": "Utilized sprint-based development with 2-week sprints, continuous integration with automated testing and deployment pipelines, regular stakeholder reviews and feedback incorporation, and adaptive planning with flexible scope adjustments based on evolving requirements."
-        },
-        {
-          "title": "Technology Stack Selection",
-          "duration": "2 weeks",
-          "content": "Carefully chose technology stack to ensure performance, scalability, and maintainability. Selected React 18.3.1 for modern UI with concurrent features, TypeScript 5.5.3 for type-safe development, Vite 5.4.1 for fast build tool, and Tailwind CSS 3.4.11 for utility-first styling."
-        },
-        {
-          "title": "Architecture Design Patterns",
-          "duration": "3 weeks",
-          "content": "Implemented component-based architecture with clear separation of concerns, service layer architecture for business logic, and security-first approach with Row Level Security policies and JWT-based authentication."
-        },
-        {
-          "title": "User Experience Design Process",
-          "duration": "4 weeks",
-          "content": "Applied user-centered design principles including accessibility-first approach with WCAG 2.1 compliance, mobile-first responsive design optimized for all screen sizes, intuitive information architecture, and performance optimization for fast loading times."
-        }
-      ],
-      "implementation": {
-        "architecture": "Built using modern JAMstack (JavaScript, APIs, Markup) architecture with React frontend, Supabase backend-as-a-service providing PostgreSQL database with real-time features, authentication, Row Level Security, and file storage capabilities.",
-        "technologies": [
-          { "name": "React 18.3.1", "purpose": "Modern UI library with concurrent features for interactive user interfaces" },
-          { "name": "TypeScript 5.5.3", "purpose": "Type-safe development environment ensuring code quality and developer productivity" },
-          { "name": "Vite 5.4.1", "purpose": "Fast build tool and development server with hot module replacement" },
-          { "name": "Tailwind CSS 3.4.11", "purpose": "Utility-first CSS framework for rapid UI development and consistent design" },
-          { "name": "Supabase", "purpose": "Backend-as-a-Service providing PostgreSQL database, authentication, and real-time subscriptions" },
-          { "name": "Shadcn/UI", "purpose": "Accessible, pre-built component library with Radix UI primitives" }
-        ],
-        "features": [
-          { "feature": "Dynamic Content Management", "description": "Real-time content editing with admin dashboard allowing instant updates to hero sections, about content, announcements, and gallery without technical expertise" },
-          { "feature": "Unified Gallery System", "description": "Comprehensive photo management supporting both individual images and grouped event galleries with categories, search, and filtering capabilities" },
-          { "feature": "Learning Materials Distribution", "description": "Organized educational resource system with advanced filtering by grade, subject, and category, supporting PDF, DOC, and other document formats" },
-          { "feature": "Two-Factor Authentication", "description": "Secure admin access with email authentication plus passkey verification, domain restrictions, and automatic session management" },
-          { "feature": "Mobile-First Responsive Design", "description": "100% responsive compatibility across all device categories with optimized mobile experience supporting 68% mobile traffic" },
-          { "feature": "Performance Optimization", "description": "Code splitting, lazy loading, image optimization, and CDN integration achieving 95/100 Lighthouse performance scores" }
-        ],
-        "challenges": [
-          {
-            "challenge": "Complex State Management Across Multiple Content Types",
-            "solution": "Implemented custom React hooks and context providers for efficient state management, with real-time updates using Supabase subscriptions and optimistic UI updates for better user experience."
-          },
-          {
-            "challenge": "File Upload and Storage Optimization",
-            "solution": "Created comprehensive file upload service with automatic image compression, format validation, CDN integration via Supabase Storage, and progressive loading for better performance."
-          },
-          {
-            "challenge": "Admin Security and User Experience Balance",
-            "solution": "Developed two-factor authentication system with email verification and passkey requirements, domain restrictions for admin access, while maintaining intuitive admin interface with real-time content preview."
-          },
-          {
-            "challenge": "Cross-Device Compatibility and Performance",
-            "solution": "Implemented mobile-first responsive design with Tailwind CSS, comprehensive testing across devices, performance optimization with code splitting, and lazy loading achieving consistent experience across all platforms."
-          }
-        ]
-      },
-      "results": {
-        "metrics": {
-          "Performance": "95/100",
-          "Mobile Traffic": "68%",
-          "Cost Reduction": "72%",
-          "Admin Efficiency": "+87%",
-          "Daily Users": "847",
-          "Uptime": "99.97%"
-        },
-        "achievements": [
-          "Achieved 95/100 Lighthouse performance score across all metrics",
-          "Delivered 100% responsive compatibility across all device categories",
-          "Reduced operational costs by 72% (from $347/month to $98/month)",
-          "Improved content update efficiency by 87% (from hours to minutes)",
-          "Decreased user support requests by 74%",
-          "Maintained 99.97% uptime since launch",
-          "Successfully served 847 daily active users with 68% mobile traffic",
-          "Achieved WCAG 2.1 AA accessibility compliance",
-          "Implemented enterprise-grade security with zero high-risk vulnerabilities",
-          "Delivered exceptional user experience with 4.6/5.0 mobile satisfaction scores"
-        ],
-        "impact": "The St. G. D. Convent School Platform has revolutionized St. G. D. Convent School's digital presence and operational efficiency. With 847 daily active users and 68% mobile traffic, the platform has significantly improved stakeholder engagement. Administrative efficiency increased by 87%, with content updates that previously took hours now completing in minutes. The platform achieved 95% user satisfaction and has become a model for educational technology implementation in similar institutions."
-      },
-      "conclusion": "The St. G. D. Convent School Platform project represents a comprehensive success in modern educational platform development, demonstrating how thoughtful technology choices, user-centered design, and robust implementation can transform institutional digital presence and operational efficiency. The platform has exceeded all primary objectives while achieving exceptional performance metrics, significant cost savings, and enhanced user experience across all stakeholder groups.",
-      "futureWork": [
-        "Progressive Web App (PWA) implementation with offline capabilities",
-        "Advanced analytics with detailed user behavior tracking and content performance metrics",
-        "Multi-language support with internationalization for broader accessibility",
-        "AI-powered search with natural language processing capabilities",
-        "Native mobile applications leveraging existing API infrastructure",
-        "Integration with school management systems and learning platforms",
-        "Advanced user roles with granular permission systems",
-        "AI-powered features including automatic content categorization and personalized recommendations"
-      ]
-    }
+    "hidden": false,
+    "projectRef": "st-gd-convent",
+    "liveUrl": "https://stgdconventschool.com/"
   },
   {
     "id": "monopoly-banking",
@@ -245,8 +69,9 @@
     "category": "Financial Technology",
     "timeline": "Aug 2022 - Dec 2023",
     "role": "Full Stack Developer",
+    "status": "completed",
     "description": "A gamified banking system inspired by Monopoly's 'Ultimate Banking', featuring real-time balance updates and transaction history.",
-    "achievements": "Successfully implemented real-time transaction processing and intuitive UI design",
+    "achievements": "Implemented real-time transaction processing and intuitive UI design.",
     "tags": ["HTML", "CSS", "jQuery", "Vanilla JS", "Firebase"],
     "SHOW_IN_INDEX": true,
     "badges": {
@@ -266,87 +91,8 @@
     "has_github": true,
     "has_case_study": true,
     "case_study_hidden": true,
-    "caseStudy": {
-      "readTime": "15 min read",
-      "objective": "Develop an intelligent trading bot that uses machine learning to make informed trading decisions.",
-      "aim": "Create an automated system that analyzes market data and executes trades based on learned patterns and risk management.",
-      "history": "Interest in combining machine learning with financial markets led to exploring algorithmic trading as a way to apply AI in a practical, measurable context.",
-      "methodology": [
-        {
-          "title": "Market Research",
-          "duration": "3 weeks",
-          "content": "Studied financial markets, trading strategies, and existing algorithmic trading approaches. Analyzed market data patterns and volatility."
-        },
-        {
-          "title": "Algorithm Development",
-          "duration": "8 weeks",
-          "content": "Developed machine learning models using historical data, implemented risk management strategies, and created the trading logic."
-        },
-        {
-          "title": "Backtesting",
-          "duration": "4 weeks",
-          "content": "Extensive backtesting with historical data to validate strategies and optimize parameters for better performance."
-        },
-        {
-          "title": "Live Testing",
-          "duration": "1 week",
-          "content": "Conducted paper trading to test the system in real market conditions before any actual deployment."
-        }
-      ],
-      "implementation": {
-        "architecture": "Python-based system using TensorFlow for machine learning models, pandas for data manipulation, and RESTful APIs for market data integration.",
-        "technologies": [
-          { "name": "Python", "purpose": "Core programming language for algorithm development" },
-          { "name": "TensorFlow", "purpose": "Machine learning framework for building predictive models" },
-          { "name": "Pandas & NumPy", "purpose": "Data manipulation and numerical computations" },
-          { "name": "Alpha Vantage API", "purpose": "Real-time and historical market data" },
-          { "name": "PostgreSQL", "purpose": "Storage for historical data and trading records" },
-          { "name": "Docker", "purpose": "Containerization for consistent deployment" }
-        ],
-        "features": [
-          { "feature": "Predictive Models", "description": "LSTM neural networks for price prediction based on technical indicators" },
-          { "feature": "Risk Management", "description": "Stop-loss, take-profit, and position sizing based on volatility" },
-          { "feature": "Real-time Analysis", "description": "Continuous market monitoring and opportunity identification" },
-          { "feature": "Performance Tracking", "description": "Detailed analytics and performance metrics dashboard" }
-        ],
-        "challenges": [
-          {
-            "challenge": "Market Volatility Handling",
-            "solution": "Implemented dynamic risk management that adjusts position sizes based on current market volatility measures."
-          },
-          {
-            "challenge": "Data Quality and Latency",
-            "solution": "Built robust data validation and implemented multiple data sources for redundancy and accuracy."
-          },
-          {
-            "challenge": "Overfitting Prevention",
-            "solution": "Used cross-validation, regularization techniques, and walk-forward analysis to ensure model generalization."
-          }
-        ]
-      },
-      "results": {
-        "metrics": {
-          "Win Rate": "68%",
-          "Sharpe Ratio": "1.42",
-          "Max Drawdown": "-8.5%",
-          "Annual Return": "23%"
-        },
-        "achievements": [
-          "Achieved consistent positive returns in backtesting",
-          "Implemented robust risk management system",
-          "Successfully integrated multiple data sources",
-          "Created comprehensive performance analytics"
-        ],
-        "impact": "The trading bot demonstrated the practical application of machine learning in financial markets and provided valuable insights into algorithmic trading strategies and risk management."
-      },
-      "conclusion": "The AI trading bot project successfully combined machine learning with financial analysis to create an intelligent trading system. While primarily educational, it demonstrated the potential of AI in financial applications.",
-      "futureWork": [
-        "Integration with cryptocurrency markets",
-        "Advanced sentiment analysis from news",
-        "Portfolio optimization algorithms",
-        "Real-time dashboard improvements"
-      ]
-    }
+    "hidden": true,
+    "projectRef": "monopoly-banking"
   },
   {
     "id": "library-management",
@@ -354,8 +100,9 @@
     "category": "Educational Software",
     "timeline": "2023",
     "role": "Full Stack Python Developer",
-    "description": "A GUI-based Library Management System (LMS) designed to handle primary housekeeping functions of a library. Built as the final project for Harvard's CS50P course, featuring inventory management, member tracking, and automated fine calculations.",
-    "achievements": "Perfect score in CS50P final project evaluation",
+    "status": "completed",
+    "description": "A GUI-based Library Management System designed to handle primary housekeeping functions of a library. Built as the final project for Harvard's CS50P course, featuring inventory management, member tracking, and automated fine calculations.",
+    "achievements": "Perfect score in CS50P final project evaluation.",
     "tags": ["Python", "Tkinter", "SQLite", "GUI"],
     "SHOW_IN_INDEX": true,
     "badges": {
@@ -375,89 +122,8 @@
     "has_github": true,
     "has_case_study": true,
     "case_study_hidden": true,
-    "caseStudy": {
-      "readTime": "10 min read",
-      "objective": "Build a comprehensive task management application for teams with real-time collaboration features.",
-      "aim": "Create an intuitive platform that enables teams to organize, track, and collaborate on projects efficiently.",
-      "history": "Observed inefficiencies in existing project management tools and wanted to create a more streamlined solution focused on simplicity and real-time collaboration.",
-      "methodology": [
-        {
-          "title": "User Research",
-          "duration": "2 weeks",
-          "content": "Conducted surveys and interviews with team leads and project managers to understand pain points in existing solutions."
-        },
-        {
-          "title": "Design & Prototyping",
-          "duration": "3 weeks",
-          "content": "Created user personas, wireframes, and interactive prototypes focusing on user experience and workflow optimization."
-        },
-        {
-          "title": "Development",
-          "duration": "14 weeks",
-          "content": "Built the full-stack application with emphasis on real-time features, intuitive UI, and robust backend architecture."
-        },
-        {
-          "title": "Testing & Refinement",
-          "duration": "3 weeks",
-          "content": "Conducted user testing sessions, gathered feedback, and iteratively improved the application based on real usage patterns."
-        }
-      ],
-      "implementation": {
-        "architecture": "Full-stack application using React for the frontend, Node.js/Express for the backend, and MongoDB for data persistence. Socket.io enables real-time collaboration features.",
-        "technologies": [
-          { "name": "React.js", "purpose": "Dynamic frontend with component-based architecture" },
-          { "name": "Node.js & Express", "purpose": "RESTful API server for handling business logic" },
-          { "name": "Socket.io", "purpose": "Real-time bidirectional communication for live updates" },
-          { "name": "MongoDB", "purpose": "Flexible document database for storing project data" },
-          { "name": "JWT", "purpose": "Secure authentication and authorization" },
-          { "name": "Redis", "purpose": "Session management and caching for improved performance" }
-        ],
-        "features": [
-          { "feature": "Real-time Updates", "description": "Live synchronization of tasks, comments, and project changes across all team members" },
-          { "feature": "Kanban Boards", "description": "Visual project management with drag-and-drop task organization" },
-          { "feature": "Team Collaboration", "description": "Comments, mentions, and file sharing on tasks and projects" },
-          { "feature": "Time Tracking", "description": "Built-in time tracking with reporting and analytics" },
-          { "feature": "Custom Workflows", "description": "Configurable task statuses and project templates" },
-          { "feature": "Notifications", "description": "Smart notifications for task assignments, deadlines, and updates" }
-        ],
-        "challenges": [
-          {
-            "challenge": "Real-time Synchronization",
-            "solution": "Implemented efficient event-driven architecture with Socket.io to handle concurrent users and maintain data consistency."
-          },
-          {
-            "challenge": "Scalability Concerns",
-            "solution": "Used horizontal scaling strategies, database indexing, and connection pooling to handle growing user base."
-          },
-          {
-            "challenge": "Complex State Management",
-            "solution": "Adopted Redux for predictable state management and implemented optimistic updates for better user experience."
-          }
-        ]
-      },
-      "results": {
-        "metrics": {
-          "Active Users": "200+",
-          "Task Completion": "+40%",
-          "Team Efficiency": "+60%",
-          "User Rating": "4.7/5"
-        },
-        "achievements": [
-          "Improved team productivity by 60%",
-          "Reduced project planning time by 50%",
-          "Achieved sub-second real-time updates",
-          "Successfully onboarded 200+ active users"
-        ],
-        "impact": "The task management application significantly improved team collaboration and project visibility, leading to faster project completion and better resource allocation across organizations."
-      },
-      "conclusion": "The collaborative task management app successfully addressed key pain points in team project management and demonstrated the value of real-time collaboration features in productivity software.",
-      "futureWork": [
-        "Advanced analytics and reporting",
-        "Mobile application development",
-        "Integration with popular development tools",
-        "AI-powered task prioritization"
-      ]
-    },
+    "hidden": true,
+    "projectRef": "library-management",
     "relatedMiniProjects": [
       { "name": "Indoor Voice", "tech": "Python" },
       { "name": "Deep Thought", "tech": "Python" },
@@ -476,8 +142,10 @@
     "category": "CS50W Final Project",
     "timeline": "2025",
     "role": "Full Stack Web Developer",
+    "status": "in_progress",
     "description": "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
     "tags": ["Web Development", "Education", "Management System"],
+    "SHOW_IN_INDEX": true,
     "skills": {
       "Frontend": ["React", "TailwindCSS"],
       "Backend": ["Django", "PostgreSQL"],
@@ -492,89 +160,8 @@
     "has_github": "in_progress",
     "has_case_study": true,
     "case_study_hidden": true,
-    "caseStudy": {
-      "readTime": "12 min read",
-      "objective": "Develop a scalable e-commerce platform with modern features and seamless user experience.",
-      "aim": "Create a complete online shopping solution with advanced features like real-time inventory, payment processing, and order management.",
-      "history": "Local businesses needed a robust e-commerce solution that could compete with major platforms while offering customization and lower fees.",
-      "methodology": [
-        {
-          "title": "Market Analysis",
-          "duration": "2 weeks",
-          "content": "Analyzed competitor platforms, studied user behavior patterns, and identified unique value propositions for local businesses."
-        },
-        {
-          "title": "Architecture Design",
-          "duration": "3 weeks",
-          "content": "Designed scalable microservices architecture with focus on performance, security, and maintainability."
-        },
-        {
-          "title": "Core Development",
-          "duration": "18 weeks",
-          "content": "Built the complete platform including user management, product catalog, cart system, payment processing, and admin dashboard."
-        },
-        {
-          "title": "Integration & Testing",
-          "duration": "3 weeks",
-          "content": "Integrated payment gateways, implemented security measures, and conducted comprehensive testing across all features."
-        }
-      ],
-      "implementation": {
-        "architecture": "Microservices architecture using Next.js for the frontend, Node.js services for different business domains, PostgreSQL for transactional data, and Redis for caching and sessions.",
-        "technologies": [
-          { "name": "Next.js", "purpose": "Server-side rendered React application for optimal SEO and performance" },
-          { "name": "PostgreSQL", "purpose": "Reliable relational database for transactional data" },
-          { "name": "Stripe API", "purpose": "Secure payment processing and subscription management" },
-          { "name": "Redis", "purpose": "Caching layer and session storage for improved performance" },
-          { "name": "Docker", "purpose": "Containerization for consistent deployment across environments" },
-          { "name": "AWS S3", "purpose": "Scalable storage for product images and static assets" }
-        ],
-        "features": [
-          { "feature": "Product Management", "description": "Comprehensive product catalog with variants, inventory tracking, and bulk operations" },
-          { "feature": "Shopping Cart", "description": "Persistent cart with real-time price updates and inventory validation" },
-          { "feature": "Payment Processing", "description": "Secure payment handling with multiple payment methods and fraud protection" },
-          { "feature": "Order Management", "description": "Complete order lifecycle from placement to fulfillment with tracking" },
-          { "feature": "Admin Dashboard", "description": "Comprehensive analytics, inventory management, and customer service tools" },
-          { "feature": "Search & Filtering", "description": "Advanced product search with filters, sorting, and recommendation engine" }
-        ],
-        "challenges": [
-          {
-            "challenge": "Payment Security",
-            "solution": "Implemented PCI DSS compliance measures and used Stripe for secure payment processing with tokenization."
-          },
-          {
-            "challenge": "Inventory Synchronization",
-            "solution": "Built real-time inventory management system with automatic stock updates and low-stock alerts."
-          },
-          {
-            "challenge": "Performance at Scale",
-            "solution": "Implemented caching strategies, database optimization, and CDN integration for fast loading times."
-          }
-        ]
-      },
-      "results": {
-        "metrics": {
-          "Transaction Vol": "$50K+",
-          "Page Load": "<3s",
-          "Conversion": "3.2%",
-          "Uptime": "99.9%"
-        },
-        "achievements": [
-          "Processed over $50K in transactions",
-          "Achieved 99.9% uptime reliability",
-          "Maintained sub-3-second page load times",
-          "Successfully integrated multiple payment methods"
-        ],
-        "impact": "The e-commerce platform enabled local businesses to establish strong online presence, increase sales, and compete effectively in the digital marketplace while maintaining lower operational costs."
-      },
-      "conclusion": "The e-commerce platform successfully provided businesses with a robust, scalable solution for online sales, demonstrating the importance of performance, security, and user experience in modern e-commerce.",
-      "futureWork": [
-        "Machine learning recommendations",
-        "Multi-vendor marketplace features",
-        "Advanced analytics dashboard",
-        "Mobile app development"
-      ]
-    },
+    "hidden": true,
+    "projectRef": "hss-manager",
     "relatedMiniProjects": [
       { "name": "Search", "tech": "HTML, CSS" },
       { "name": "Wiki", "tech": "Django" },
