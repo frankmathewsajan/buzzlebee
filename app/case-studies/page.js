@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
-import caseStudiesData from '../case-studies.json';
+import projectsData from '../projects.json';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
-// Get only visible case studies
-const caseStudies = caseStudiesData.filter(caseStudy => !caseStudy.hidden);
+// Get only projects with case studies that are visible
+const caseStudies = projectsData.filter(p => p.has_case_study && !p.case_study_hidden);
 
 export default function CaseStudies() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,17 +87,14 @@ export default function CaseStudies() {
                         <h2 className={`${spaceGrotesk.className} text-xl md:text-2xl text-[#1A365D] group-hover:text-[#1A365D]/80 transition-colors duration-200`}>
                           {caseStudy.title}
                         </h2>
-                        <p className={`${inter.className} text-sm text-[#1A365D]/60`}>
-                          {caseStudy.readTime} • {caseStudy.status}
-                        </p>
                       </div>
 
                       <p className={`${inter.className} text-sm text-[#1A365D]/80 leading-relaxed line-clamp-3`}>
-                        {caseStudy.summary}
+                        {caseStudy.description}
                       </p>
 
                       <div className="flex flex-wrap gap-2">
-                        {caseStudy.technologies && caseStudy.technologies.slice(0, 4).map((tech, techIndex) => (
+                        {caseStudy.tags && caseStudy.tags.slice(0, 4).map((tech, techIndex) => (
                           <span
                             key={techIndex}
                             className={`${inter.className} text-xs px-3 py-1 rounded-full bg-[#1A365D]/10 text-[#1A365D]`}
