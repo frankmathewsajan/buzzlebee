@@ -7,6 +7,7 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import ExternalLinkModal from '../components/ExternalLinkModal';
 import projects from '../projects.json'; // Assuming projects.json is in the same directory
 
 // Font setup
@@ -20,6 +21,15 @@ export default function Projects() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [visibleSection, setVisibleSection] = useState('overview');
   const [showMiniProjectsModal, setShowMiniProjectsModal] = useState(false);
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
+  const [externalLinkName, setExternalLinkName] = useState('');
+
+  const handleExternalLink = (url, name) => {
+    setExternalLinkUrl(url);
+    setExternalLinkName(name);
+    setShowExternalLinkModal(true);
+  };
 
   
   
@@ -347,6 +357,14 @@ export default function Projects() {
 
   return (
     <div className="min-h-screen">
+      {/* External Link Modal */}
+      <ExternalLinkModal
+        isOpen={showExternalLinkModal}
+        onClose={() => setShowExternalLinkModal(false)}
+        targetUrl={externalLinkUrl}
+        siteName={externalLinkName}
+      />
+      
       {/* Portfolio Explorer Map - Always available */}
       <PortfolioMap />
 
@@ -637,16 +655,16 @@ export default function Projects() {
 
                   <div className="flex gap-6">
                     {project.has_demo && (
-                      <a
-                        href={project.links.demo}
-                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                      <button
+                        onClick={() => handleExternalLink(project.links.demo, `${project.title} - Demo`)}
+                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200 cursor-pointer`}
                         style={{ 
                           backgroundColor: colors.text,
                           color: colors.bg
                         }}
                       >
                         View Demo
-                      </a>
+                      </button>
                     )}
                     {project.has_github && (
                       project.has_github === "in_progress" ? (
@@ -660,29 +678,29 @@ export default function Projects() {
                           GitHub - In Progress
                         </span>
                       ) : (
-                        <a
-                          href={project.links.github}
-                          className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                        <button
+                          onClick={() => handleExternalLink(project.links.github, `${project.title} - GitHub`)}
+                          className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200 cursor-pointer`}
                           style={{ 
                             border: `1px solid ${colors.text}`,
                             color: colors.text
                           }}
                         >
                           GitHub
-                        </a>
+                        </button>
                       )
                     )}
                     {project.has_case_study && !project.case_study_hidden && (
-                      <Link
-                        href={project.links.caseStudy}
-                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200`}
+                      <button
+                        onClick={() => handleExternalLink(project.links.caseStudy, `${project.title} - Case Study`)}
+                        className={`${inter.className} px-6 py-2 rounded-full transition-colors duration-200 cursor-pointer`}
                         style={{ 
                           border: `1px solid ${colors.text}`,
                           color: colors.text
                         }}
                       >
                         View Case Study
-                      </Link>
+                      </button>
                     )}
                   </div>
                 </motion.div>

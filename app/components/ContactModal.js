@@ -3,8 +3,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { trackPortfolioEvents } from '../utils/analytics';
+import ExternalLinkModal from './ExternalLinkModal';
 
 const ContactModal = ({ isOpen, onClose, variant = 'contact', hideDirectAccess = false }) => {
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
+  const [externalLinkName, setExternalLinkName] = useState('');
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -108,15 +113,31 @@ GitHub: ${formData.github || 'Not provided'}`;
       github: 'https://github.com/frankmathewsajan'
     };
     
+    const names = {
+      linkedin: 'LinkedIn Profile',
+      instagram: 'Instagram Profile',
+      discord: 'Discord Profile',
+      github: 'GitHub Profile'
+    };
+    
     if (links[platform]) {
-      window.open(links[platform], '_blank');
+      setExternalLinkUrl(links[platform]);
+      setExternalLinkName(names[platform]);
+      setShowExternalLinkModal(true);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <>
+      <ExternalLinkModal
+        isOpen={showExternalLinkModal}
+        onClose={() => setShowExternalLinkModal(false)}
+        targetUrl={externalLinkUrl}
+        siteName={externalLinkName}
+      />
+      <div 
       className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
       style={{
         background: 'rgba(231, 223, 216, 0.85)',
@@ -395,6 +416,7 @@ GitHub: ${formData.github || 'Not provided'}`;
         </div>
       </motion.div>
     </div>
+    </>
   );
 };
 

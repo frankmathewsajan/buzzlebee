@@ -5,13 +5,13 @@
     "category": "IoT/Embedded Systems",
     "timeline": "Jan 2024 - Mar 2024",
     "role": "Lead Developer & Hardware Engineer",
-    "status": "completed",
     "description": "A real-time hazard detection helmet with GPS tracking and emergency communication capabilities. The system provides immediate alerts and location data in emergency situations.",
     "achievements": "Secured S-Grade in Engineering Clinics and 1st Prize at HackAP Transport and Logistics Hackathon",
     "tags": ["Arduino", "C++", "IoT", "GPS"],
     "SHOW_IN_INDEX": true,
     "badges": {
-      "AWARDED": "/certifications"
+      "AWARDED": true,
+      "DOCUMENTED": "https://medium.com/@frankmathewsajan/intelligent-safety-helmet-software-integration-a-case-study-b2c40194b302"
     },
     "skills": {
       "Hardware": ["Arduino", "Sensors", "GPS Module"],
@@ -21,14 +21,13 @@
     "links": {
       "demo": "#",
       "github": "#",
-      "caseStudy": "/case-studies/helmet-system"
+      "caseStudy": "https://medium.com/@frankmathewsajan/intelligent-safety-helmet-software-integration-a-case-study-b2c40194b302"
     },
     "has_demo": false,
     "has_github": false,
     "has_case_study": true,
-    "case_study_hidden": true,
-    "hidden": true,
-    "projectRef": "helmet-system"
+    "case_study_hidden": false,
+    "hidden": false
   },
   {
     "id": "st-gd-convent",
@@ -36,15 +35,14 @@
     "category": "Full-stack Development",
     "timeline": "2024-2025",
     "role": "Full Stack Developer",
-    "status": "deployed",
     "description": "A comprehensive educational management platform designed for St. G. D. Convent School, serving as a central hub for all school-related information, resources, and activities.",
-    "achievements": "Successfully deployed with 95% performance score, 68% mobile traffic, and 87% improvement in administrative efficiency.",
+    "achievements": "Successfully deployed with 95% performance score, 68% mobile traffic, and 87% improvement in administrative efficiency",
     "tags": ["React", "TypeScript", "Supabase", "Tailwind CSS", "Vite"],
     "SHOW_IN_INDEX": true,
     "badges": {
-      "CERTIFIED": "/certifications",
-      "DEPLOYED": "https://stgdconventschool.com/"
-    },
+      "DEPLOYED": "https://stgdconventschool.com/",
+      "CLIENT": true
+     },
     "skills": {
       "Frontend": ["React 18.3.1", "TypeScript 5.5.3", "Vite 5.4.1", "Tailwind CSS 3.4.11"],
       "Backend": ["Supabase", "PostgreSQL", "JWT Authentication"],
@@ -53,15 +51,13 @@
     "links": {
       "demo": "https://stgdconventschool.com/",
       "github": "#",
-      "caseStudy": "/case-studies/st-gd-convent"
+      "caseStudy": "#"
     },
     "has_demo": true,
     "has_github": false,
-    "has_case_study": true,
+    "has_case_study": false,
     "case_study_hidden": false,
-    "hidden": false,
-    "projectRef": "st-gd-convent",
-    "liveUrl": "https://stgdconventschool.com/"
+    "hidden": false
   },
   {
     "id": "monopoly-banking",
@@ -69,9 +65,8 @@
     "category": "Financial Technology",
     "timeline": "Aug 2022 - Dec 2023",
     "role": "Full Stack Developer",
-    "status": "completed",
     "description": "A gamified banking system inspired by Monopoly's 'Ultimate Banking', featuring real-time balance updates and transaction history.",
-    "achievements": "Implemented real-time transaction processing and intuitive UI design.",
+    "achievements": "Implemented real-time transaction processing and intuitive UI design",
     "tags": ["HTML", "CSS", "jQuery", "Vanilla JS", "Firebase"],
     "SHOW_IN_INDEX": true,
     "badges": {
@@ -85,24 +80,22 @@
     "links": {
       "demo": "#",
       "github": "https://github.com/frankmathewsajan/monopoly",
-      "caseStudy": "/case-studies/monopoly-banking"
+      "caseStudy": "#"
     },
     "has_demo": false,
     "has_github": true,
-    "has_case_study": true,
+    "has_case_study": false,
     "case_study_hidden": true,
-    "hidden": true,
-    "projectRef": "monopoly-banking"
+    "hidden": true
   },
   {
     "id": "library-management",
     "title": "Library Management System",
-    "category": "Educational Software",
+    "category": "CS50P Final Project",
     "timeline": "2023",
     "role": "Full Stack Python Developer",
-    "status": "completed",
     "description": "A GUI-based Library Management System designed to handle primary housekeeping functions of a library. Built as the final project for Harvard's CS50P course, featuring inventory management, member tracking, and automated fine calculations.",
-    "achievements": "Perfect score in CS50P final project evaluation.",
+    "achievements": "Perfect score in CS50P final project evaluation",
     "tags": ["Python", "Tkinter", "SQLite", "GUI"],
     "SHOW_IN_INDEX": true,
     "badges": {
@@ -116,14 +109,13 @@
     "links": {
       "demo": "#",
       "github": "https://github.com/frankmathewsajan/library-management-system",
-      "caseStudy": "/case-studies/library-management"
+      "caseStudy": "#"
     },
     "has_demo": false,
     "has_github": true,
-    "has_case_study": true,
+    "has_case_study": false,
     "case_study_hidden": true,
     "hidden": true,
-    "projectRef": "library-management",
     "relatedMiniProjects": [
       { "name": "Indoor Voice", "tech": "Python" },
       { "name": "Deep Thought", "tech": "Python" },
@@ -142,10 +134,10 @@
     "category": "CS50W Final Project",
     "timeline": "2025",
     "role": "Full Stack Web Developer",
-    "status": "in_progress",
     "description": "A modernized version of legacy software used across schools in Kerala, India. Streamlines student and administration management with modern web technologies and user-friendly interfaces.",
+    "achievements": "Currently in development",
     "tags": ["Web Development", "Education", "Management System"],
-    "SHOW_IN_INDEX": true,
+    "SHOW_IN_INDEX": false,
     "skills": {
       "Frontend": ["React", "TailwindCSS"],
       "Backend": ["Django", "PostgreSQL"],
@@ -153,15 +145,14 @@
     },
     "links": {
       "demo": "#",
-      "github": "In Progress",
-      "caseStudy": "/case-studies/hss-manager"
+      "github": "#",
+      "caseStudy": "#"
     },
     "has_demo": false,
     "has_github": "in_progress",
-    "has_case_study": true,
+    "has_case_study": false,
     "case_study_hidden": true,
     "hidden": true,
-    "projectRef": "hss-manager",
     "relatedMiniProjects": [
       { "name": "Search", "tech": "HTML, CSS" },
       { "name": "Wiki", "tech": "Django" },
