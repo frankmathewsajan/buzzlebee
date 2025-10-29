@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import ExternalLinkModal from '../components/ExternalLinkModal';
 import projectsData from '../projects.json';
 
 // Font setup
@@ -16,6 +17,10 @@ const caseStudies = projectsData.filter(p => p.has_case_study && !p.case_study_h
 
 export default function CaseStudies() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
+  const [externalLinkUrl, setExternalLinkUrl] = useState('');
+  const [externalLinkName, setExternalLinkName] = useState('');
+  
   const studiesPerPage = 4;
   const totalPages = Math.ceil(caseStudies.length / studiesPerPage);
   
@@ -24,8 +29,25 @@ export default function CaseStudies() {
     currentPage * studiesPerPage
   );
 
+  const handleCaseStudyClick = (e, caseStudy) => {
+    e.preventDefault();
+    if (caseStudy.links.caseStudy && caseStudy.links.caseStudy !== '#') {
+      setExternalLinkUrl(caseStudy.links.caseStudy);
+      setExternalLinkName(`${caseStudy.title} - Case Study`);
+      setShowExternalLinkModal(true);
+    }
+  };
+
   return (
     <>
+      {/* External Link Modal */}
+      <ExternalLinkModal
+        isOpen={showExternalLinkModal}
+        onClose={() => setShowExternalLinkModal(false)}
+        targetUrl={externalLinkUrl}
+        siteName={externalLinkName}
+      />
+      
       {/* Portfolio Explorer Map */}
       <PortfolioMap />
       
@@ -68,16 +90,16 @@ export default function CaseStudies() {
               </div>
 
               {currentStudies.map((caseStudy, index) => (
-                <Link 
-                  href={`/case-studies/${caseStudy.id}`}
+                <div
                   key={caseStudy.id}
-                  className="relative block transition-all duration-300 group/card"
+                  onClick={(e) => handleCaseStudyClick(e, caseStudy)}
+                  className="relative block transition-all duration-300 group/card cursor-pointer"
                 >
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="group cursor-pointer"
+                    className="group"
                   >
                     <div className="h-full flex flex-col space-y-4">
                       <div className="space-y-2">
@@ -105,7 +127,7 @@ export default function CaseStudies() {
                       </div>
                     </div>
                   </motion.div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
