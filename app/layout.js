@@ -46,7 +46,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Analytics />
-        {isMobile ? <MobileMessage /> : children}
+        {children}
       </body>
     </html>
   );
