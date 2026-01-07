@@ -17,11 +17,13 @@ export default function ResumePage() {
   useEffect(() => {
     // Function to get PDF URL based on hash
     const getPdfUrl = () => {
+      // Eg: http://localhost:3000/resume#07012026
+      console.log('Current hash:', window.location.hash);
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         return `/files/FrankMathewSajan_${hash}.pdf`;
       }
-      return '/files/FrankMathewSajan_08202025.pdf'; // Default PDF
+      return '/files/FrankMathewSajan_07012026.pdf'; // Default PDF
     };
 
     // Function to check if PDF exists
@@ -39,7 +41,7 @@ export default function ResumePage() {
       const targetPdfUrl = getPdfUrl();
       const pdfExists = await checkPdfExists(targetPdfUrl);
       
-      const finalPdfUrl = pdfExists ? targetPdfUrl : '/files/FrankMathewSajan_08202025.pdf';
+      const finalPdfUrl = pdfExists ? targetPdfUrl : '/files/FrankMathewSajan_07012026.pdf';
       setPdfUrl(finalPdfUrl);
 
       // Simulate PDF loading time with minimum 2 seconds for the loading animation

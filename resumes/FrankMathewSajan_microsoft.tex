@@ -1,228 +1,183 @@
-\documentclass[10pt, letterpaper]{article}
+%-------------------------
+% Resume in Latex
+% Author : Frank Mathew Sajan
+% License : MIT
+%------------------------
 
-% Packages:
-\usepackage[
-	ignoreheadfoot, % set margins without considering header and footer
-	top=2 cm, % separation between body and page edge from the top
-	bottom=2 cm, % separation between body and page edge from the bottom
-	left=2 cm, % separation between body and page edge from the left
-	right=2 cm, % separation between body and page edge from the right
-	footskip=1.0 cm, % separation between body and footer
-	% show frame % for debugging
-]{geometry} % for adjusting page geometry
-\usepackage{titlesec} % for customizing section titles
-\usepackage{tabularx} % for making tables with fixed-width columns
-\usepackage{array} % tabular requires this
-\usepackage[dvipsnames]{xcolor} % for coloring text
-\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
-\usepackage{enumitem} % for customizing lists
-\usepackage{fontawesome5} % for using icons
-\usepackage{amsmath} % for math
-\usepackage[
-	pdftitle={Frank Mathew Sajan - Resume},
-	pdfauthor={Frank Mathew Sajan},
-	pdfcreator={LaTeX with RenderCV},
-	colorlinks=true,
-	urlcolor=primaryColor
-]{hyperref} % for links, metadata, and bookmarks
-\usepackage[pscoord]{eso-pic} % for floating text on the page
-\usepackage{calc} % for calculating lengths
-\usepackage{bookmark} % for bookmarks
-\usepackage{lastpage} % for getting the total number of pages
-\usepackage{changepage} % for one column entries (adjust width environment)
-\usepackage{paracol} % for two and three-column entries
-\usepackage{ifthen} % for conditional statements
-\usepackage{needspace} % for avoiding page breaks right after the section title
-\usepackage{iftex} % check if the engine is pdf latex, latex, or latex
+\documentclass[letterpaper,11pt]{article}
 
-% Ensure that the generated pdf is machine readable/ATS parsable:
-\ifPDFTeX
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
 \input{glyphtounicode}
-\pdfgentounicode=1
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\fi
 
-\usepackage{charter}
+%----------FONT OPTIONS----------
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
 
-% Some settings:
+% Adjust margins - AGGRESSIVE 1-PAGE FIT
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.25in}
+
+\urlstyle{same}
+
+\raggedbottom
 \raggedright
-\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjust width environment
-\pagestyle{empty} % no header or footer
-\setcounter{secnumdepth}{0} % no section numbering
-\setlength{\parindent}{0pt} % no indentation
-\setlength{\topskip}{0pt} % no top skip
-\setlength{\columnsep}{0.15cm} % set column separation
-\pagenumbering{gobble} % no page numbering
+\setlength{\tabcolsep}{0in}
 
-\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[
-\vspace{1pt}
-\titlerule]
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-8pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-6pt}]
 
-\titlespacing{\section}{
-% left space:
--1pt }{
-% top space:
-0.3 cm }{
-% bottom space:
-0.2 cm } % section title spacing
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
 
-\renewcommand{\labelitemi}{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
-\newenvironment{highlights}{ \begin{itemize}[ topsep=0.10 cm, parsep=0.10 cm, partopsep=0pt,
-itemsep=0pt, leftmargin=0 cm + 10pt ] }{ \end{itemize} } % new environment for highlights
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
 
-\newenvironment{highlightsforbulletentries}{ \begin{itemize}[ topsep=0.10 cm,
-parsep=0.10 cm, partopsep=0pt, itemsep=0pt, leftmargin=10pt ] }{ \end{itemize} } % new environment for highlights for bullet entries
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
 
-\newenvironment{onecolentry}{ \begin{adjustwidth}{ 0 cm + 0.00001 cm }{ 0 cm + 0.00001 cm }
-}{ \end{adjustwidth} } % new environment for one column entries
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
 
-\newenvironment{twocolentry}[2][]{ \onecolentry \def\secondColumn{#2} \setcolumnwidth{\fill, 4.5 cm}
-\begin{paracol}{2} }{ \switchcolumn \raggedleft \secondColumn \end{paracol}
-\endonecolentry } % new environment for two-column entries
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
 
-\newenvironment{threecolentry}[3][]{ \onecolentry \def\thirdColumn{#3} \setcolumnwidth{, \fill, 4.5 cm}
-\begin{paracol}{3} {\raggedright #2} \switchcolumn }{ \switchcolumn \raggedleft \thirdColumn
-\end{paracol} \endonecolentry } % new environment for three column entries
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
 
-\newenvironment{header}{
-\setlength{\topsep}{0pt}
-\par\kern\topsep
-\centering
-\linespread{1.5} }{ \par\kern\topsep } % new environment for the header
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
-\AddToShipoutPictureFG*{% Add <stuff> to current page foreground
-\put( \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm}, \LenToUnit{\paperheight-1.0 cm} ){\vtop{{\null}\makebox[0pt][c]{ \small\color{gray}\textit{Last updated in September 2024}\hspace{\widthof{Last updated in September 2024}} }}}%
-}%
-}%
-
-% save the original href command in a new command:
-\let\hrefWithoutArrow\href
-
-% new command for external links:
 
 \begin{document}
-	\newcommand{\AND}{\unskip \cleaders\copy\ANDbox\hskip\wd\ANDbox \ignorespaces }
-	\newsavebox{\ANDbox}
-	\sbox{\ANDbox}{$|$}
 
-	\begin{header}
-		\fontsize{25 pt}{25 pt}\selectfont Frank Mathew Sajan
-
-		\vspace{5 pt}
-
-		\normalsize \mbox{Amaravati, India}%
-		\kern 5.0 pt%
-		\AND%
-		\kern 5.0 pt%
-		\mbox{\hrefWithoutArrow{mailto:frankmathewsajan@gmail.com}{frankmathewsajan@gmail.com}}%
-		\kern 5.0 pt%
-		\AND%
-		\kern 5.0 pt%
-		\mbox{\hrefWithoutArrow{https://frankmathewsajan.web.app/}{Portfolio}}%
-		\kern 5.0 pt%
-		\AND%
-		\kern 5.0 pt%
-		\mbox{\hrefWithoutArrow{https://linkedin.com/in/frankmathewsajan}{LinkedIn}}%
-		\kern 5.0 pt%
-		\AND%
-		\kern 5.0 pt%
-		\mbox{\hrefWithoutArrow{https://github.com/frankmathewsajan}{Github}}%
-	\end{header}
-
-	\vspace{5 pt - 0.3 cm}
-
-	\section{Education}
-
-	\begin{twocolentry}
-		{ Expected May 2027 } \textbf{Vellore Institute of Technology, Amaravati}
-	\end{twocolentry}
-
-	\vspace{0.10 cm}
-	\begin{onecolentry}
-		\begin{highlights}
-			\item Bachelor of Technology in Computer Science | 8.68 (out of 10.00) CGPA \item \textbf{Relevant
-			Coursework:} Design and Analysis of Algorithms, DBMS, Computer Networks, Object-Oriented Programming System, Deep Learning.
-		\end{highlights}
-	\end{onecolentry}
-
-       \section{Technical Skills}
-
-\begin{onecolentry}
-    \textbf{Programming Languages:} Python, Java, JavaScript (ES6+), SQL.\\
-    \vspace{0.10 cm}
-    \textbf{Web \& App Development:} React + Vite.js, Django, REST APIs, React Native(Expo). \\
-    \vspace{0.10 cm}
-    \textbf{Databases \& Cloud:} MySQL, Supabase, AWS, Firebase. \\
-    \vspace{0.10 cm}
-    \textbf{Software Engineering Tools:} Version Control with Git, CI/CD, Linux/Bash.\\
-    \vspace{0.10 cm}
-    \textbf{Embedded Systems:} Arduino, Raspberry Pi, Real-time Data Processing.  \\
-\end{onecolentry}
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Frank Mathew Sajan} \\ \vspace{2pt}
+    \small Amaravati, India $|$ \href{mailto:frankmathewsajan@gmail.com}{\underline{frankmathewsajan@gmail.com}} $|$ 
+    \href{https://linkedin.com/in/frankmathewsajan}{\underline{LinkedIn}} $|$
+    \href{https://github.com/frankmathewsajan}{\underline{GitHub}} $|$
+    \href{https://leetcode.com/u/frankmathewsajan/}{\underline{LeetCode}} $|$
+    \href{https://itsfrank.web.app/}{\underline{Portfolio}}
+\end{center}
 
 
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Vellore Institute of Technology}{Amaravati, India}
+      {Bachelor of Technology in Computer Science, Specialization in AI/ML}{Sept. 2023 -- Jul. 2027}
+      \vspace{1pt}
+      \small{\item{
+       \textbf{CGPA}: 8.62 / 10.00 \\
+       \textbf{Coursework}: \textbf{Data Structures \& Algorithms}, OOP (Java/C++), DBMS (Normalization), OS (Concurrency)
+      }}
+  \resumeSubHeadingListEnd
 
-	\section{Experience}
+%-----------TECHNICAL SKILLS (PIVOTED FOR DATA SCIENCE)-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Data Science \& ML}{: \textbf{Pandas, NumPy, Scikit-learn}, Deep Learning (Basic), Data Visualization (Matplotlib), RAG} \\
+     \textbf{Languages}{: \textbf{Python}, \textbf{SQL}, C++, Java, JavaScript (ES6+)} \\
+     \textbf{Core Concepts}{: Data Structures \& Algorithms, \textbf{Database Normalization}, System Design, OOP} \\
+     \textbf{Frameworks}{: React.js, Django, FastAPI, TensorFlow/Keras (Exposure), REST APIs} \\
+     \textbf{Tools \& Cloud}{: AWS (EC2, S3), Docker, Git/GitHub, VS Code, Supabase, Linux/Bash}
+    }}
+ \end{itemize}
 
-\begin{twocolentry}
-    { Aug 2023 – Present } \textbf{Software Engineer Intern}, IIEC VIT-AP, Amaravati
-\end{twocolentry}
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
 
-\begin{onecolentry}
-    \begin{highlights}
-    \vspace{0.10 cm}
-        \item Developed a mobile application using Expo Framework for an autonomous agricultural drone, optimizing seed-planting paths and reducing fertilizer waste through route optimization. \\
-        \item Built a real-time sensor data processing system (thermal/IR/gas detection) to detect industrial hazard scenarios, to be deployed in low-connectivity environments. \\
-        \item Designed and tested a communication module using LoRa, ensuring optimal uptime for safety systems in manufacturing-like environments. \\
-        \item Collaborated on a plant anomaly detection model, deployed it on an AWS EC2 instance, and made it accessible via an API, thereby reducing the need for edge computing.
-    \end{highlights}
-\end{onecolentry}
+    \resumeSubheading
+      {Founding Engineer \& Product Lead}{Aug 2025 -- Present}
+      {House of Muziris (D2C Startup) $|$ \href{https://houseofmuziris.com}{\underline{Live Link}}}{Kerala, India}
+      \resumeItemListStart
+        \resumeItem{Architected a data-centric full-stack MVP using \textbf{React, Django, and PostgreSQL}, ensuring rigorous data validation for FSSAI compliance and supply chain tracking.}
+        \resumeItem{Designed a normalized \textbf{database schema} to model complex inventory states, preventing data inconsistency and enabling accurate stock forecasting.}
+        \resumeItem{Implemented analytics logging within the high-availability waitlist system to capture \textbf{user engagement metrics} during marketing campaigns.}
+      \resumeItemListEnd
 
-	\section{Projects}
+    \resumeSubheading
+      {Software Engineering Intern}{Jun 2025 -- Jul 2025}
+      {TechtoGreen Drone \& Robotics Pvt. Ltd. (IIEC Incubator) $|$ \href{https://medium.com/@frankmathewsajan}{\underline{Case Study}}}{Vijayawada, India}
+      \resumeItemListStart
+        \resumeItem{\textbf{Engineered the cloud inference pipeline} for a Deep Learning anomaly detection model on AWS EC2, implementing system observability via RESTful APIs.}
+        \resumeItem{Analyzed flight path data to optimize autonomous drone control algorithms, resulting in a \textbf{30\% increase in field coverage efficiency}.}
+        \resumeItem{Engineered a fault-tolerant \textbf{data transmission pipeline} using LoRa, achieving $>$99\% Packet Delivery Ratio (PDR) for critical telemetry datasets.}
+      \resumeItemListEnd
 
-\begin{onecolentry}
-    \textbf{School Management System (Supabase, AWS)} \hfill \href{https://stgdconventschool.com}{\texttt{Live Demo}}
-\end{onecolentry}
+    \resumeSubheading
+      {Deputy Captain - Technical Research}{Sep 2023 -- Present}
+      {IETE VIT-AP (Student Chapter)}{Amaravati, India}
+      \resumeItemListStart
+        \resumeItem{Mentoring 20+ student developers in technical research, fostering a culture of \textbf{data-driven experimentation} in Embedded Systems and IoT projects.}
+        \resumeItem{Reviewing technical papers and IoT developments to drive innovation in student research initiatives.}
+      \resumeItemListEnd
 
-\begin{onecolentry}
-    \begin{highlights}
-        \vspace{0.1cm}
-        \item Deployed a system for a rural school in Agra, \textbf{reducing administrative tasks and increasing digital adoption}. \\
-        \item Optimized database queries (SQLite), cutting page load times by 35\%. \\
-        \item \textbf{Developed, tested, and deployed} a full-stack application using React (frontend), Supabase (backend), and Firebase Hosting, ensuring 99.9\% uptime during peak usage. 
-    \end{highlights}
-\end{onecolentry}
+  \resumeSubHeadingListEnd
 
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{NASA Space Apps Challenge (Global Nominee)} $|$ \emph{React, Satellite Data API, AI}}{Oct 2024}
+          \resumeItemListStart
+            \resumeItem{Selected as a \textbf{Global Nominee (Top 1\% of 93,000+ participants)} for engineering an AI-driven tool utilizing \textbf{PACE satellite data}.}
+            \resumeItem{Built a dynamic \textbf{Data Visualization dashboard} to simplify complex oceanographic datasets, making scientific data accessible to non-technical users.}
+          \resumeItemListEnd
+      \resumeProjectHeading
+          {\textbf{Rural School Management System} $|$ \emph{PostgreSQL, Supabase, Data Pipelines}}{Aug 2025 -- Nov 2025}
+          \resumeItemListStart
+            \resumeItem{Digitized academic records for 200+ students, establishing a structured \textbf{data pipeline} that reduced manual entry time by 15 hours/week.}
+            \resumeItem{Optimized \textbf{SQL queries} for reporting modules, cutting data retrieval latency by 35\% on low-bandwidth networks.}
+          \resumeItemListEnd
+    \resumeSubHeadingListEnd
 
+%-----------CERTIFICATIONS & AWARDS-----------
+\section{Certifications \& Awards}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Cloud/AI}: AWS Academy Graduate (Cloud Architecting), Oracle GenAI Certified Professional (2025) \\
+     \textbf{Code}: CS50P: Programming with Python (Harvard, 2024), Automation Anywhere Essentials (2025) \\
+     \textbf{Leadership}: McKinsey.org Forward Program (Problem Solving \& Leadership, 2025) \\
+     \textbf{Awards}: Rajya Puraskar (State Award, Bharat Scouts \& Guides) -- Highest State Honor for Discipline.
+    }}
+ \end{itemize}
 
-
-\vspace{0.10 cm}
-\begin{onecolentry}
-    \textbf{Hazard Detection \& Communication Module (Smart Helmet)
-} 
-\end{onecolentry}
-\begin{onecolentry}
-    \begin{highlights}
-    \vspace{0.10 cm}
-        \item Developed a real-time monitoring system with \textbf{modular software architecture}, enabling scalability for industrial environments. \\
-        \item Engineered conflict-resolution logic to handle sensor data disputes, reducing false alerts.  
-    \end{highlights}
-\end{onecolentry}
-
-
-\section{Achievements}
-\begin{onecolentry}
-    \begin{highlights}
-        \item \textbf{NASA Space Apps Challenge 2024 Global Nominee} (Top 1\% of 93,520+ participants)
-        \vspace{0.1cm}
-        \\Developed an AI-driven educational platform to simplify PACE satellite data analysis, improving ocean literacy for students. 
-        - Collaborated in a 4-member team under time constraints, aligning with industrial project workflows.  
-        \href{https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/cosmic-ninjas/}{[Results]}
-        
-        \item \textbf{1st Prize, HackAP Hackathon}\\\vspace{0.1cm}Engineered a hazard detection system with modular software for industrial environments, reducing false alerts using sensor dispute-resolution algorithms.
-    \end{highlights}
-\end{onecolentry}
+%-------------------------------------------
 \end{document}
-
