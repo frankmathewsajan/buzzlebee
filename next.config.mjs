@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: "export", // Enables static site generation
-  images: {
-    unoptimized: true, // Required for static export if using Next.js Image component
-  },
+    experimental: {
+      optimizePackageImports: ["@geist-ui/core", "react-icons"],
+    },
+    images: {
+      unoptimized: true, // Required for static export if using Next.js Image component
+    },
 };
 
 export default nextConfig;
