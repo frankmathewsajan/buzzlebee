@@ -16,7 +16,7 @@
     "firebase": "^12.2.1",
     "framer-motion": "^12.6.2",
     "motion": "^12.6.2",
-    "next": "15.4.10",
+    "next": "16.1.1",
     "react": "^19.0.0",
     "react-d3-tree": "^3.6.6",
     "react-dom": "^19.0.0",
@@ -28,7 +28,7 @@
     "@types/node": "22.13.14",
     "@types/react": "19.0.12",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "eslint-config-next": "16.1.1",
     "tailwindcss": "^4",
     "typescript": "5.8.2"
   },
