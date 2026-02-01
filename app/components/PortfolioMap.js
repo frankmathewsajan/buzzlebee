@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { 
-  FaHome, 
-  FaUser, 
-  FaTools, 
-  FaPen, 
-  FaAward, 
-  FaChartBar, 
+import {
+  FaHome,
+  FaUser,
+  FaTools,
+  FaPen,
+  FaAward,
+  FaChartBar,
   FaBriefcase,
   FaBroom,
   FaLink,
@@ -16,7 +16,6 @@ import {
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
 import ExternalLinkModal from './ExternalLinkModal';
-import { trackPortfolioEvents } from '../utils/analytics';
 
 // Website sitemap structure - this represents the actual site structure
 const SITE_STRUCTURE = {
@@ -68,7 +67,7 @@ const createPortfolioTreeData = (siteStructure, visitedPages, currentPath) => {
   const mapNode = (node) => {
     const isVisited = visitedPages.has(node.path);
     const isCurrent = currentPath === node.path;
-    
+
     return {
       name: node.name,
       attributes: {
@@ -100,7 +99,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
     'FaLink': FaLink,
     'FaFileAlt': FaFileAlt
   };
-  
+
   const IconComponent = iconMap[nodeDatum.attributes?.icon];
   const isVisited = nodeDatum.attributes?.visited;
   const isCurrent = nodeDatum.attributes?.current;
@@ -109,16 +108,16 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
   const externalUrl = nodeDatum.attributes?.externalUrl;
   const nodePath = nodeDatum.attributes?.path;
   const scrollProgress = pageScrollProgress?.[nodePath] || 0;
-  
+
   // Different sizes for different levels
   const isRoot = nodeDatum.attributes?.path === '/';
   const nodeRadius = isRoot ? 18 : 15;
-  
+
   // Color scheme based on state - Modern tech theme
   let fillColor = '#ffffff';
   let strokeColor = '#d4d4d8';
   let textColor = '#71717a';
-  
+
   if (isCurrent) {
     fillColor = '#000000';
     strokeColor = '#000000';
@@ -128,7 +127,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
     strokeColor = '#a3a3a3';
     textColor = '#404040';
   }
-  
+
   return (
     <>
       {/* Node circle */}
@@ -161,7 +160,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
           }
         }}
       />
-      
+
       {/* Current page indicator */}
       {isCurrent && (
         <circle
@@ -173,7 +172,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
           style={{ animation: 'pulse 2s infinite' }}
         />
       )}
-      
+
       {/* Icon inside the node */}
       {IconComponent && (
         <foreignObject
@@ -195,7 +194,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
           </div>
         </foreignObject>
       )}
-      
+
       {/* Label */}
       <g className="rd3t-label">
         <text
@@ -228,7 +227,7 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
 
 // Portfolio D3 Tree Component
 const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNodeClick, onClose }) => {
-  const [treeData, setTreeData] = useState(() => 
+  const [treeData, setTreeData] = useState(() =>
     createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath)
   );
 
@@ -259,12 +258,12 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
     ripple.style.height = '20px';
     ripple.style.left = (x - 10) + 'px';
     ripple.style.top = (y - 10) + 'px';
-    
+
     container.appendChild(ripple);
-    
+
     // Add surface click animation
     container.classList.add('map-surface-click');
-    
+
     // Clean up after animation
     setTimeout(() => {
       if (container.contains(ripple)) {
@@ -278,13 +277,13 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
   const pathClassFunc = (linkDatum) => {
     const targetVisited = linkDatum.target.data.attributes?.visited;
     const targetCurrent = linkDatum.target.data.attributes?.current;
-    
+
     if (targetCurrent) return 'link-current';
     return targetVisited ? 'link-visited' : 'link-unvisited';
   };
 
   return (
-    <div 
+    <div
       style={{ width: '100%', height: '100%', position: 'relative' }}
       onClick={handleSurfaceClick}
     >
@@ -431,7 +430,7 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
           }
         }
       `}</style>
-      
+
       <Tree
         data={treeData}
         orientation="horizontal"
@@ -440,7 +439,7 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
         translate={{ x: 150, y: 220 }}
         nodeSize={{ x: 160, y: 60 }}
         separation={{ siblings: 1.0, nonSiblings: 1.2 }}
-        renderCustomNodeElement={(props) => renderCustomNodeElement({...props, pageScrollProgress, onNodeClick: handleNodeClick})}
+        renderCustomNodeElement={(props) => renderCustomNodeElement({ ...props, pageScrollProgress, onNodeClick: handleNodeClick })}
         onNodeClick={handleNodeClick}
         collapsible={false}
         zoomable={true}
@@ -456,15 +455,15 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
 };
 
 // Main Portfolio Map Component - Completely Self-Contained
-const PortfolioMap = ({ 
-  onClose: externalOnClose = null, 
-  autoOpen = false, 
+const PortfolioMap = ({
+  onClose: externalOnClose = null,
+  autoOpen = false,
   onExternalLinkModal = null,
   disableInternalExternalModal = false
 }) => {
   const router = useRouter();
   const pathname = usePathname();
-  
+
   // Component's own state management
   const [showExplorationMap, setShowExplorationMap] = useState(autoOpen);
   const [isClosing, setIsClosing] = useState(false);
@@ -492,15 +491,27 @@ const PortfolioMap = ({
     setVisitedPages(prev => {
       const newSet = new Set(prev);
       newSet.add(pathname);
-      
+
       // Also save to localStorage immediately for direct visits
       if (typeof window !== 'undefined') {
         localStorage.setItem('portfolioVisitedPages', JSON.stringify([...newSet]));
       }
-      
+
       return newSet;
     });
   }, [pathname]);
+
+  // Lock body scroll when map is open
+  useEffect(() => {
+    if (showExplorationMap) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showExplorationMap]);
 
   // Track scroll progress and save page-specific progress
   useEffect(() => {
@@ -509,11 +520,11 @@ const PortfolioMap = ({
       const currentScroll = window.scrollY;
       const progress = totalHeight > 0 ? Math.min(100, (currentScroll / totalHeight) * 100) : 0;
       setScrollProgress(progress);
-      
+
       // Save page-specific scroll progress with debouncing
       setPageScrollProgress(prev => {
         const updated = { ...prev, [pathname]: Math.round(progress) };
-        
+
         // Debounced localStorage save
         if (typeof window !== 'undefined') {
           clearTimeout(window.portfolioScrollTimer);
@@ -521,14 +532,14 @@ const PortfolioMap = ({
             localStorage.setItem('portfolioPageScrollProgress', JSON.stringify(updated));
           }, 100);
         }
-        
+
         return updated;
       });
     };
 
     // Initial call to capture page state
     setTimeout(handleScroll, 100);
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -565,20 +576,14 @@ const PortfolioMap = ({
       newSet.add(path);
       return newSet;
     });
-    
-    // Track navigation event
-    trackPortfolioEvents.portfolioNavigation(path);
-    
+
     router.push(path);
   }, [router]);
 
   // Handle external link confirmation
   const handleExternalLink = useCallback((url) => {
     console.log('handleExternalLink called with:', url);
-    
-    // Track external link click
-    trackPortfolioEvents.externalLinkClick(url, 'portfolio_map');
-    
+
     if (disableInternalExternalModal && onExternalLinkModal) {
       // Use parent's external modal handling
       console.log('Using parent external modal handling');
@@ -589,7 +594,7 @@ const PortfolioMap = ({
       setExternalLinkUrl(url);
       setShowExternalLinkModal(true);
     }
-    
+
     // Auto-close the portfolio map when external link modal opens
     handleCloseModal();
   }, [handleCloseModal, onExternalLinkModal, disableInternalExternalModal]);
@@ -599,20 +604,20 @@ const PortfolioMap = ({
     // Prevent default behavior
     evt?.preventDefault?.();
     evt?.stopPropagation?.();
-    
+
     console.log('Clicked nodeDatum:', nodeDatum);
 
     // Check if this is an external link
     const isExternal = nodeDatum.data?.attributes?.external || nodeDatum.attributes?.external;
     const externalUrl = nodeDatum.data?.attributes?.externalUrl || nodeDatum.attributes?.externalUrl;
-    
+
     if (isExternal && externalUrl) {
       handleExternalLink(externalUrl);
       return;
     }
 
     // Regular navigation
-    const path = 
+    const path =
       nodeDatum.data?.attributes?.path ||
       nodeDatum.attributes?.path ||
       nodeDatum.data?.attributes?.href ||
@@ -643,7 +648,7 @@ const PortfolioMap = ({
       }
       return paths;
     };
-    
+
     const allPaths = getAllPaths(SITE_STRUCTURE);
     const visitedCount = allPaths.filter(path => visitedPages.has(path)).length;
     return Math.round((visitedCount / allPaths.length) * 100);
@@ -658,7 +663,7 @@ const PortfolioMap = ({
       }
       return nodes;
     };
-    
+
     const allNodes = getAllNodes(SITE_STRUCTURE);
     return allNodes.filter(node => !visitedPages.has(node.path));
   }, [visitedPages]);
@@ -676,20 +681,20 @@ const PortfolioMap = ({
           aria-label="Toggle Portfolio Map"
         >
           {/* Map Icon */}
-          <svg 
-            className="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-all duration-300" 
-            fill="none" 
-            viewBox="0 0 24 24" 
+          <svg
+            className="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-all duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={1.5} 
-              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7" 
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m0 0L9 7"
             />
           </svg>
-          
+
           {/* Progress Ring - Shows scroll progress */}
           <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
             <circle
@@ -722,34 +727,34 @@ const PortfolioMap = ({
       </div>      {/* Exploration Map Modal */}
       {showExplorationMap && (
         <div className={`fixed inset-0 z-[99999] flex items-center justify-center p-4 modal-backdrop ${isClosing ? 'modal-backdrop-closing' : ''}`}
-             style={{
-               background: 'rgba(231, 223, 216, 0.85)',
-               backdropFilter: 'blur(0.5px)'
-               
-             }}
-             onClick={(e) => {
-               // Close modal when clicking backdrop
-               if (e.target === e.currentTarget) {
-                 handleCloseModal();
-               }
-             }}>
+          style={{
+            background: 'rgba(231, 223, 216, 0.85)',
+            backdropFilter: 'blur(0.5px)'
+
+          }}
+          onClick={(e) => {
+            // Close modal when clicking backdrop
+            if (e.target === e.currentTarget) {
+              handleCloseModal();
+            }
+          }}>
           {/* Modern Tech Interface Container */}
           <div className={`relative max-w-4xl w-full max-h-[80vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-800 modal-container ${isClosing ? 'modal-container-closing' : ''}`}
-               style={{
-                 background: 'linear-gradient(145deg, #fafaf9 0%, #f5f5f4 50%, #e7e5e4 100%)',
-                 borderRadius: '4px'
-               }}
-               onClick={(e) => e.stopPropagation()}>
-            
+            style={{
+              background: 'linear-gradient(145deg, #fafaf9 0%, #f5f5f4 50%, #e7e5e4 100%)',
+              borderRadius: '4px'
+            }}
+            onClick={(e) => e.stopPropagation()}>
+
             {/* Subtle tech grid overlay */}
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
-                 style={{
-                   backgroundImage: `
+              style={{
+                backgroundImage: `
                      linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
                      linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
                    `,
-                   backgroundSize: '20px 20px'
-                 }}>
+                backgroundSize: '20px 20px'
+              }}>
             </div>
 
             {/* Corner accent lines */}
@@ -772,10 +777,10 @@ const PortfolioMap = ({
 
             {/* Header */}
             <div className="relative flex justify-between items-center p-6 border-b border-neutral-300"
-                 style={{ background: 'linear-gradient(180deg, #fafaf9 0%, #f5f5f4 100%)' }}>
+              style={{ background: 'linear-gradient(180deg, #fafaf9 0%, #f5f5f4 100%)' }}>
               <div>
-                <h2 className="text-2xl font-light text-black tracking-wide" 
-                    style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.05em' }}>
+                <h2 className="text-2xl font-light text-black tracking-wide"
+                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.05em' }}>
                   SITE.MAP
                 </h2>
                 <p className="text-neutral-600 mt-1 text-sm font-mono">
@@ -808,9 +813,9 @@ const PortfolioMap = ({
             </div>
 
             {/* Footer with Legend and Stats */}
-            <div className="relative p-4 border-t border-neutral-300 bg-neutral-50">
+            <div className="relative p-1 border-t border-neutral-300 bg-neutral-50">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8 text-xs text-neutral-700 font-mono uppercase tracking-wider">
+                <div className="flex items-center space-x-6 ms-6 text-xs text-neutral-700 font-mono uppercase tracking-wider">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-black"></div>
                     <span>ACTIVE</span>

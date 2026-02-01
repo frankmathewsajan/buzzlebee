@@ -6,7 +6,6 @@ import { Space_Grotesk } from 'next/font/google';
 
 // Components
 import PortfolioMap from './components/PortfolioMap';
-import DevNotice from './components/DevNotice';
 import ContactModal from './components/ContactModal';
 import ExternalLinkModal from './components/ExternalLinkModal';
 import HeroSection from './components/i/HeroSection';
@@ -19,7 +18,7 @@ import projectsData from './projects.json';
 import { useScrollAndVisibility } from './hooks/useScrollAndVisibility';
 
 // Font setup
-const spaceGrotesk = Space_Grotesk({ 
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
 });
@@ -27,7 +26,7 @@ const spaceGrotesk = Space_Grotesk({
 export default function Home() {
   const router = useRouter();
   const indexProjects = projectsData.filter(project => project.SHOW_IN_INDEX);
-  
+
   // Refs
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -69,7 +68,7 @@ export default function Home() {
   useEffect(() => {
     const styleId = 'home-page-styles';
     if (document.getElementById(styleId)) return;
-    
+
     const style = document.createElement('style');
     style.id = styleId;
     style.textContent = `
@@ -79,7 +78,7 @@ export default function Home() {
       }
     `;
     document.head.appendChild(style);
-    
+
     return () => {
       const existingStyle = document.getElementById(styleId);
       if (existingStyle) existingStyle.remove();
@@ -88,20 +87,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#e7dfd8]">
-      <DevNotice />
       <PortfolioMap />
 
-      <HeroSection 
+      <HeroSection
         sectionRef={homeRef}
         isVisible={viewState.sectionVisibility.home}
       />
 
-      <AboutSection 
+      <AboutSection
         sectionRef={aboutRef}
         isVisible={viewState.sectionVisibility.about}
       />
 
-      <ProjectsSection 
+      <ProjectsSection
         sectionRef={projectsRef}
         isVisible={viewState.sectionVisibility.projects}
         projectsOpacity={viewState.projectsOpacity}
@@ -110,7 +108,7 @@ export default function Home() {
         spaceGrotesk={spaceGrotesk}
       />
 
-      <ContactSection 
+      <ContactSection
         sectionRef={contactRef}
         isVisible={viewState.sectionVisibility.contact}
         contactOpacity={viewState.contactOpacity}
@@ -118,8 +116,8 @@ export default function Home() {
         handleSocialLinkClick={handleSocialLinkClick}
       />
 
-      <ContactModal 
-        isOpen={contactModalOpen} 
+      <ContactModal
+        isOpen={contactModalOpen}
         onClose={() => setContactModalOpen(false)}
         variant={contactModalSource === 'gmail' ? 'contact' : 'social'}
         hideDirectAccess={contactModalSource === 'gmail'}
