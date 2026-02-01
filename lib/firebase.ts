@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from "firebase/app";
-import { getAnalytics, Analytics } from "firebase/analytics";
+import type { Analytics } from "firebase/analytics";
 
 // Next.js only injects env vars for static property accesses like process.env.MY_KEY.
 // Avoid dynamic lookups; validate required vars with static references.
@@ -36,11 +36,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-// Initialize Analytics
+// Initialize Analytics (only on client-side)
 let analytics: Analytics | null = null;
 
 if (typeof window !== "undefined") {
-  analytics = getAnalytics(app);
+  // Dynamically import analytics only on client-side
+  import("firebase/analytics").then(({ getAnalytics }) => {
+    analytics = getAnalytics(app);
+  });
 }
 
 export { app, analytics };
