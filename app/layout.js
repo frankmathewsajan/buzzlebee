@@ -1,13 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Caveat, Outfit } from "next/font/google";
 import "./globals.css";
-import MobileMessage from "./components/MobileMessage";
-import Analytics from "./components/Analytics";
-
-// Initialize Firebase Analytics
-import "../lib/firebase";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -20,19 +14,6 @@ const outfit = Outfit({
 });
 
 export default function RootLayout({ children }) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkScreenSize();
-    window.addEventListener("resize", checkScreenSize);
-
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
   return (
     <html lang="en" className={`${caveat.variable} ${outfit.variable}`}>
       <head>
@@ -45,7 +26,6 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <Analytics />
         {children}
       </body>
     </html>

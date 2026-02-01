@@ -1,0 +1,49 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next
+out
+.vercel
+
+# Production
+build
+dist
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+*.log
+pglite-debug.log
+
+# Local env files
+.env*.local
+.env
+
+# Firebase
+.firebaserc
+firebase.json
+.firebase
+
+# Git
+.git
+.gitignore
+.github
+
+# IDE
+.vscode
+.idea
+
+# Testing
+coverage
+.nyc_output
+
+# Documentation
+README.md
+howto.md
+*.md
