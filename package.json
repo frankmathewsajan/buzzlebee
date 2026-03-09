@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "deploy": "bun run build && firebase deploy --only hosting",
+    "deploy": "bun run build && bunx firebase-tools deploy --only hosting",
     "deploy:cloudrun": "powershell -ExecutionPolicy Bypass -File deploy-cloudrun.ps1"
   },
   "dependencies": {
