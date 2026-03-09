@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
+import { useSectionNavigation } from '../hooks/useSectionNavigation';
 import certifications from '../certifications.json';
 
 // Font setup to match index page
@@ -21,155 +21,20 @@ const inter = Inter({
 });
 
 export default function Certifications() {
-  const [activeCert, setActiveCert] = useState('overview');
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [visibleSection, setVisibleSection] = useState('overview');
-
-  // Filter out hidden certificates
   const visibleCertifications = useMemo(() => {
     return certifications.filter(cert => !cert.hidden);
   }, []);
-
-  // Create refs at the top level - one for each visible certificate
-  const overviewRef = useRef(null);
-  const stGdConventRef = useRef(null);
-  const cs50pRef = useRef(null);
-  const hacksagonRef = useRef(null);
-
-  const certRefs = {
-    overview: overviewRef,
-    'st-gd-convent-completion': stGdConventRef,
-    'cs50p-certificate': cs50pRef,
-    'hacksagon-2025': hacksagonRef
-  };
-
-  // Group certifications by tags
-  const certificationsByTag = useMemo(() => {
-    const grouped = {
-      skill: [],
-      academic: [],
-      professional: [],
-      wins: [],
-      participation: []
-    };
-
-    certifications.forEach(cert => {
-      cert.tags.forEach(tag => {
-        if (grouped[tag]) {
-          grouped[tag].push(cert);
-        }
-      });
-    });
-
-    return grouped;
-  }, []);
-
-  // Single professional color scheme inspired by Credly
-  const brandColors = {
-    bg: '#FFFFFF',
-    text: '#1A1A1A',
-    secondary: '#6B7280',
-    accent: '#2563EB',
-    border: '#E5E7EB',
-    hoverBg: '#F8FAFC',
-    cardBg: '#FEFEFE'
-  };
-
-  useEffect(() => {
-    let scrollTimeout;
-
-    const handleScroll = () => {
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-
-      scrollTimeout = setTimeout(() => {        
-        // Find the section that's most visible in the viewport
-        const sections = ['overview', ...certifications.map(c => c.id)];
-        let currentSection = 'overview';
-        let maxVisibility = 0;
-        
-        sections.forEach(sectionId => {
-          const element = document.getElementById(sectionId);
-          if (!element) return;
-          
-          const rect = element.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          
-          // Calculate how much of the section is visible
-          const visibleTop = Math.max(0, -rect.top);
-          const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-          
-          const visibilityPercentage = (visibleHeight / Math.max(1, rect.height)) * 100;
-          
-          if (visibilityPercentage > maxVisibility) {
-            maxVisibility = visibilityPercentage;
-            currentSection = sectionId;
-          }
-        });
-        
-        if (currentSection !== activeCert) {
-          setActiveCert(currentSection);
-          setVisibleSection(currentSection);
-        }
-
-        // Update scroll progress
-        const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = Math.min(100, (window.scrollY / Math.max(1, totalHeight)) * 100);
-        setScrollProgress(progress);
-      }, 100);
-    };
-
-    // Initial scroll calculation
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-    };
-  }, [activeCert]);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      let mostVisibleEntry = null;
-      let maxVisibilityRatio = 0;
-
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > maxVisibilityRatio) {
-          maxVisibilityRatio = entry.intersectionRatio;
-          mostVisibleEntry = entry;
-        }
-      });
-
-      if (mostVisibleEntry && mostVisibleEntry.intersectionRatio > 0.3) {
-        const sectionId = mostVisibleEntry.target.id;
-        setVisibleSection(sectionId);
-        setActiveCert(sectionId);
-      }
-    }, options);
-
-    // Observe all sections
-    const sections = ['overview', ...certifications.map(c => c.id)];
-    sections.forEach(sectionId => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const sectionIds = useMemo(
+    () => ['overview', ...visibleCertifications.map((cert) => cert.id)],
+    [visibleCertifications],
+  );
+  const {
+    activeSection: activeCert,
+    visibleSection,
+    scrollProgress,
+    sectionRefs: certRefs,
+    scrollToSection,
+  } = useSectionNavigation(sectionIds);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -228,7 +93,7 @@ export default function Certifications() {
       {activeCert !== 'overview' && (
         <div className="fixed bottom-8 right-8 z-50">
           <button
-            onClick={() => certRefs.overview.current?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => scrollToSection('overview')}
             className="p-3 rounded-full border border-[#E5E7EB] hover:border-[#2563EB] text-[#6B7280] hover:text-[#2563EB] transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -242,7 +107,7 @@ export default function Certifications() {
       <section
         id="overview"
         ref={certRefs.overview}
-        className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
+        className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
       >
         <motion.div 
           className="max-w-6xl mx-auto w-full"
@@ -281,19 +146,12 @@ export default function Certifications() {
                 <motion.button
                   key={cert.id}
                   variants={itemVariants}
-                  onClick={() => {
-                    const element = certRefs[cert.id]?.current;
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
-                      setActiveCert(cert.id);
-                      setVisibleSection(cert.id);
-                    }
-                  }}
+                  onClick={() => scrollToSection(cert.id)}
                   className="group flex items-center gap-6 p-6 rounded-lg border border-[#E5E7EB] hover:border-[#2563EB] transition-all duration-300 bg-white hover:bg-[#F8FAFC] text-left w-full"
                 >
                   {/* Tiny Certificate Preview */}
-                  <div className="flex-shrink-0">
-                    <div className="w-20 h-16 bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] rounded border border-[#E5E7EB] overflow-hidden">
+                  <div className="shrink-0">
+                    <div className="w-20 h-16 bg-linear-to-br from-[#F3F4F6] to-[#E5E7EB] rounded border border-[#E5E7EB] overflow-hidden">
                       {cert.image && cert.image !== false ? (
                         <Image
                           src={`/images/certifications/${cert.image}`}
@@ -326,7 +184,7 @@ export default function Certifications() {
                   </div>
 
                   {/* Arrow Icon */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <svg className="w-5 h-5 text-[#6B7280] group-hover:text-[#2563EB] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -344,7 +202,7 @@ export default function Certifications() {
           key={cert.id}
           id={cert.id}
           ref={certRefs[cert.id]}
-          className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
+          className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20"
         >
           <motion.div
             className="max-w-6xl mx-auto w-full"
@@ -355,8 +213,8 @@ export default function Certifications() {
             {/* Certificate Header */}
             <div className="flex flex-col lg:flex-row gap-12 mb-16">
               {/* Bigger Certificate Preview */}
-              <div className="flex-shrink-0">
-                <div className="w-[600px] h-[450px] bg-gradient-to-br from-[#F8FAFC] to-[#F3F4F6] rounded-xl border border-[#E5E7EB] overflow-hidden shadow-xl">
+              <div className="shrink-0">
+                <div className="w-[600px] h-[450px] bg-linear-to-br from-[#F8FAFC] to-[#F3F4F6] rounded-xl border border-[#E5E7EB] overflow-hidden shadow-xl">
                   {cert.image && cert.image !== false ? (
                     <Image
                       src={`/images/certifications/${cert.image}`}
@@ -490,7 +348,7 @@ export default function Certifications() {
       ))}
 
       {/* Navigation Dots */}
-      <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
+      <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-100 flex flex-col items-end">
         <div className="flex flex-col items-end gap-3">
           {['overview', ...visibleCertifications.map(c => c.id)].map((id, index) => {
             const cert = visibleCertifications.find(c => c.id === id);
@@ -498,14 +356,7 @@ export default function Certifications() {
             return (
               <button
                 key={id}
-                onClick={() => {
-                  const element = certRefs[id].current;
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                    setActiveCert(id);
-                    setVisibleSection(id);
-                  }
-                }}
+                onClick={() => scrollToSection(id)}
                 className="group flex items-center gap-3"
               >
                 <span className={`${inter.className} text-sm transition-all duration-300 opacity-0 group-hover:opacity-100 text-[#374151]`}>

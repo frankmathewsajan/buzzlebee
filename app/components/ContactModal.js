@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import ExternalLinkModal from './ExternalLinkModal';
+import ModalFrame from './ModalFrame';
 
 const ContactModal = ({ isOpen, onClose, variant = 'contact', hideDirectAccess = false }) => {
   const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
@@ -143,10 +143,11 @@ GitHub: ${formData.github || 'Not provided'}`;
         siteName={externalLinkName}
       />
       <div
-        className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+        className="fixed inset-0 flex items-center justify-center p-4"
         style={{
           background: 'rgba(231, 223, 216, 0.85)',
-          backdropFilter: 'blur(0.5px)'
+          backdropFilter: 'blur(0.5px)',
+          zIndex: 99999,
         }}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
@@ -154,73 +155,18 @@ GitHub: ${formData.github || 'Not provided'}`;
           }
         }}
       >
-        <motion.div
-          className="relative max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-800"
-          style={{
-            background: 'linear-gradient(145deg, #fafaf9 0%, #f5f5f4 50%, #e7e5e4 100%)',
-            borderRadius: '4px'
-          }}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          onClick={(e) => e.stopPropagation()}
+        <ModalFrame
+          title={variant === 'social' ? 'SOCIAL.CONNECT' : 'CONTACT.FORM'}
+          subtitle={
+            variant === 'social'
+              ? 'CONNECT.REQUEST • PRIVATE.ACCOUNT.ACCESS'
+              : 'MESSAGE.DISPATCH • DIRECT.COMMUNICATION'
+          }
+          onClose={onClose}
+          closeLabel="Close form"
+          widthClassName="max-w-2xl"
+          bodyClassName="p-0"
         >
-          {/* Subtle tech grid overlay */}
-          <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
-            style={{
-              backgroundImage: `
-                 linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-                 linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-               `,
-              backgroundSize: '20px 20px'
-            }}>
-          </div>
-
-          {/* Corner accent lines */}
-          <div className="absolute top-0 left-0 w-8 h-8">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-black"></div>
-            <div className="absolute top-0 left-0 w-[1px] h-full bg-black"></div>
-          </div>
-          <div className="absolute top-0 right-0 w-8 h-8">
-            <div className="absolute top-0 right-0 w-full h-[1px] bg-black"></div>
-            <div className="absolute top-0 right-0 w-[1px] h-full bg-black"></div>
-          </div>
-          <div className="absolute bottom-0 left-0 w-8 h-8">
-            <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black"></div>
-            <div className="absolute bottom-0 left-0 w-[1px] h-full bg-black"></div>
-          </div>
-          <div className="absolute bottom-0 right-0 w-8 h-8">
-            <div className="absolute bottom-0 right-0 w-full h-[1px] bg-black"></div>
-            <div className="absolute bottom-0 right-0 w-[1px] h-full bg-black"></div>
-          </div>
-
-          {/* Header */}
-          <div className="relative flex justify-between items-center p-6 border-b border-neutral-300"
-            style={{ background: 'linear-gradient(180deg, #fafaf9 0%, #f5f5f4 100%)' }}>
-            <div>
-              <h2 className="text-2xl font-light text-black tracking-wide"
-                style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.05em' }}>
-                {variant === 'social' ? 'SOCIAL.CONNECT' : 'CONTACT.FORM'}
-              </h2>
-              <p className="text-neutral-600 mt-1 text-sm font-mono">
-                {variant === 'social'
-                  ? 'CONNECT.REQUEST • PRIVATE.ACCOUNT.ACCESS'
-                  : 'MESSAGE.DISPATCH • DIRECT.COMMUNICATION'}
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="text-neutral-400 hover:text-black text-xl font-light 
-                       w-8 h-8 flex items-center justify-center 
-                       hover:bg-neutral-100 transition-all duration-200 border border-transparent hover:border-neutral-300"
-              aria-label="Close form"
-              style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-            >
-              ×
-            </button>
-          </div>
-
-          {/* Social Direct Access (only for social variant and when not hidden) */}
           {variant === 'social' && !hideDirectAccess && (
             <div className="p-6 border-b border-neutral-200 bg-neutral-50">
               <h3 className="text-sm font-mono text-neutral-700 uppercase tracking-wider mb-3">
@@ -272,10 +218,8 @@ GitHub: ${formData.github || 'Not provided'}`;
             </div>
           )}
 
-          {/* Form Content */}
           <div className="flex-1 overflow-y-auto p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Required Fields */}
               <div className="space-y-4">
                 <h3 className="text-sm font-mono text-neutral-700 uppercase tracking-wider">
                   REQUIRED.FIELDS
@@ -331,7 +275,6 @@ GitHub: ${formData.github || 'Not provided'}`;
                 </div>
               </div>
 
-              {/* Optional Social Handles */}
               <div className="space-y-4">
                 <h3 className="text-sm font-mono text-neutral-700 uppercase tracking-wider">
                   SOCIAL.HANDLES • OPTIONAL
@@ -396,7 +339,6 @@ GitHub: ${formData.github || 'Not provided'}`;
                 </div>
               </div>
 
-              {/* Submit Status */}
               {submitStatus && (
                 <div className={`p-3 rounded border font-mono text-sm ${submitStatus === 'success'
                   ? 'bg-green-50 border-green-200 text-green-800'
@@ -408,7 +350,6 @@ GitHub: ${formData.github || 'Not provided'}`;
                 </div>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -418,7 +359,7 @@ GitHub: ${formData.github || 'Not provided'}`;
               </button>
             </form>
           </div>
-        </motion.div>
+        </ModalFrame>
       </div>
     </>
   );

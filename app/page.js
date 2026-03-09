@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useRef, useState, useMemo, useCallback } from "react";
 import { Space_Grotesk } from 'next/font/google';
 
 // Components
@@ -62,27 +62,6 @@ export default function Home() {
     } else {
       window.open(url, '_blank');
     }
-  }, []);
-
-  // CSS animations
-  useEffect(() => {
-    const styleId = 'home-page-styles';
-    if (document.getElementById(styleId)) return;
-
-    const style = document.createElement('style');
-    style.id = styleId;
-    style.textContent = `
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      const existingStyle = document.getElementById(styleId);
-      if (existingStyle) existingStyle.remove();
-    };
   }, []);
 
   return (

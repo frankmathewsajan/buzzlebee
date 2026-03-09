@@ -7,25 +7,20 @@ import "./resume.css";
 
 export default function ResumePage() {
   const [isLoading, setIsLoading] = useState(true);
-  const [pdfLoaded, setPdfLoaded] = useState(false);
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
   const [showExternalModal, setShowExternalModal] = useState(false);
   const [externalLinkUrl, setExternalLinkUrl] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
 
   useEffect(() => {
-    // Function to get PDF URL based on hash
     const getPdfUrl = () => {
-      // Eg: http://localhost:3000/resume#07012026
-      console.log('Current hash:', window.location.hash);
       const hash = window.location.hash.replace('#', '');
       if (hash) {
         return `/files/FrankMathewSajan_${hash}.pdf`;
       }
-      return '/files/FrankMathewSajan_07012026.pdf'; // Default PDF
+      return '/files/FrankMathewSajan_07012026.pdf';
     };
 
-    // Function to check if PDF exists
     const checkPdfExists = async (url) => {
       try {
         const response = await fetch(url, { method: 'HEAD' });
@@ -43,7 +38,6 @@ export default function ResumePage() {
       const finalPdfUrl = pdfExists ? targetPdfUrl : '/files/FrankMathewSajan_07012026.pdf';
       setPdfUrl(finalPdfUrl);
 
-      // Simulate PDF loading time with minimum 2 seconds for the loading animation
       const minLoadTime = 2000;
       const startTime = Date.now();
 
@@ -52,25 +46,18 @@ export default function ResumePage() {
         const remainingTime = Math.max(0, minLoadTime - elapsedTime);
 
         setTimeout(() => {
-          setPdfLoaded(true);
           setIsLoading(false);
-
-
-          // Track resume view
-          // trackPortfolioEvents.resumeView();
         }, remainingTime);
       };
 
-      // Create iframe to preload PDF
       const iframe = document.createElement('iframe');
       iframe.src = finalPdfUrl;
       iframe.style.display = 'none';
       iframe.onload = handlePdfLoad;
-      iframe.onerror = handlePdfLoad; // Handle load errors gracefully
+      iframe.onerror = handlePdfLoad;
 
       document.body.appendChild(iframe);
 
-      // Cleanup function
       return () => {
         if (document.body.contains(iframe)) {
           document.body.removeChild(iframe);
@@ -78,21 +65,14 @@ export default function ResumePage() {
       };
     };
 
-    // Handle hash changes
     const handleHashChange = () => {
-      // Restart the loading process when hash changes
       setIsLoading(true);
-      setPdfLoaded(false);
       initializePdfUrl();
     };
 
-    // Initialize on mount
     const cleanup = initializePdfUrl();
-
-    // Listen for hash changes
     window.addEventListener('hashchange', handleHashChange);
 
-    // Cleanup
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
       if (cleanup && typeof cleanup === 'function') {
@@ -101,13 +81,10 @@ export default function ResumePage() {
     };
   }, []);
 
-  // Handle external link modal state from PortfolioMap
   const handleExternalLinkModal = (isOpen, url = '') => {
-    console.log('External modal state changed:', isOpen, url);
     setShowExternalModal(isOpen);
     setExternalLinkUrl(url);
     if (isOpen) {
-      // Hide portfolio modal when external link modal opens
       setShowPortfolioModal(false);
     }
   };

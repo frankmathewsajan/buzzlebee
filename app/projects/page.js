@@ -1,25 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo } from 'react';
-import { ArrowUpCircle, ArrowDownCircle } from '@geist-ui/icons';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import PortfolioMap from '../components/PortfolioMap';
 import ExternalLinkModal from '../components/ExternalLinkModal';
-import projects from '../projects.json'; // Assuming projects.json is in the same directory
+import { useSectionNavigation } from '../hooks/useSectionNavigation';
+import projects from '../projects.json';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Projects() {
-  const [activeProject, setActiveProject] = useState('overview');
-  const [showNavMenu, setShowNavMenu] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [visibleSection, setVisibleSection] = useState('overview');
   const [showMiniProjectsModal, setShowMiniProjectsModal] = useState(false);
   const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
   const [externalLinkUrl, setExternalLinkUrl] = useState('');
@@ -31,77 +25,14 @@ export default function Projects() {
     setShowExternalLinkModal(true);
   };
 
-  
-  
-
-  const categories = {
-    "IoT/Embedded": ["helmet-system"],
-    "Full Stack": ["st-gd-convent", "monopoly-banking"],
-    "Course Projects": ["library-management", "hss-manager"]
-  };
-
-  const overviewRef = useRef(null);
-  const helmetSystemRef = useRef(null);
-  const stGdConventRef = useRef(null);
-  const monopolyBankingRef = useRef(null);
-  const libraryManagementRef = useRef(null);
-  const hssManagerRef = useRef(null);
-
-  const projectRefs = useMemo(() => ({
-    overview: overviewRef,
-    'helmet-system': helmetSystemRef,
-    'st-gd-convent': stGdConventRef,
-    'monopoly-banking': monopolyBankingRef,
-    'library-management': libraryManagementRef,
-    'hss-manager': hssManagerRef
-  }), []);
-
-  const themes = {
-    dark: {
-      bg: '#0A0F1E',
-      card: '#111827',
-      text: {
-        primary: '#F9FAFB',
-        secondary: '#D1D5DB'
-      },
-      accent: {
-        primary: '#3B82F6',
-        secondary: '#8B5CF6'
-      }
-    },
-    light: {
-      bg: '#F9FAFB',
-      card: '#FFFFFF',
-      text: {
-        primary: '#111827',
-        secondary: '#4B5563'
-      },
-      accent: {
-        primary: '#2563EB',
-        secondary: '#7C3AED'
-      }
-    }
-  };
-
-  const theme = isDarkMode ? themes.dark : themes.light;
-
-  // Add theme toggle button styles
-  const toggleButtonStyles = `
-    fixed top-8 right-8 z-50 p-3 rounded-full 
-    ${isDarkMode ? 'bg-white/10' : 'bg-gray-900/10'} 
-    backdrop-blur-sm transition-all duration-300
-    hover:scale-110 border 
-    ${isDarkMode ? 'border-white/20' : 'border-gray-900/20'}
-  `;
-
-  // Update navigation menu styles
-  const navMenuStyles = `
-    fixed right-0 top-1/2 -translate-y-1/2 z-50
-    ${isDarkMode ? 'bg-[#1F2937]/90' : 'bg-white/90'}
-    backdrop-blur-sm rounded-l-2xl shadow-xl overflow-hidden
-    border ${isDarkMode ? 'border-[#3B82F6]/30' : 'border-gray-200'}
-    transition-all duration-300
-  `;
+  const sectionIds = useMemo(() => ['overview', ...projects.map((project) => project.id)], []);
+  const {
+    activeSection: activeProject,
+    visibleSection,
+    scrollProgress,
+    sectionRefs: projectRefs,
+    scrollToSection,
+  } = useSectionNavigation(sectionIds);
 
   // Color schemes for different domains
   const domainColors = {
@@ -139,147 +70,6 @@ export default function Projects() {
       bg: '#F0FDF4',
       text: '#2F855A',
       accent: '#276749'
-    }
-  };
-
-  useEffect(() => {
-    let scrollTimeout;
-
-    const handleScroll = () => {
-      const currentScroll = window.scrollY;
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = Math.min(100, (currentScroll / Math.max(1, totalHeight)) * 100);
-      setScrollProgress(progress);
-
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-
-      scrollTimeout = setTimeout(() => {        
-        // Find the section that's most visible in the viewport
-        const sections = ['overview', ...projects.map(p => p.id)];
-        let currentSection = 'overview';
-        let maxVisibility = 0;
-        
-        sections.forEach(sectionId => {
-          const element = document.getElementById(sectionId);
-          if (!element) return;
-          
-          const rect = element.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          
-          // Calculate how much of the section is visible
-          const visibleTop = Math.max(0, -rect.top);
-          const visibleBottom = Math.min(rect.height, viewportHeight - rect.top);
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-          
-          const visibilityPercentage = (visibleHeight / Math.max(1, rect.height)) * 100;
-          
-          if (visibilityPercentage > maxVisibility) {
-            maxVisibility = visibilityPercentage;
-            currentSection = sectionId;
-          }
-        });
-        
-        if (currentSection !== activeProject) {
-          setActiveProject(currentSection);
-          setVisibleSection(currentSection);
-        }
-      }, 100);
-    };
-
-    // Remove the wheel event handler to allow natural scrolling
-    // const handleWheel = (e) => {
-    //   if (isScrolling) return;
-    //   
-    //   e.preventDefault();
-    //   
-    //   const sections = ['overview', ...projects.map(p => p.id)];
-    //   const currentIndex = sections.indexOf(activeProject);
-    //   
-    //   if (e.deltaY > 0 && currentIndex < sections.length - 1) {
-    //     const nextSection = projectRefs[sections[currentIndex + 1]].current;
-    //     if (nextSection) {
-    //       nextSection.scrollIntoView({ behavior: 'smooth' });
-    //       setActiveProject(sections[currentIndex + 1]);
-    //       setVisibleSection(sections[currentIndex + 1]);
-    //     }
-    //   } else if (e.deltaY < 0 && currentIndex > 0) {
-    //     const prevSection = projectRefs[sections[currentIndex - 1]].current;
-    //     if (prevSection) {
-    //       prevSection.scrollIntoView({ behavior: 'smooth' });
-    //       setActiveProject(sections[currentIndex - 1]);
-    //       setVisibleSection(sections[currentIndex - 1]);
-    //     }
-    //   }
-    // };
-
-    // Initial scroll calculation
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Removed wheel event listener to allow natural scrolling
-    // window.addEventListener('wheel', handleWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      // window.removeEventListener('wheel', handleWheel);
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-    };
-  }, [activeProject, projectRefs]);
-
-  // Add CSS for smooth scrolling
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.textContent = `
-      html {
-        scroll-behavior: smooth;
-      }
-      section {
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      let mostVisibleEntry = null;
-      let maxVisibilityRatio = 0;
-
-      entries.forEach(entry => {
-        if (entry.intersectionRatio > maxVisibilityRatio) {
-          maxVisibilityRatio = entry.intersectionRatio;
-          mostVisibleEntry = entry;
-        }
-      });
-
-      if (mostVisibleEntry && mostVisibleEntry.intersectionRatio > 0.3) {
-        const sectionId = mostVisibleEntry.target.id;
-        setVisibleSection(sectionId);
-        setActiveProject(sectionId);
-      }
-    }, options);
-
-    // Observe all sections
-    const sections = ['overview', ...projects.map(p => p.id)];
-    sections.forEach(sectionId => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
     return () => observer.disconnect();
   }, []);
 
@@ -313,18 +103,6 @@ export default function Projects() {
     visible: {
       opacity: 1,
       x: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const timelineItemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
       transition: {
         duration: 0.5,
         ease: [0.22, 1, 0.36, 1]
@@ -372,7 +150,7 @@ export default function Projects() {
       {activeProject !== 'overview' && (
         <div className="fixed bottom-8 right-8 z-40">
           <button
-            onClick={() => projectRefs.overview.current?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => scrollToSection('overview')}
             className={`p-3 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 bg-white/80 backdrop-blur-sm hover:bg-white/90`}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -386,7 +164,7 @@ export default function Projects() {
       <section
         id="overview"
         ref={projectRefs.overview}
-        className="min-h-screen flex items-start relative px-8 bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-16"
+        className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-16"
       >
         <motion.div 
           className="max-w-[90vw] mx-auto w-full"
@@ -425,7 +203,7 @@ export default function Projects() {
                     <motion.button
                       key={project.id}
                       variants={itemVariants}
-                      onClick={() => projectRefs[project.id].current?.scrollIntoView({ behavior: 'smooth' })}
+                      onClick={() => scrollToSection(project.id)}
                       className="group block text-left w-full"
                     >
                       <div className="flex items-baseline justify-between border-b border-[#5D503A]/20 pb-2 group-hover:border-[#5D503A] transition-all duration-200"
@@ -468,7 +246,7 @@ export default function Projects() {
                     <motion.button
                       key={project.id}
                       variants={itemVariants}
-                      onClick={() => projectRefs[project.id].current?.scrollIntoView({ behavior: 'smooth' })}
+                      onClick={() => scrollToSection(project.id)}
                       className="group block text-left w-full"
                     >
                       <div className="flex items-baseline justify-between border-b border-[#5D503A]/20 pb-2 group-hover:border-[#5D503A] transition-all duration-200"
@@ -495,15 +273,11 @@ export default function Projects() {
                 <motion.button 
                   className="relative w-24 h-24 flex items-center justify-center cursor-pointer"
                   onClick={() => {
-                    const sections = ['overview', ...projects.map(p => p.id)];
-                    const currentIndex = sections.indexOf(visibleSection);
-                    if (currentIndex < sections.length - 1) {
-                      const nextSectionId = sections[currentIndex + 1];
-                      const nextElement = projectRefs[nextSectionId]?.current;
-                      if (nextElement) {
-                        nextElement.scrollIntoView({ behavior: 'smooth' });
-                        setActiveProject(nextSectionId);
-                        setVisibleSection(nextSectionId);
+                    const currentIndex = sectionIds.indexOf(visibleSection);
+                    if (currentIndex < sectionIds.length - 1) {
+                      const nextSectionId = sectionIds[currentIndex + 1];
+                      if (nextSectionId) {
+                        scrollToSection(nextSectionId);
                       }
                     }
                   }}
@@ -775,7 +549,7 @@ export default function Projects() {
 
       {/* Update the navigation dots to match current section color */}
       {!showMiniProjectsModal && (
-        <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] flex flex-col items-end">
+        <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-100 flex flex-col items-end">
           <div className={`flex flex-col items-end ${activeProject === 'overview' ? 'gap-6' : 'gap-3'}`}>
             {['overview', ...projects.map(p => p.id)].map((id, index) => {
               const project = projects.find(p => p.id === id);
@@ -786,14 +560,7 @@ export default function Projects() {
               return (
                 <button
                   key={id}
-                  onClick={() => {
-                    const element = projectRefs[id].current;
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
-                      setActiveProject(id);
-                      setVisibleSection(id);
-                    }
-                  }}
+                  onClick={() => scrollToSection(id)}
                   className={`group flex items-center gap-3 ${activeProject === 'overview' ? 'cursor-default' : ''}`}
                 >
                   <span className={`${inter.className} text-sm transition-all duration-300 ${activeProject === 'overview' ? 'hidden' : 'opacity-0 group-hover:opacity-100'}`}

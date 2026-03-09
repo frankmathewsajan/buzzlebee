@@ -150,7 +150,7 @@ export default function AboutPage() {
           {/* Name and Title - Centered */}
           <div className="text-center mb-16">
             <motion.h1
-              className="text-4xl md:text-5xl font-serif font-light bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent mb-8 px-4"
+              className="text-4xl md:text-5xl font-serif font-light bg-linear-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent mb-8 px-4"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -163,7 +163,7 @@ export default function AboutPage() {
           <div className="flex flex-col lg:flex-row gap-12 items-start max-w-5xl mx-auto">
             {/* Image */}
             <motion.div
-              className="flex-shrink-0 mx-auto lg:mx-0"
+              className="shrink-0 mx-auto lg:mx-0"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 3.8 }}
@@ -176,7 +176,7 @@ export default function AboutPage() {
                   className="object-cover grayscale contrast-110 brightness-95 hover:grayscale-0 transition-all duration-500"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent pointer-events-none"></div>
               </div>
             </motion.div>
 

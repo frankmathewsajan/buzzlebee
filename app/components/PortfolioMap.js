@@ -16,6 +16,7 @@ import {
 } from 'react-icons/fa';
 import Tree from 'react-d3-tree';
 import ExternalLinkModal from './ExternalLinkModal';
+import ModalFrame from './ModalFrame';
 
 // Website sitemap structure - this represents the actual site structure
 const SITE_STRUCTURE = {
@@ -142,7 +143,6 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
         }}
         onClick={(e) => {
           e.stopPropagation();
-          console.log('Circle clicked, path:', nodePath);
           if (isClickable && onNodeClick) {
             onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, e);
           }
@@ -212,7 +212,6 @@ const renderCustomNodeElement = ({ nodeDatum, toggleNode, onNodeClick, pageScrol
           }}
           onClick={(e) => {
             e.stopPropagation();
-            console.log('Text clicked, path:', nodePath);
             if (isClickable && onNodeClick) {
               onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, e);
             }
@@ -380,55 +379,6 @@ const PortfolioD3Tree = ({ visitedPages, currentPath, pageScrollProgress, onNode
           50% { transform: scale(0.998); }
           100% { transform: scale(1); }
         }
-        
-        /* Modal animations */
-        .modal-backdrop {
-          animation: fadeIn 0.3s ease-out;
-        }
-        
-        .modal-backdrop-closing {
-          animation: fadeOut 0.3s ease-out;
-        }
-        
-        .modal-container {
-          animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        .modal-container-closing {
-          animation: modalSlideOut 0.3s cubic-bezier(0.4, 0, 0.6, 1);
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes fadeOut {
-          from { opacity: 1; }
-          to { opacity: 0; }
-        }
-        
-        @keyframes modalSlideIn {
-          from { 
-            opacity: 0;
-            transform: scale(0.95) translateY(20px);
-          }
-          to { 
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-        
-        @keyframes modalSlideOut {
-          from { 
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-          to { 
-            opacity: 0;
-            transform: scale(0.95) translateY(-20px);
-          }
-        }
       `}</style>
 
       <Tree
@@ -582,15 +532,9 @@ const PortfolioMap = ({
 
   // Handle external link confirmation
   const handleExternalLink = useCallback((url) => {
-    console.log('handleExternalLink called with:', url);
-
     if (disableInternalExternalModal && onExternalLinkModal) {
-      // Use parent's external modal handling
-      console.log('Using parent external modal handling');
       onExternalLinkModal(true, url);
     } else {
-      // Use internal modal handling
-      console.log('Using internal external modal handling');
       setExternalLinkUrl(url);
       setShowExternalLinkModal(true);
     }
@@ -601,13 +545,9 @@ const PortfolioMap = ({
 
   // Handle node clicks - either navigate or show external modal
   const handleNodeClick = useCallback((nodeDatum, evt) => {
-    // Prevent default behavior
     evt?.preventDefault?.();
     evt?.stopPropagation?.();
 
-    console.log('Clicked nodeDatum:', nodeDatum);
-
-    // Check if this is an external link
     const isExternal = nodeDatum.data?.attributes?.external || nodeDatum.attributes?.external;
     const externalUrl = nodeDatum.data?.attributes?.externalUrl || nodeDatum.attributes?.externalUrl;
 
@@ -625,16 +565,13 @@ const PortfolioMap = ({
       nodeDatum.path;
 
     if (!path) {
-      console.log('No path found in node data');
       return;
     }
 
     if (path === pathname) {
-      console.log('Same page, not navigating');
       return;
     }
 
-    console.log('Navigating to:', path);
     handleNavigate(path);
     handleCloseModal();
   }, [pathname, handleNavigate, handleExternalLink, handleCloseModal]);
@@ -674,7 +611,7 @@ const PortfolioMap = ({
   return (
     <>
       {/* Fixed Top-Right Explorer Button */}
-      <div className="fixed top-6 right-6 z-[9999]">
+      <div className="fixed top-6 right-6" style={{ zIndex: 9999 }}>
         <button
           onClick={() => setShowExplorationMap(prev => !prev)}
           className="group relative w-12 h-12 bg-white/80 backdrop-blur-xl rounded-full shadow-lg hover:shadow-xl transition-all duration-500 flex items-center justify-center border border-white/20 hover:scale-110 hover:bg-white/90"
@@ -724,12 +661,15 @@ const PortfolioMap = ({
             <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-gray-700 rounded-full border border-white animate-pulse"></div>
           )}
         </button>
-      </div>      {/* Exploration Map Modal */}
+      </div>
+
+      {/* Exploration Map Modal */}
       {showExplorationMap && (
-        <div className={`fixed inset-0 z-[99999] flex items-center justify-center p-4 modal-backdrop ${isClosing ? 'modal-backdrop-closing' : ''}`}
+        <div className={`fixed inset-0 flex items-center justify-center p-4 transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
           style={{
             background: 'rgba(231, 223, 216, 0.85)',
-            backdropFilter: 'blur(0.5px)'
+            backdropFilter: 'blur(0.5px)',
+            zIndex: 99999,
 
           }}
           onClick={(e) => {
@@ -738,82 +678,18 @@ const PortfolioMap = ({
               handleCloseModal();
             }
           }}>
-          {/* Modern Tech Interface Container */}
-          <div className={`relative max-w-4xl w-full max-h-[80vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-800 modal-container ${isClosing ? 'modal-container-closing' : ''}`}
-            style={{
-              background: 'linear-gradient(145deg, #fafaf9 0%, #f5f5f4 50%, #e7e5e4 100%)',
-              borderRadius: '4px'
-            }}
-            onClick={(e) => e.stopPropagation()}>
-
-            {/* Subtle tech grid overlay */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none"
-              style={{
-                backgroundImage: `
-                     linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-                     linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-                   `,
-                backgroundSize: '20px 20px'
-              }}>
-            </div>
-
-            {/* Corner accent lines */}
-            <div className="absolute top-0 left-0 w-8 h-8">
-              <div className="absolute top-0 left-0 w-full h-[1px] bg-black"></div>
-              <div className="absolute top-0 left-0 w-[1px] h-full bg-black"></div>
-            </div>
-            <div className="absolute top-0 right-0 w-8 h-8">
-              <div className="absolute top-0 right-0 w-full h-[1px] bg-black"></div>
-              <div className="absolute top-0 right-0 w-[1px] h-full bg-black"></div>
-            </div>
-            <div className="absolute bottom-0 left-0 w-8 h-8">
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black"></div>
-              <div className="absolute bottom-0 left-0 w-[1px] h-full bg-black"></div>
-            </div>
-            <div className="absolute bottom-0 right-0 w-8 h-8">
-              <div className="absolute bottom-0 right-0 w-full h-[1px] bg-black"></div>
-              <div className="absolute bottom-0 right-0 w-[1px] h-full bg-black"></div>
-            </div>
-
-            {/* Header */}
-            <div className="relative flex justify-between items-center p-6 border-b border-neutral-300"
-              style={{ background: 'linear-gradient(180deg, #fafaf9 0%, #f5f5f4 100%)' }}>
-              <div>
-                <h2 className="text-2xl font-light text-black tracking-wide"
-                  style={{ fontFamily: 'system-ui, -apple-system, sans-serif', letterSpacing: '0.05em' }}>
-                  SITE.MAP
-                </h2>
-                <p className="text-neutral-600 mt-1 text-sm font-mono">
-                  PORTFOLIO.EXPLORER • {explorationProgress}% DISCOVERED
-                </p>
-              </div>
-              <button
-                onClick={handleCloseModal}
-                className="text-neutral-400 hover:text-black text-xl font-light 
-                           w-8 h-8 flex items-center justify-center 
-                           hover:bg-neutral-100 transition-all duration-200 border border-transparent hover:border-neutral-300"
-                aria-label="Close interface"
-                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Tree Map Content - Reduced size with proper centering */}
-            <div className="flex-1 relative overflow-hidden bg-white" style={{ minHeight: '450px' }}>
-              <div className="absolute inset-0 p-6">
-                <PortfolioD3Tree
-                  visitedPages={visitedPages}
-                  currentPath={pathname}
-                  pageScrollProgress={pageScrollProgress}
-                  onNodeClick={handleNodeClick}
-                  onClose={handleCloseModal}
-                />
-              </div>
-            </div>
-
-            {/* Footer with Legend and Stats */}
-            <div className="relative p-1 border-t border-neutral-300 bg-neutral-50">
+          <ModalFrame
+            title="SITE.MAP"
+            subtitle={`PORTFOLIO.EXPLORER • ${explorationProgress}% DISCOVERED`}
+            onClose={handleCloseModal}
+            closeLabel="Close interface"
+            widthClassName="max-w-4xl"
+            panelClassName="max-h-[80vh]"
+            bodyClassName="p-0"
+            animate={isClosing ? { opacity: 0, scale: 0.95, y: -20 } : { opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            footerClassName="relative p-1 border-t border-neutral-300 bg-neutral-50"
+            footer={(
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6 ms-6 text-xs text-neutral-700 font-mono uppercase tracking-wider">
                   <div className="flex items-center space-x-2">
@@ -855,8 +731,20 @@ const PortfolioMap = ({
                   </button>
                 </div>
               </div>
+            )}
+          >
+            <div className="flex-1 relative overflow-hidden bg-white" style={{ minHeight: '450px' }}>
+              <div className="absolute inset-0 p-6">
+                <PortfolioD3Tree
+                  visitedPages={visitedPages}
+                  currentPath={pathname}
+                  pageScrollProgress={pageScrollProgress}
+                  onNodeClick={handleNodeClick}
+                  onClose={handleCloseModal}
+                />
+              </div>
             </div>
-          </div>
+          </ModalFrame>
         </div>
       )}
 
@@ -865,10 +753,7 @@ const PortfolioMap = ({
         <ExternalLinkModal
           isOpen={showExternalLinkModal}
           onClose={() => {
-            console.log('External link modal closing');
             setShowExternalLinkModal(false);
-            // Notify parent component that external link modal closed
-            console.log('Calling onExternalLinkModal with false');
             if (onExternalLinkModal) {
               onExternalLinkModal(false);
             }
