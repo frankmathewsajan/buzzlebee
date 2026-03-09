@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { FaBroom } from 'react-icons/fa';
 import ExternalLinkModal from '@/app/components/ExternalLinkModal';
@@ -25,6 +25,8 @@ const getAllNodes = (node, nodes = []) => {
   return nodes;
 };
 
+const MAP_CLOSE_MS = 240;
+
 export default function PortfolioMap({
   onClose: externalOnClose = null,
   autoOpen = false,
@@ -37,6 +39,7 @@ export default function PortfolioMap({
   const [isClosing, setIsClosing] = useState(false);
   const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
   const [externalLinkUrl, setExternalLinkUrl] = useState('');
+  const closeTimeoutRef = useRef(null);
   const {
     visitedPages,
     setVisitedPages,
@@ -54,18 +57,24 @@ export default function PortfolioMap({
 
     return () => {
       document.body.style.overflow = 'unset';
+      if (closeTimeoutRef.current) {
+        window.clearTimeout(closeTimeoutRef.current);
+      }
     };
   }, [showExplorationMap]);
 
-  const handleCloseModal = useCallback(() => {
+  const handleCloseModal = useCallback((afterClose) => {
     setIsClosing(true);
-    window.setTimeout(() => {
+    closeTimeoutRef.current = window.setTimeout(() => {
       setShowExplorationMap(false);
       setIsClosing(false);
+      if (afterClose) {
+        afterClose();
+      }
       if (externalOnClose) {
         externalOnClose();
       }
-    }, 300);
+    }, MAP_CLOSE_MS);
   }, [externalOnClose]);
 
   const handleNavigate = useCallback((path) => {
@@ -75,18 +84,25 @@ export default function PortfolioMap({
       return next;
     });
 
-    router.push(path);
-  }, [router, setVisitedPages]);
-
-  const handleExternalLink = useCallback((url) => {
-    if (disableInternalExternalModal && onExternalLinkModal) {
-      onExternalLinkModal(true, url);
-    } else {
-      setExternalLinkUrl(url);
-      setShowExternalLinkModal(true);
+    if (typeof router.prefetch === 'function') {
+      router.prefetch(path);
     }
 
-    handleCloseModal();
+    handleCloseModal(() => {
+      router.push(path);
+    });
+  }, [handleCloseModal, router, setVisitedPages]);
+
+  const handleExternalLink = useCallback((url) => {
+    handleCloseModal(() => {
+      if (disableInternalExternalModal && onExternalLinkModal) {
+        onExternalLinkModal(true, url);
+        return;
+      }
+
+      setExternalLinkUrl(url);
+      setShowExternalLinkModal(true);
+    });
   }, [disableInternalExternalModal, handleCloseModal, onExternalLinkModal]);
 
   const handleNodeClick = useCallback((nodeDatum, event) => {
@@ -113,8 +129,22 @@ export default function PortfolioMap({
     }
 
     handleNavigate(path);
-    handleCloseModal();
-  }, [handleCloseModal, handleExternalLink, handleNavigate, pathname]);
+  }, [handleExternalLink, handleNavigate, pathname]);
+
+  useEffect(() => {
+    if (!showExplorationMap) {
+      return;
+    }
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        handleCloseModal();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [handleCloseModal, showExplorationMap]);
 
   const getExplorationProgress = useCallback(() => {
     const allPaths = getAllPaths(SITE_STRUCTURE);
@@ -203,8 +233,6 @@ export default function PortfolioMap({
             widthClassName="max-w-4xl"
             panelClassName="max-h-[80vh]"
             bodyClassName="p-0"
-            animate={isClosing ? { opacity: 0, scale: 0.95, y: -20 } : { opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
             footerClassName="relative border-t border-neutral-300 bg-neutral-50 p-1"
             footer={(
               <div className="flex items-center justify-between">

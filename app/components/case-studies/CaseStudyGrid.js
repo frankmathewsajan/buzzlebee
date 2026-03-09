@@ -24,6 +24,21 @@ export default function CaseStudyGrid({ caseStudies, spaceGroteskClass, interCla
 
   return (
     <>
+      <style jsx global>{`
+        .group\/card:hover ~ .group\/card,
+        .group\/card:has(~ .group\/card:hover) {
+          opacity: 0.5;
+          filter: blur(2px);
+          transform: scale(0.98);
+        }
+
+        .group\/card:hover {
+          opacity: 1;
+          filter: blur(0);
+          transform: scale(1);
+        }
+      `}</style>
+
       <ExternalLinkModal
         isOpen={modal.open}
         onClose={() => setModal(s => ({ ...s, open: false }))}

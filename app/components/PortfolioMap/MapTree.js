@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import Tree from 'react-d3-tree';
 import {
   FaAward,
@@ -168,13 +168,10 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
 }
 
 export default function MapTree({ visitedPages, currentPath, pageScrollProgress, onNodeClick }) {
-  const [treeData, setTreeData] = useState(() =>
-    createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath)
+  const treeData = useMemo(
+    () => createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath),
+    [visitedPages, currentPath],
   );
-
-  useEffect(() => {
-    setTreeData(createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath));
-  }, [visitedPages, currentPath]);
 
   const handleNodeClick = useCallback((nodeDatum, event) => {
     if (onNodeClick) {

@@ -1,19 +1,26 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import ModalFrame from './ModalFrame';
 
+const MODAL_CLOSE_MS = 220;
+
 const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Site' }) => {
   const [isClosing, setIsClosing] = useState(false);
+  const closeTimeoutRef = useRef(null);
 
   const handleClose = useCallback(() => {
+    if (isClosing) {
+      return;
+    }
+
     setIsClosing(true);
-    setTimeout(() => {
+    closeTimeoutRef.current = window.setTimeout(() => {
       setIsClosing(false);
       onClose();
-    }, 300);
-  }, [onClose]);
+    }, MODAL_CLOSE_MS);
+  }, [isClosing, onClose]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -30,6 +37,9 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'auto';
+      if (closeTimeoutRef.current) {
+        window.clearTimeout(closeTimeoutRef.current);
+      }
     };
   }, [isOpen, handleClose]);
 
@@ -61,8 +71,6 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
         subtitle="REDIRECT.REQUEST • EXTERNAL.NAVIGATION"
         onClose={handleClose}
         closeLabel="Close modal"
-        animate={isClosing ? { opacity: 0, scale: 0.95 } : { opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
         footer={(
           <>
             <button
