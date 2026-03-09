@@ -33,7 +33,7 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
             {/* Chess Illustration */}
             <div className="lg:col-span-2 flex justify-center lg:justify-start">
-              <div className="relative w-full max-w-[300px]">
+              <div className="relative w-full max-w-75">
                 <div className="relative aspect-square">
                   <Image
                     src="/images/chess.png"

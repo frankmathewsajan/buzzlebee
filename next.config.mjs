@@ -2,7 +2,7 @@
 const nextConfig = {
     output: "export", // Enables static site generation
     experimental: {
-      optimizePackageImports: ["@geist-ui/core", "react-icons"],
+      optimizePackageImports: ["react-icons"],
     },
     images: {
       unoptimized: true, // Required for static export if using Next.js Image component

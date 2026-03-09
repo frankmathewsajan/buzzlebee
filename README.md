@@ -10,7 +10,6 @@ A compact, professional portfolio built with Next.js and Tailwind CSS. This repo
 ## Key features
 - Static export (pre-rendered pages) for fast delivery.
 - Centralized project data in `app/projects.json`.
-- Firebase Analytics (client-side, SSR-safe) for page and event tracking.
 - Small, focused UI built with Tailwind CSS and modern React patterns.
 - CI: GitHub Actions workflow to build and deploy (uses `npm run deploy`).
 
@@ -20,7 +19,6 @@ A compact, professional portfolio built with Next.js and Tailwind CSS. This repo
 | Framework | Next.js (App Router) |
 | Language | JavaScript (+ project-level TypeScript support) |
 | Styling | Tailwind CSS v4 |
-| Analytics | Firebase Analytics (client-only init) |
 | Hosting / Deploy | Firebase Hosting (via `firebase-tools`) |
 | CI | GitHub Actions |
 
@@ -28,7 +26,6 @@ A compact, professional portfolio built with Next.js and Tailwind CSS. This repo
 - `app/` — Next.js app routes and components
 - `app/projects.json` — projects & case studies data (SSOT)
 - `app/components/ExternalLinkModal.js` — modal for external link confirmations
-- `lib/firebase.ts` — SSR-safe firebase + analytics helpers
 - `public/` — static assets and images
 - `.github/workflows/deploy.yml` — CI workflow (build + deploy)
 

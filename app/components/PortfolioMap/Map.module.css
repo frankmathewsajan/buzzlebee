@@ -1,0 +1,114 @@
+.mapSurface {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+:global(.rd3t-tree-container) {
+  background: transparent !important;
+  cursor: grab;
+  transition: all 0.2s ease;
+}
+
+:global(.rd3t-tree-container:active) {
+  cursor: grabbing;
+}
+
+:global(.rd3t-tree-container svg) {
+  background: transparent !important;
+  transition: filter 0.2s ease;
+}
+
+:global(.rd3t-tree-container:active svg) {
+  filter: brightness(0.95);
+}
+
+.linkCurrent {
+  stroke: #000000 !important;
+  stroke-width: 2px !important;
+  stroke-dasharray: none !important;
+  transition: all 0.2s ease;
+}
+
+.linkVisited {
+  stroke: #a3a3a3 !important;
+  stroke-width: 1.5px !important;
+  stroke-dasharray: none !important;
+  transition: all 0.2s ease;
+}
+
+.linkUnvisited {
+  stroke: #d4d4d8 !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: 3, 3 !important;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+:global(.rd3t-label__title) {
+  user-select: none;
+  font-family: 'system-ui', '-apple-system', 'sans-serif' !important;
+  transition: all 0.2s ease;
+}
+
+:global(.rd3t-node circle) {
+  transition: all 0.2s ease;
+}
+
+:global(.rd3t-node:hover circle) {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.clickRipple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  pointer-events: none;
+}
+
+.pulseRing {
+  animation: pulse 2s infinite;
+}
+
+.mapSurfaceClick {
+  animation: surface-click 0.1s ease;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes surface-click {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.998);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

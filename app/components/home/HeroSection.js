@@ -47,7 +47,7 @@ const HeroSection = memo(({ sectionRef, isVisible }) => {
           </div>
 
           {/* Image */}
-          <div className="relative aspect-square w-full max-w-[450px] mx-auto opacity-0 translate-x-4 animate-[fadeIn_1s_ease-out_0.4s_forwards]">
+          <div className="relative aspect-square w-full max-w-112.5 mx-auto opacity-0 translate-x-4 animate-[fadeIn_1s_ease-out_0.4s_forwards]">
             <div className="absolute inset-0 bg-gray-900 rounded-3xl transform rotate-3 opacity-20 shadow-xl"></div>
             <Image
               src="/images/mathew.webp"

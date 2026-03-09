@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 const PANEL_STYLE = {
   background: 'linear-gradient(145deg, #fafaf9 0%, #f5f5f4 50%, #e7e5e4 100%)',
   borderRadius: '4px',
@@ -26,19 +24,11 @@ export default function ModalFrame({
   footer,
   footerClassName = 'p-6 border-t border-neutral-300 flex space-x-3',
   children,
-  initial = { opacity: 0, scale: 0.95 },
-  animate = { opacity: 1, scale: 1 },
-  exit = { opacity: 0, scale: 0.95 },
-  transition,
 }) {
   return (
-    <motion.div
-      className={`relative ${widthClassName} w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-800 ${panelClassName}`}
+    <div
+      className={`relative ${widthClassName} w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-neutral-800 animate-modal-enter ${panelClassName}`}
       style={PANEL_STYLE}
-      initial={initial}
-      animate={animate}
-      exit={exit}
-      transition={transition}
       onClick={(event) => event.stopPropagation()}
     >
       <div
@@ -53,20 +43,20 @@ export default function ModalFrame({
       />
 
       <div className="absolute top-0 left-0 w-8 h-8">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-black" />
-        <div className="absolute top-0 left-0 w-[1px] h-full bg-black" />
+        <div className="absolute top-0 left-0 w-full h-px bg-black" />
+        <div className="absolute top-0 left-0 w-px h-full bg-black" />
       </div>
       <div className="absolute top-0 right-0 w-8 h-8">
-        <div className="absolute top-0 right-0 w-full h-[1px] bg-black" />
-        <div className="absolute top-0 right-0 w-[1px] h-full bg-black" />
+        <div className="absolute top-0 right-0 w-full h-px bg-black" />
+        <div className="absolute top-0 right-0 w-px h-full bg-black" />
       </div>
       <div className="absolute bottom-0 left-0 w-8 h-8">
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-black" />
-        <div className="absolute bottom-0 left-0 w-[1px] h-full bg-black" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-black" />
+        <div className="absolute bottom-0 left-0 w-px h-full bg-black" />
       </div>
       <div className="absolute bottom-0 right-0 w-8 h-8">
-        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-black" />
-        <div className="absolute bottom-0 right-0 w-[1px] h-full bg-black" />
+        <div className="absolute bottom-0 right-0 w-full h-px bg-black" />
+        <div className="absolute bottom-0 right-0 w-px h-full bg-black" />
       </div>
 
       <div className="relative flex justify-between items-center p-6 border-b border-neutral-300" style={HEADER_STYLE}>
@@ -96,6 +86,6 @@ export default function ModalFrame({
           {footer}
         </div>
       ) : null}
-    </motion.div>
+    </div>
   );
 }

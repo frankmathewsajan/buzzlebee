@@ -4,7 +4,7 @@ import { Space_Grotesk, Inter } from 'next/font/google';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Link from 'next/link';
-import PortfolioMap from '../components/PortfolioMap';
+import PortfolioMap from '@/app/components/PortfolioMap';
 import ExternalLinkModal from '../components/ExternalLinkModal';
 import projectsData from '../projects.json';
 
@@ -77,7 +77,7 @@ export default function CaseStudies() {
               <h1 className={`${spaceGrotesk.className} text-4xl md:text-6xl leading-none text-[#1A365D] mb-4`}>
                 Case Studies
               </h1>
-              <p className={`${inter.className} text-sm text-[#1A365D]/60 leading-relaxed font-light max-w-[400px] text-justify`}>
+              <p className={`${inter.className} text-sm text-[#1A365D]/60 leading-relaxed font-light max-w-100 text-justify`}>
                 Detailed technical case studies showcasing my solutions & their measurable impact across various domains.
               </p>
             </motion.div>
@@ -85,8 +85,8 @@ export default function CaseStudies() {
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 relative">
               {/* Cross Separator */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-full h-[1px] bg-[#1A365D]/20"></div>
-                <div className="absolute w-[1px] h-full bg-[#1A365D]/20"></div>
+                <div className="w-full h-px bg-[#1A365D]/20"></div>
+                <div className="absolute w-px h-full bg-[#1A365D]/20"></div>
               </div>
 
               {currentStudies.map((caseStudy, index) => (

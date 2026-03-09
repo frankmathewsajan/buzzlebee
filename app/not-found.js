@@ -1,11 +1,10 @@
 'use client';
 
 import { Space_Grotesk, Inter } from 'next/font/google';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState } from 'react';
 import { FaLink } from 'react-icons/fa';
-import PortfolioMap from './components/PortfolioMap';
+import PortfolioMap from '@/app/components/PortfolioMap';
 import ExternalLinkModal from './components/ExternalLinkModal';
 
 // Font setup
@@ -36,12 +35,7 @@ export default function NotFound() {
       {/* Portfolio Explorer Map */}
       <PortfolioMap />
       
-      <motion.div 
-        className="text-center space-y-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <div className="text-center space-y-8 animate-entry-fade-up">
         <h1 className={`${spaceGrotesk.className} text-8xl md:text-9xl text-[#5D503A]`}>
           404
         </h1>
@@ -81,7 +75,7 @@ export default function NotFound() {
             ))}
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* External Link Modal */}
       {showExternalLinkModal && (
