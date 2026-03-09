@@ -74,7 +74,7 @@ export default function PortfolioMap({
     closeTimeoutRef.current = window.setTimeout(() => {
       setShowExplorationMap(false);
       setIsClosing(false);
-      if (afterClose) {
+      if (typeof afterClose === 'function') {
         afterClose();
       }
       if (externalOnClose) {
