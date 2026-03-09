@@ -1,0 +1,30 @@
+{
+  "title": "GET IN TOUCH",
+  "intro": [
+    "If you're here to understand what I have built, what I value, or what I can contribute - this is a good place to start.",
+    "Currently focused on integrating real world systems with intelligent automation across domains like IoT, environmental tech, and health & safety.",
+    "Feel free to contact me. I am always open to discussing new projects, creative ideas, or opportunities to contribute to your visions."
+  ],
+  "quickLinks": [
+    { "name": "Home", "href": "/", "external": false },
+    { "name": "Blog", "href": "https://medium.com/@frankmathewsajan", "external": true },
+    { "name": "Projects", "href": "/projects", "external": false },
+    { "name": "Case Studies", "href": "/case-studies", "external": false },
+    { "name": "Certifications", "href": "/certifications", "external": false },
+    { "name": "About & Experience", "href": "/about", "external": false },
+    { "name": "Resume", "href": "/resume", "external": false }
+  ],
+  "socialLinks": [
+    { "platform": "github", "url": "https://github.com/frankmathewsajan", "label": "GitHub" },
+    { "platform": "linkedin", "url": "https://linkedin.com/in/frankmathewsajan", "label": "LinkedIn" },
+    { "platform": "discord", "url": "https://discord.com/users/frankmathewsajan", "label": "Discord" },
+    { "platform": "instagram", "url": "https://instagram.com/franklyy.idk", "label": "Instagram" },
+    { "platform": "gmail", "url": "mailto:frankmathewsajan@gmail.com", "label": "Gmail" }
+  ],
+  "siteInfo": {
+    "title": "About This Site",
+    "description": "Built with Next.js, React, and Tailwind CSS. Hosted on Google Firebase.",
+    "stack": ["Next.js", "React", "Tailwind", "Firebase"],
+    "lastUpdated": "28/10/2025"
+  }
+}

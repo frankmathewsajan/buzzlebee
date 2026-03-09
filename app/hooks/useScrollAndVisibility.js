@@ -72,10 +72,11 @@ export const useScrollAndVisibility = (sectionRefs) => {
     };
 
     window.addEventListener('scroll', throttledScroll, { passive: true });
-    handleScroll();
+    const initFrame = requestAnimationFrame(handleScroll);
     
     return () => {
       window.removeEventListener('scroll', throttledScroll);
+      cancelAnimationFrame(initFrame);
       if (timeoutId) cancelAnimationFrame(timeoutId);
     };
   }, [handleScroll]);

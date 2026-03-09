@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const VISITED_PAGES_KEY = 'portfolioVisitedPages';
 const PAGE_SCROLL_PROGRESS_KEY = 'portfolioPageScrollProgress';
@@ -29,25 +29,19 @@ export default function usePortfolioTracker(pathname) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [pageScrollProgress, setPageScrollProgress] = useState(getInitialPageScrollProgress);
 
-  useEffect(() => {
-    setVisitedPages((prev) => {
-      if (prev.has(pathname)) {
-        return prev;
-      }
-
-      const next = new Set(prev);
-      next.add(pathname);
-      return next;
-    });
-  }, [pathname]);
+  const effectiveVisitedPages = useMemo(() => {
+    const next = new Set(visitedPages);
+    next.add(pathname);
+    return next;
+  }, [pathname, visitedPages]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
 
-    localStorage.setItem(VISITED_PAGES_KEY, JSON.stringify([...visitedPages]));
-  }, [visitedPages]);
+    localStorage.setItem(VISITED_PAGES_KEY, JSON.stringify([...effectiveVisitedPages]));
+  }, [effectiveVisitedPages]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -108,7 +102,7 @@ export default function usePortfolioTracker(pathname) {
   };
 
   return {
-    visitedPages,
+    visitedPages: effectiveVisitedPages,
     setVisitedPages,
     scrollProgress,
     setScrollProgress,

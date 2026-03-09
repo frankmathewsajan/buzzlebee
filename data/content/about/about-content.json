@@ -1,0 +1,31 @@
+{
+  "hero": {
+    "paragraphs": [
+      "I'm Frank Mathew Sajan, originally from Kerala but currently studying in Andhra Pradesh. I spend my time coding, learning German, and occasionally playing chess or watching anime.",
+      "I build software that works across platforms: web apps, mobile apps, and desktop applications that solve real problems. My work spans from system architecture to research projects depending on the challenge, with some freelance work when interesting opportunities arise."
+    ],
+    "roles": ["Engineer", "Freelancer", "Researcher", "Deutsch lernen"]
+  },
+  "education": {
+    "title": "Chapter 2: Education",
+    "quote": "The journey of learning never truly begins in classrooms. It starts with curiosity.",
+    "paragraphs": [
+      "My educational journey began like most others, with small steps in primary school, learning to read and write, discovering numbers and their relationships. Those early years at various institutions laid a foundation I didn't fully appreciate at the time. During my time at St. Joseph's HSS, I became a Rajya Puraskar Scout and was awarded Nanammudra in the Chief Minister's Shield competition, experiences that taught me leadership, teamwork, and service to community.",
+      "The transition to St. Joseph's Higher Secondary School marked a turning point. Here, mathematics began to make sense not just as abstract formulas, but as a language that could describe the world around me. It was during these years that I first encountered a computer, and something clicked.",
+      "VIT-AP University, Amaravati became the next chapter. Moving from Kerala to Andhra Pradesh wasn't just a geographic shift but was stepping into independence. The Bachelors in Computer Science and Engineering program here isn't just about learning programming languages; it's about learning to think systematically, to break down complex problems, and to build solutions that matter.",
+      "But perhaps the most important education has happened outside formal curricula. Learning German on my own, diving into research projects that fascinate me, discovering that the best learning happens when curiosity drives the journey."
+    ]
+  },
+  "experience": {
+    "title": "Chapter 3: Experience",
+    "quote": "Experience is not what happens to you; it's what you do with what happens to you.",
+    "paragraphs": [
+      "My first real taste of the professional world came through the Innovation, Incubation, and Entrepreneurship Center (IIEC) at VIT-AP University, where I work as a Research and Development Software Engineer. Under the guidance of Dr. Santanu Mandal Ph.D, I've been involved in developing innovative software solutions that bridge academic research with practical applications.",
+      "But experience isn't just about prestigious programs. It's built in the quiet hours spent debugging code that refuses to work, in the satisfaction of finally solving a problem that seemed impossible yesterday. My internship at TechtoGreen Drone & Robotics Pvt Ltd expanded my horizons into the world of autonomous systems and robotics, where software meets hardware in fascinating ways.",
+      "Leadership opportunities have also shaped my journey significantly. As Deputy Captain of the Institution of Electronics and Telecommunication Engineers (IETE) student chapter on campus, I've learned that effective leadership isn't about having all the answers but is about asking the right questions and creating space for others to contribute their best work.",
+      "I've learned that full-stack development is less about mastering every framework and more about understanding how to connect ideas to implementation. Whether it's a React frontend that users love interacting with, or a Node.js/Django backend that handles thousands of requests without breaking, each project teaches something new.",
+      "Some of my most valuable experience comes from research projects: those moments when you're exploring questions that don't have Stack Overflow answers. These projects teach patience, systematic thinking, and the humility that comes with realizing how much you don't know.",
+      "The most rewarding experiences have been those where everyone grows together. Whether it's collaborating on research projects at IIEC, organizing technical events through IETE, or working with teams on complex software solutions, the best outcomes emerge when diverse perspectives combine toward a common goal."
+    ]
+  }
+}

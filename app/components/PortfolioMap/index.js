@@ -7,7 +7,7 @@ import ExternalLinkModal from '@/app/components/ExternalLinkModal';
 import ModalFrame from '@/app/components/ModalFrame';
 import MapTree from '@/app/components/PortfolioMap/MapTree';
 import usePortfolioTracker from '@/app/hooks/usePortfolioTracker';
-import { SITE_STRUCTURE } from '@/lib/constants/sitemap';
+import { SITE_STRUCTURE } from '@/data/navigation/site-structure';
 
 const getAllPaths = (node, paths = []) => {
   paths.push(node.path);

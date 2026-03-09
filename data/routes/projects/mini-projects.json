@@ -1,0 +1,26 @@
+{
+  "CS50P": [
+    { "name": "Indoor Voice", "tech": "Python" },
+    { "name": "Deep Thought", "tech": "Python" },
+    { "name": "Camel Case", "tech": "Python" },
+    { "name": "Outdated", "tech": "Python" },
+    { "name": "Adieu, Adieu", "tech": "Python" },
+    { "name": "Back to the Bank", "tech": "Python" },
+    { "name": "Lines of Code", "tech": "Python" },
+    { "name": "Regular, um, Expressions", "tech": "Python" },
+    { "name": "Cookie Jar", "tech": "Python" }
+  ],
+  "CS50W": [
+    { "name": "Search", "tech": "HTML, CSS" },
+    { "name": "Wiki", "tech": "Django" },
+    { "name": "Commerce", "tech": "Django" },
+    { "name": "Mail", "tech": "Django, JavaScript" },
+    { "name": "Network", "tech": "Django, JavaScript" }
+  ],
+  "Full Stack Open": [
+    { "name": "Note App", "tech": "React, Node.js" },
+    { "name": "Phonebook", "tech": "MERN Stack" },
+    { "name": "Blog List", "tech": "MERN Stack" },
+    { "name": "Countries", "tech": "React, REST APIs" }
+  ]
+}

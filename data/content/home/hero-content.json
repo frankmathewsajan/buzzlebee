@@ -1,0 +1,10 @@
+{
+  "headline": ["Just", "Frank"],
+  "tagline": "Shaping ideas that transcend time",
+  "subtagline": "one bug at a time.",
+  "stats": [
+    { "value": "5+", "label": "Years of Coding" },
+    { "value": "10+", "label": "AI/ML & Software Projects" },
+    { "value": "20+", "label": "Hackathons & Competitions" }
+  ]
+}

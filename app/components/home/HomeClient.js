@@ -15,14 +15,17 @@ const MODAL_PLATFORMS = new Set(['instagram', 'discord', 'github', 'gmail']);
 
 export default function HomeClient({ indexProjects, sgClass }) {
   const router = useRouter();
-  const refs = {
-    home: useRef(null),
-    about: useRef(null),
-    projects: useRef(null),
-    contact: useRef(null),
-  };
+  const homeRef = useRef(null);
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+  const contactRef = useRef(null);
 
-  const viewState = useScrollAndVisibility(refs);
+  const viewState = useScrollAndVisibility({
+    home: homeRef,
+    about: aboutRef,
+    projects: projectsRef,
+    contact: contactRef,
+  });
   const [modal, setModal] = useState({ contact: false, source: 'social', external: false, url: '' });
 
   const handleExternalLink = (url) => setModal(s => ({ ...s, external: true, url }));
@@ -37,10 +40,10 @@ export default function HomeClient({ indexProjects, sgClass }) {
   return (
     <>
       <PortfolioMap />
-      <HeroSection sectionRef={refs.home} isVisible={viewState.sectionVisibility.home} />
-      <AboutSection sectionRef={refs.about} isVisible={viewState.sectionVisibility.about} />
+      <HeroSection sectionRef={homeRef} isVisible={viewState.sectionVisibility.home} />
+      <AboutSection sectionRef={aboutRef} isVisible={viewState.sectionVisibility.about} />
       <ProjectsSection
-        sectionRef={refs.projects}
+        sectionRef={projectsRef}
         isVisible={viewState.sectionVisibility.projects}
         projectsOpacity={viewState.projectsOpacity}
         indexProjects={indexProjects}
@@ -48,7 +51,7 @@ export default function HomeClient({ indexProjects, sgClass }) {
         spaceGrotesk={{ className: sgClass }}
       />
       <ContactSection
-        sectionRef={refs.contact}
+        sectionRef={contactRef}
         isVisible={viewState.sectionVisibility.contact}
         contactOpacity={viewState.contactOpacity}
         handleExternalLink={handleExternalLink}

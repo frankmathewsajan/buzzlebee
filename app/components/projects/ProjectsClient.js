@@ -53,25 +53,14 @@ function ActionButton({ onClick, label, colors, filled, disabled, interClass }) 
   );
 }
 
-export default function ProjectsClient({ projects, sgClass, interClass }) {
+export default function ProjectsClient({ projects, miniProjects, sgClass, interClass }) {
   const [showMiniModal, setShowMiniModal] = useState(false);
   const [extLink, setExtLink] = useState({ open: false, url: '', name: '' });
 
   const sectionIds = useMemo(() => ['overview', ...projects.map(p => p.id)], [projects]);
-  const { activeSection, visibleSection, scrollProgress, sectionRefs, scrollToSection } = useSectionNavigation(sectionIds);
+  const { activeSection, visibleSection, scrollProgress, registerSection, scrollToSection } = useSectionNavigation(sectionIds);
 
   const handleExtLink = (url, name) => setExtLink({ open: true, url, name });
-
-  const miniProjects = useMemo(() => ({
-    'CS50P': projects.find(p => p.id === 'library-management')?.relatedMiniProjects ?? [],
-    'CS50W': projects.find(p => p.id === 'hss-manager')?.relatedMiniProjects ?? [],
-    'Full Stack Open': [
-      { name: 'Note App', tech: 'React, Node.js' },
-      { name: 'Phonebook', tech: 'MERN Stack' },
-      { name: 'Blog List', tech: 'MERN Stack' },
-      { name: 'Countries', tech: 'React, REST APIs' },
-    ],
-  }), [projects]);
 
   const featured = projects.filter(p => !p.category.includes('CS50'));
   const course = projects.filter(p => p.category.includes('CS50'));
@@ -107,7 +96,7 @@ export default function ProjectsClient({ projects, sgClass, interClass }) {
       {/* Overview Section */}
       <section
         id="overview"
-        ref={sectionRefs.overview}
+        ref={registerSection('overview')}
         className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-16"
       >
         <div className={`max-w-[90vw] mx-auto w-full section-fade ${visibleSection === 'overview' ? 'visible' : 'exit'}`}>
@@ -212,7 +201,7 @@ export default function ProjectsClient({ projects, sgClass, interClass }) {
       {projects.map(project => {
         const colors = DOMAIN_COLORS[project.category];
         return (
-          <section key={project.id} id={project.id} ref={sectionRefs[project.id]} className="min-h-screen flex items-center relative" style={{ backgroundColor: colors.bg }}>
+          <section key={project.id} id={project.id} ref={registerSection(project.id)} className="min-h-screen flex items-center relative" style={{ backgroundColor: colors.bg }}>
             <div className={`max-w-[90vw] mx-auto w-full px-8 py-16 section-fade ${visibleSection === project.id ? 'visible' : 'exit'}`}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 <div className={`space-y-12 slide-left ${visibleSection === project.id ? 'visible' : ''}`}>

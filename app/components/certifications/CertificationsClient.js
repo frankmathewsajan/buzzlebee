@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import Image from 'next/image';
+import { FaCertificate } from 'react-icons/fa';
 import { useSectionNavigation } from '@/app/hooks/useSectionNavigation';
 
 function MetaField({ label, children, interClass }) {
@@ -17,7 +18,7 @@ export default function CertificationsClient({ certifications, spaceGroteskClass
   const visibleCertifications = useMemo(() => certifications.filter(c => !c.hidden), [certifications]);
   const sectionIds = useMemo(() => ['overview', ...visibleCertifications.map(c => c.id)], [visibleCertifications]);
 
-  const { activeSection: activeCert, visibleSection, scrollProgress, sectionRefs: certRefs, scrollToSection } =
+  const { activeSection: activeCert, visibleSection, scrollProgress, registerSection, scrollToSection } =
     useSectionNavigation(sectionIds);
 
   return (
@@ -33,7 +34,7 @@ export default function CertificationsClient({ certifications, spaceGroteskClass
       )}
 
       {/* Overview */}
-      <section id="overview" ref={certRefs.overview} className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20">
+      <section id="overview" ref={registerSection('overview')} className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20">
         <div className={`max-w-6xl mx-auto w-full section-fade ${visibleSection === 'overview' ? 'visible' : 'exit'}`}>
           <div className={`mb-16 section-fade ${visibleSection === 'overview' ? 'visible' : 'exit'}`} style={{ transitionDelay: '0.1s' }}>
             <h1 className={`${spaceGroteskClass} text-5xl md:text-6xl font-medium leading-tight text-[#1A1A1A] mb-4`}>Certifications</h1>
@@ -49,7 +50,7 @@ export default function CertificationsClient({ certifications, spaceGroteskClass
                       {cert.image && cert.image !== false ? (
                         <Image src={`/images/certifications/${cert.image}`} alt={`${cert.title} Certificate`} width={80} height={64} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center"><i className="fas fa-certificate text-[#6B7280] text-xl" /></div>
+                        <div className="w-full h-full flex items-center justify-center"><FaCertificate className="text-[#6B7280] text-xl" /></div>
                       )}
                     </div>
                   </div>
@@ -74,7 +75,7 @@ export default function CertificationsClient({ certifications, spaceGroteskClass
 
       {/* Individual Certificate Sections */}
       {visibleCertifications.map((cert) => (
-        <section key={cert.id} id={cert.id} ref={certRefs[cert.id]} className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20">
+        <section key={cert.id} id={cert.id} ref={registerSection(cert.id)} className="min-h-screen flex items-start relative px-8 bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] pt-20">
           <div className={`max-w-6xl mx-auto w-full section-fade ${visibleSection === cert.id ? 'visible' : 'exit'}`}>
             <div className="flex flex-col lg:flex-row gap-12 mb-16">
               <div className="shrink-0">
@@ -84,7 +85,7 @@ export default function CertificationsClient({ certifications, spaceGroteskClass
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-center text-[#6B7280] p-12">
                       <div>
-                        <i className="fas fa-certificate text-8xl mx-auto mb-6 text-[#6B7280]" />
+                        <FaCertificate className="text-8xl mx-auto mb-6 text-[#6B7280]" />
                         <h3 className={`${spaceGroteskClass} text-2xl font-medium text-[#1A1A1A] mb-3`}>{cert.title}</h3>
                         <p className={`${interClass} text-lg text-[#6B7280]`}>{cert.issuer}</p>
                       </div>

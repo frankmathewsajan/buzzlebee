@@ -12,7 +12,7 @@ import {
   FaTools,
   FaUser
 } from 'react-icons/fa';
-import { SITE_STRUCTURE } from '@/lib/constants/sitemap';
+import { SITE_STRUCTURE } from '@/data/navigation/site-structure';
 import styles from '@/app/components/PortfolioMap/Map.module.css';
 
 const ICON_MAP = {

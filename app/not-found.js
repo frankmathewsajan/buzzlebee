@@ -1,35 +1,14 @@
-'use client';
-
 import { Space_Grotesk, Inter } from 'next/font/google';
 import Link from 'next/link';
-import { useState } from 'react';
 import { FaLink } from 'react-icons/fa';
 import PortfolioMap from '@/app/components/PortfolioMap';
-import ExternalLinkModal from './components/ExternalLinkModal';
+import { SITE_LINKS } from '@/data/navigation/site-links';
 
 // Font setup
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'] });
 const inter = Inter({ subsets: ['latin'] });
 
 export default function NotFound() {
-  const [showExternalLinkModal, setShowExternalLinkModal] = useState(false);
-  const [externalLinkUrl, setExternalLinkUrl] = useState('');
-
-  const siteMap = [
-    { name: 'Home', href: '/' },
-    { name: 'Projects', href: '/projects' },
-    { name: 'Case Studies', href: '/case-studies' },
-    { name: 'Resume', href: '/resume' },
-    { name: 'Certifications', href: '/certifications' },
-    { name: 'About & Experience', href: '/about' },
-    { name: 'Blog', external: true, externalUrl: 'https://medium.com/@frankmathewsajan' },
-  ];
-
-  const handleExternalLink = (url) => {
-    setExternalLinkUrl(url);
-    setShowExternalLinkModal(true);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] px-4">
       {/* Portfolio Explorer Map */}
@@ -53,16 +32,18 @@ export default function NotFound() {
             Site Map
           </h3>
           <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
-            {siteMap.map((page) => (
+            {SITE_LINKS.map((page) => (
               page.external ? (
-                <button
+                <a
                   key={page.name}
-                  onClick={() => handleExternalLink(page.externalUrl)}
+                  href={page.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`${inter.className} px-4 py-2 rounded-full border border-[#5D503A]/20 hover:border-[#5D503A] text-[#5D503A] hover:text-[#5D503A]/80 transition-all duration-200 text-center text-sm flex items-center justify-center gap-1`}
                 >
                   {page.name}
                   <FaLink className="w-3 h-3" />
-                </button>
+                </a>
               ) : (
                 <Link
                   key={page.name}
@@ -76,15 +57,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-
-      {/* External Link Modal */}
-      {showExternalLinkModal && (
-        <ExternalLinkModal
-          isOpen={showExternalLinkModal}
-          onClose={() => setShowExternalLinkModal(false)}
-          targetUrl={externalLinkUrl}
-        />
-      )}
     </div>
   );
-} 
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const DEFAULT_THRESHOLD = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 
@@ -14,21 +14,22 @@ export function useSectionNavigation(
     scrollDebounceMs = 100,
   } = {},
 ) {
-  const refsRef = useRef({});
+  const sectionElementsRef = useRef({});
   const [activeSection, setActiveSection] = useState(initialSection);
   const [visibleSection, setVisibleSection] = useState(initialSection);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  const sectionRefs = useMemo(() => {
-    const nextRefs = {};
+  const registerSection = useCallback(
+    (sectionId) => (element) => {
+      if (!element) {
+        delete sectionElementsRef.current[sectionId];
+        return;
+      }
 
-    sectionIds.forEach((id) => {
-      nextRefs[id] = refsRef.current[id] ?? createRef();
-    });
-
-    refsRef.current = nextRefs;
-    return nextRefs;
-  }, [sectionIds]);
+      sectionElementsRef.current[sectionId] = element;
+    },
+    [],
+  );
 
   const syncSection = useCallback((sectionId) => {
     setActiveSection((current) => (current === sectionId ? current : sectionId));
@@ -37,7 +38,7 @@ export function useSectionNavigation(
 
   const scrollToSection = useCallback(
     (sectionId) => {
-      const target = sectionRefs[sectionId]?.current;
+      const target = sectionElementsRef.current[sectionId];
 
       if (!target) {
         return;
@@ -46,7 +47,7 @@ export function useSectionNavigation(
       target.scrollIntoView({ behavior: 'smooth' });
       syncSection(sectionId);
     },
-    [sectionRefs, syncSection],
+    [syncSection],
   );
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export function useSectionNavigation(
         let maxVisibility = 0;
 
         sectionIds.forEach((sectionId) => {
-          const element = sectionRefs[sectionId]?.current;
+          const element = sectionElementsRef.current[sectionId];
 
           if (!element) {
             return;
@@ -99,7 +100,7 @@ export function useSectionNavigation(
         clearTimeout(scrollTimeout);
       }
     };
-  }, [initialSection, scrollDebounceMs, sectionIds, sectionRefs, syncSection]);
+  }, [initialSection, scrollDebounceMs, sectionIds, syncSection]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -126,7 +127,7 @@ export function useSectionNavigation(
     );
 
     sectionIds.forEach((sectionId) => {
-      const element = sectionRefs[sectionId]?.current;
+      const element = sectionElementsRef.current[sectionId];
 
       if (element) {
         observer.observe(element);
@@ -134,7 +135,7 @@ export function useSectionNavigation(
     });
 
     return () => observer.disconnect();
-  }, [minVisibleRatio, observerRootMargin, observerThreshold, sectionIds, sectionRefs, syncSection]);
+  }, [minVisibleRatio, observerRootMargin, observerThreshold, sectionIds, syncSection]);
 
   return {
     activeSection,
@@ -142,7 +143,7 @@ export function useSectionNavigation(
     visibleSection,
     setVisibleSection,
     scrollProgress,
-    sectionRefs,
+    registerSection,
     scrollToSection,
   };
 }

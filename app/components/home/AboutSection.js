@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Tooltip from '../Tooltip';
 import { memo } from "react";
+import aboutSectionContent from '@/data/content/home/about-section-content.json';
 
 const AboutSection = memo(({ sectionRef, isVisible }) => {
   return (
@@ -21,8 +22,8 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
             <div className="relative">
               <div className="space-y-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-semibold text-gray-900 font-sans uppercase tracking-wide">Quick</span>
-                  <span className="text-4xl font-semibold text-red-600 font-sans uppercase tracking-wide">overview</span>
+                  <span className="text-4xl font-semibold text-gray-900 font-sans uppercase tracking-wide">{aboutSectionContent.heading[0]}</span>
+                  <span className="text-4xl font-semibold text-red-600 font-sans uppercase tracking-wide">{aboutSectionContent.heading[1]}</span>
                 </div>
               </div>
               <div className="mt-4 w-12 h-px bg-red-600"></div>
@@ -46,11 +47,11 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
                 </div>
                 <div className="mt-6 text-center space-y-2">
                   <p className="text-xs uppercase tracking-[0.3em] text-gray-500 font-sans font-medium">
-                    Strategic Thinking
+                    {aboutSectionContent.visual.title}
                   </p>
                   <div className="w-16 h-px bg-red-500 mx-auto opacity-60"></div>
                   <p className="text-sm text-gray-600 font-serif italic leading-relaxed whitespace-nowrap">
-                    Every move counts, both on the board and in code
+                    {aboutSectionContent.visual.caption}
                   </p>
                 </div>
               </div>
@@ -59,13 +60,7 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
             {/* Article Text */}
             <div className="lg:col-span-3 space-y-8 lg:-mt-20">
               <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                <span className="text-xl font-bold font-serif text-gray-800s">Hey there!</span>
-                <span className="text-lg font-normal ml-2">I&apos;m</span>
-                <span className="text-lg font-semibold text-red-600 ml-2">Frank</span>
-                <span className="text-lg font-normal text-gray-700">, and I build software.</span>
-                <span className="text-lg font-normal text-gray-700"> What began as small fixes for </span>
-                <span className="font-sans font-medium text-red-600 text-base tracking-wide">my own problems </span>
-                <span className="text-lg font-normal text-gray-700">grew into solutions that help others too. </span>
+                {aboutSectionContent.intro}
               </div>
               
               <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
@@ -80,10 +75,7 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
               </div>
               
               <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
-                These projects are&nbsp; 
-                <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> things I&apos;ve built for&nbsp; 
-                <span className="font-sans text-gray-900 uppercase text-base tracking-tight">REAL</span> problems. Some worked out better than others, but that&apos;s 
-                <span className="text-red-500 font-serif italic"> how it goes</span>.
+                {aboutSectionContent.reality}
               </div>
 
               <div className="text-gray-700 leading-relaxed text-lg font-serif text-justify">
@@ -101,7 +93,7 @@ const AboutSection = memo(({ sectionRef, isVisible }) => {
               <div className="mt-12 pt-8 border-t border-gray-300">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-px bg-red-500"></div>
-                  <span className="text-xs uppercase tracking-[0.2em] text-gray-500 font-sans">Frank Mathew Sajan</span>
+                  <span className="text-xs uppercase tracking-[0.2em] text-gray-500 font-sans">{aboutSectionContent.signature}</span>
                   <div className="w-12 h-px bg-red-500"></div>
                 </div>
               </div>

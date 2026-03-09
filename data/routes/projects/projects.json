@@ -42,7 +42,7 @@
     "badges": {
       "DEPLOYED": "https://stgdconventschool.com/",
       "CLIENT": true
-     },
+    },
     "skills": {
       "Frontend": ["React 18.3.1", "TypeScript 5.5.3", "Vite 5.4.1", "Tailwind CSS 3.4.11"],
       "Backend": ["Supabase", "PostgreSQL", "JWT Authentication"],
