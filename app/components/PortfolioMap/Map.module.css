@@ -37,6 +37,21 @@
   transition: all 0.2s ease;
 }
 
+.linkCompleted {
+  stroke: #111111 !important;
+  stroke-width: 1.8px !important;
+  stroke-dasharray: none !important;
+  transition: all 0.2s ease;
+}
+
+.linkDiscovered {
+  stroke: #b7b7b7 !important;
+  stroke-width: 1.25px !important;
+  stroke-dasharray: 4, 2 !important;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+}
+
 .linkUnvisited {
   stroke: #d4d4d8 !important;
   stroke-width: 1px !important;
@@ -76,6 +91,12 @@
   animation: surface-click 0.1s ease;
 }
 
+.unvisitedBadge {
+  animation: badge-nudge 1.8s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
 @keyframes ripple {
   0% {
     transform: scale(0);
@@ -110,5 +131,32 @@
 
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes badge-nudge {
+  0% {
+    transform: translateX(0);
+  }
+
+  12% {
+    transform: translateX(-1.6px);
+  }
+
+  24% {
+    transform: translateX(1.6px);
+  }
+
+  36% {
+    transform: translateX(-1.2px);
+  }
+
+  48% {
+    transform: translateX(1.2px);
+  }
+
+  60%,
+  100% {
+    transform: translateX(0);
   }
 }

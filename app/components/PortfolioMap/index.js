@@ -10,7 +10,10 @@ import usePortfolioTracker from '@/app/hooks/usePortfolioTracker';
 import { SITE_STRUCTURE } from '@/data/navigation/site-structure';
 
 const getAllPaths = (node, paths = []) => {
-  paths.push(node.path);
+  if (!node.external) {
+    paths.push(node.path);
+  }
+
   if (node.children) {
     node.children.forEach((child) => getAllPaths(child, paths));
   }
@@ -18,7 +21,10 @@ const getAllPaths = (node, paths = []) => {
 };
 
 const getAllNodes = (node, nodes = []) => {
-  nodes.push(node);
+  if (!node.external) {
+    nodes.push(node);
+  }
+
   if (node.children) {
     node.children.forEach((child) => getAllNodes(child, nodes));
   }
@@ -42,7 +48,7 @@ export default function PortfolioMap({
   const closeTimeoutRef = useRef(null);
   const {
     visitedPages,
-    setVisitedPages,
+    markVisited,
     scrollProgress,
     pageScrollProgress,
     clearProgress
@@ -77,12 +83,20 @@ export default function PortfolioMap({
     }, MAP_CLOSE_MS);
   }, [externalOnClose]);
 
+  const handleOpenModal = useCallback((event) => {
+    event?.stopPropagation?.();
+
+    if (showExplorationMap) {
+      return;
+    }
+
+    // Recover safely from any stale closing state and reopen immediately.
+    setIsClosing(false);
+    setShowExplorationMap(true);
+  }, [showExplorationMap]);
+
   const handleNavigate = useCallback((path) => {
-    setVisitedPages((prev) => {
-      const next = new Set(prev);
-      next.add(path);
-      return next;
-    });
+    markVisited(path);
 
     if (typeof router.prefetch === 'function') {
       router.prefetch(path);
@@ -91,19 +105,26 @@ export default function PortfolioMap({
     handleCloseModal(() => {
       router.push(path);
     });
-  }, [handleCloseModal, router, setVisitedPages]);
+  }, [handleCloseModal, markVisited, router]);
 
   const handleExternalLink = useCallback((url) => {
+    markVisited(url);
+
     handleCloseModal(() => {
       if (disableInternalExternalModal && onExternalLinkModal) {
         onExternalLinkModal(true, url);
         return;
       }
 
+      setShowExternalLinkModal(false);
       setExternalLinkUrl(url);
-      setShowExternalLinkModal(true);
+
+      // Force a clean reopen path even if a previous close animation just finished.
+      window.requestAnimationFrame(() => {
+        setShowExternalLinkModal(true);
+      });
     });
-  }, [disableInternalExternalModal, handleCloseModal, onExternalLinkModal]);
+  }, [disableInternalExternalModal, handleCloseModal, markVisited, onExternalLinkModal]);
 
   const handleNodeClick = useCallback((nodeDatum, event) => {
     event?.preventDefault?.();
@@ -164,7 +185,7 @@ export default function PortfolioMap({
     <>
       <div className="fixed top-6 right-6" style={{ zIndex: 9999 }}>
         <button
-          onClick={() => setShowExplorationMap((prev) => !prev)}
+          onClick={showExplorationMap ? () => handleCloseModal() : handleOpenModal}
           className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/80 shadow-lg backdrop-blur-xl transition-all duration-500 hover:scale-110 hover:bg-white/90 hover:shadow-xl"
           aria-label="Toggle Portfolio Map"
         >
@@ -289,6 +310,7 @@ export default function PortfolioMap({
           isOpen={showExternalLinkModal}
           onClose={() => {
             setShowExternalLinkModal(false);
+            setIsClosing(false);
             if (onExternalLinkModal) {
               onExternalLinkModal(false);
             }

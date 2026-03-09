@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#FAF5EE] via-[#F8F2E9] to-[#FAF5EE] px-4">
       {/* Portfolio Explorer Map */}
       <PortfolioMap />
       

@@ -5,13 +5,37 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 const VISITED_PAGES_KEY = 'portfolioVisitedPages';
 const PAGE_SCROLL_PROGRESS_KEY = 'portfolioPageScrollProgress';
 
+const normalizePath = (path) => {
+  if (!path || typeof path !== 'string') {
+    return '/';
+  }
+
+  const withoutQuery = path.split('?')[0].split('#')[0] || '/';
+
+  if (withoutQuery === '/') {
+    return '/';
+  }
+
+  return withoutQuery.endsWith('/') ? withoutQuery.slice(0, -1) : withoutQuery;
+};
+
 const getInitialVisitedPages = () => {
   if (typeof window === 'undefined') {
     return new Set(['/']);
   }
 
   const saved = localStorage.getItem(VISITED_PAGES_KEY);
-  return saved ? new Set(JSON.parse(saved)) : new Set(['/']);
+  if (!saved) {
+    return new Set(['/']);
+  }
+
+  try {
+    const parsed = JSON.parse(saved);
+    const normalized = parsed.map((path) => normalizePath(path));
+    return new Set(['/', ...normalized]);
+  } catch {
+    return new Set(['/']);
+  }
 };
 
 const getInitialPageScrollProgress = () => {
@@ -20,10 +44,26 @@ const getInitialPageScrollProgress = () => {
   }
 
   const saved = localStorage.getItem(PAGE_SCROLL_PROGRESS_KEY);
-  return saved ? JSON.parse(saved) : {};
+  if (!saved) {
+    return {};
+  }
+
+  try {
+    const parsed = JSON.parse(saved);
+    const normalized = {};
+
+    Object.entries(parsed).forEach(([path, value]) => {
+      normalized[normalizePath(path)] = value;
+    });
+
+    return normalized;
+  } catch {
+    return {};
+  }
 };
 
 export default function usePortfolioTracker(pathname) {
+  const normalizedPathname = normalizePath(pathname);
   const scrollSaveTimeoutRef = useRef(null);
   const [visitedPages, setVisitedPages] = useState(getInitialVisitedPages);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -31,9 +71,22 @@ export default function usePortfolioTracker(pathname) {
 
   const effectiveVisitedPages = useMemo(() => {
     const next = new Set(visitedPages);
-    next.add(pathname);
+    next.add(normalizedPathname);
     return next;
-  }, [pathname, visitedPages]);
+  }, [normalizedPathname, visitedPages]);
+
+  const markVisited = (path) => {
+    const normalizedPath = normalizePath(path);
+    setVisitedPages((prev) => {
+      if (prev.has(normalizedPath)) {
+        return prev;
+      }
+
+      const next = new Set(prev);
+      next.add(normalizedPath);
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -52,7 +105,7 @@ export default function usePortfolioTracker(pathname) {
       setScrollProgress(progress);
       setPageScrollProgress((prev) => ({
         ...prev,
-        [pathname]: Math.round(progress)
+        [normalizedPathname]: Math.round(progress)
       }));
     };
 
@@ -68,7 +121,7 @@ export default function usePortfolioTracker(pathname) {
         clearTimeout(scrollSaveTimeoutRef.current);
       }
     };
-  }, [pathname]);
+  }, [normalizedPathname]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -96,7 +149,7 @@ export default function usePortfolioTracker(pathname) {
       localStorage.removeItem(PAGE_SCROLL_PROGRESS_KEY);
     }
 
-    setVisitedPages(new Set([pathname]));
+    setVisitedPages(new Set([normalizedPathname]));
     setPageScrollProgress({});
     setScrollProgress(0);
   };
@@ -104,6 +157,7 @@ export default function usePortfolioTracker(pathname) {
   return {
     visitedPages: effectiveVisitedPages,
     setVisitedPages,
+    markVisited,
     scrollProgress,
     setScrollProgress,
     pageScrollProgress,

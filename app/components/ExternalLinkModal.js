@@ -15,6 +15,10 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
       return;
     }
 
+    if (closeTimeoutRef.current) {
+      window.clearTimeout(closeTimeoutRef.current);
+    }
+
     setIsClosing(true);
     closeTimeoutRef.current = window.setTimeout(() => {
       setIsClosing(false);
@@ -39,6 +43,7 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
       document.body.style.overflow = 'auto';
       if (closeTimeoutRef.current) {
         window.clearTimeout(closeTimeoutRef.current);
+        closeTimeoutRef.current = null;
       }
     };
   }, [isOpen, handleClose]);
@@ -53,7 +58,7 @@ const ExternalLinkModal = ({ isOpen, onClose, targetUrl, siteName = 'External Si
   return (
     <div 
       className={`fixed inset-0 flex items-center justify-center p-4 transition-opacity duration-300 ${
-        isClosing ? 'opacity-0' : 'opacity-100'
+        isClosing ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'
       }`}
       style={{
         background: 'rgba(231, 223, 216, 0.85)',

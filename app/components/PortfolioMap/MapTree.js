@@ -5,6 +5,7 @@ import Tree from 'react-d3-tree';
 import {
   FaAward,
   FaChartBar,
+  FaExclamationCircle,
   FaFileAlt,
   FaHome,
   FaLink,
@@ -49,13 +50,11 @@ const createPortfolioTreeData = (siteStructure, visitedPages, currentPath) => {
   return mapNode(siteStructure);
 };
 
-function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
+function CustomNodeElement({ nodeDatum, onNodeClick }) {
   const IconComponent = ICON_MAP[nodeDatum.attributes?.icon];
   const isVisited = nodeDatum.attributes?.visited;
   const isCurrent = nodeDatum.attributes?.current;
   const isClickable = nodeDatum.attributes?.href;
-  const nodePath = nodeDatum.attributes?.path;
-  const scrollProgress = pageScrollProgress?.[nodePath] || 0;
 
   const isRoot = nodeDatum.attributes?.path === '/';
   const nodeRadius = isRoot ? 18 : 15;
@@ -74,6 +73,13 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
     textColor = '#404040';
   }
 
+  const triggerNodeClick = (event) => {
+    event.stopPropagation();
+    if (isClickable && onNodeClick) {
+      onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, event);
+    }
+  };
+
   return (
     <>
       <circle
@@ -85,12 +91,7 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
           cursor: isClickable ? 'pointer' : 'default',
           transition: 'all 0.3s ease'
         }}
-        onClick={(event) => {
-          event.stopPropagation();
-          if (isClickable && onNodeClick) {
-            onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, event);
-          }
-        }}
+        onClick={triggerNodeClick}
         onMouseEnter={(event) => {
           if (isClickable && !isCurrent) {
             event.target.setAttribute('stroke', '#737373');
@@ -114,6 +115,14 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
           strokeDasharray="2,2"
           className={styles.pulseRing}
         />
+      )}
+
+      {!isCurrent && !isVisited && (
+        <foreignObject x={nodeRadius - 7} y={-nodeRadius + 1} width={12} height={12} style={{ pointerEvents: 'none' }}>
+          <div className={styles.unvisitedBadge} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+            <FaExclamationCircle style={{ fontSize: '10px', color: '#ef4444' }} />
+          </div>
+        </foreignObject>
       )}
 
       {IconComponent && (
@@ -153,12 +162,7 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
             cursor: isClickable ? 'pointer' : 'default',
             letterSpacing: '0.025em'
           }}
-          onClick={(event) => {
-            event.stopPropagation();
-            if (isClickable && onNodeClick) {
-              onNodeClick({ data: nodeDatum, attributes: nodeDatum.attributes }, event);
-            }
-          }}
+          onClick={triggerNodeClick}
         >
           {nodeDatum.name}
         </text>
@@ -167,7 +171,7 @@ function CustomNodeElement({ nodeDatum, onNodeClick, pageScrollProgress }) {
   );
 }
 
-export default function MapTree({ visitedPages, currentPath, pageScrollProgress, onNodeClick }) {
+export default function MapTree({ visitedPages, currentPath, onNodeClick }) {
   const treeData = useMemo(
     () => createPortfolioTreeData(SITE_STRUCTURE, visitedPages, currentPath),
     [visitedPages, currentPath],
@@ -204,14 +208,24 @@ export default function MapTree({ visitedPages, currentPath, pageScrollProgress,
   }, []);
 
   const pathClassFunc = useCallback((linkDatum) => {
-    const targetVisited = linkDatum.target.data.attributes?.visited;
+    const sourceCurrent = linkDatum.source.data.attributes?.current;
     const targetCurrent = linkDatum.target.data.attributes?.current;
+    const sourceVisited = linkDatum.source.data.attributes?.visited;
+    const targetVisited = linkDatum.target.data.attributes?.visited;
 
-    if (targetCurrent) {
+    if (sourceCurrent || targetCurrent) {
       return styles.linkCurrent;
     }
 
-    return targetVisited ? styles.linkVisited : styles.linkUnvisited;
+    if (targetVisited) {
+      return styles.linkCompleted;
+    }
+
+    if (sourceVisited || targetVisited) {
+      return styles.linkDiscovered;
+    }
+
+    return styles.linkUnvisited;
   }, []);
 
   return (
@@ -227,7 +241,6 @@ export default function MapTree({ visitedPages, currentPath, pageScrollProgress,
         renderCustomNodeElement={(props) => (
           <CustomNodeElement
             {...props}
-            pageScrollProgress={pageScrollProgress}
             onNodeClick={handleNodeClick}
           />
         )}
